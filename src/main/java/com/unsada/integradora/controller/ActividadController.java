@@ -21,33 +21,34 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unsada.integradora.model.Actividad;
 import com.unsada.integradora.service.ActividadServiceApi;
 
-
 @RestController
 @RequestMapping(value = "/api/actividad")
 @CrossOrigin("*")
 public class ActividadController {
 	@Autowired
 	ActividadServiceApi actividadServiceApi;
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
-	HashMap<String, Object> response = new HashMap<String, Object>();
+		HashMap<String, Object> response = new HashMap<String, Object>();
 
-	try {
-		List<Actividad> claseData;
-		claseData = (List<Actividad>) actividadServiceApi.findAll();
-		response.put("message", "Successful load");
-		response.put("data",claseData);
-		response.put("success", true);
-		return response;
+		try {
+			List<Actividad> claseData;
+			claseData = (List<Actividad>) actividadServiceApi.findAll();
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
 
-	} catch (Exception e) {
-		response.put("message", e.getMessage());
-		response.put("success ", false);
-		return response;
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+
 	}
 
-}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
@@ -74,7 +75,7 @@ public class ActividadController {
 			return response;
 		}
 	}
-	
+
 	@PostMapping(value = "/create")
 	public ResponseEntity<String> create(@RequestBody Actividad data) {
 
@@ -82,12 +83,12 @@ public class ActividadController {
 			actividadServiceApi.save(data);
 			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 		} catch (Exception e) {
-			
+
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
-	
+
 	@PutMapping(value = "/update/{id}")
 
 	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Actividad data) {
@@ -107,7 +108,7 @@ public class ActividadController {
 		}
 
 	}
-	
+
 	@DeleteMapping(value = "/delete/{id}")
 
 	public Map<String, Object> update(@PathVariable("id") Integer id) {

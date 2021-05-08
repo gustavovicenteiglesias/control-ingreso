@@ -18,42 +18,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.model.Cohorte;
-import com.unsada.integradora.service.CohorteServiceApi;
+import com.unsada.integradora.model.Pregunta;
+import com.unsada.integradora.service.PreguntaServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/cohorte")
+@RequestMapping(value = "/api/entidadaula")
 @CrossOrigin("*")
-public class CohorteController {
+public class PreguntaController {
 	@Autowired
-	CohorteServiceApi cohorteServiceApi;
+	PreguntaServiceApi preguntaServiceApi;
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
-	HashMap<String, Object> response = new HashMap<String, Object>();
+		HashMap<String, Object> response = new HashMap<String, Object>();
 
-	try {
-		List<Cohorte> claseData;
-		claseData = (List<Cohorte>) cohorteServiceApi.findAll();
-		response.put("message", "Successful load");
-		response.put("data",claseData);
-		response.put("success", true);
-		return response;
+		try {
+			List<Pregunta> claseData;
+			claseData = (List<Pregunta>) preguntaServiceApi.findAll();
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
 
-	} catch (Exception e) {
-		response.put("message", e.getMessage());
-		response.put("success ", false);
-		return response;
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+
 	}
 
-}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
 
-			Optional<Cohorte> clase = cohorteServiceApi.findById(id);
+			Optional<Pregunta> clase = preguntaServiceApi.findById(id);
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
@@ -73,29 +75,29 @@ public class CohorteController {
 			return response;
 		}
 	}
-	
+
 	@PostMapping(value = "/create")
-	public ResponseEntity<String> create(@RequestBody Cohorte data) {
+	public ResponseEntity<String> create(@RequestBody Pregunta data) {
 
 		try {
-			cohorteServiceApi.save(data);
+			preguntaServiceApi.save(data);
 			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 		} catch (Exception e) {
-			
+
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
-	
+
 	@PutMapping(value = "/update/{id}")
 
-	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Cohorte data) {
+	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Pregunta data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-			data.setIdCohorte(id);;
-			cohorteServiceApi.save(data);
+			data.setIdPregunta(id);
+			preguntaServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);
 			return response;
@@ -106,7 +108,7 @@ public class CohorteController {
 		}
 
 	}
-	
+
 	@DeleteMapping(value = "/delete/{id}")
 
 	public Map<String, Object> update(@PathVariable("id") Integer id) {
@@ -114,8 +116,7 @@ public class CohorteController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-			cohorteServiceApi.deleteById(id);
-			;
+			preguntaServiceApi.deleteById(id);
 			response.put("message", "Successful delete");
 			response.put("success", true);
 			return response;
