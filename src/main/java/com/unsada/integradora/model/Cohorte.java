@@ -2,6 +2,10 @@ package com.unsada.integradora.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -30,15 +34,18 @@ public class Cohorte implements Serializable {
 	//bi-directional many-to-one association to Actividad
 	@ManyToOne
 	@JoinColumn(name="id_actividad")
+	@JsonBackReference("actividad-cohorte")
 	private Actividad actividad;
 
 	//bi-directional many-to-one association to Sede
 	@ManyToOne
 	@JoinColumn(name="id_sede")
+	@JsonIgnore
 	private Sede sede;
 
 	//bi-directional many-to-one association to CohorteHorario
 	@OneToMany(mappedBy="cohorte")
+	@JsonIgnore
 	private List<CohorteHorario> cohorteHorarios;
 
 	public Cohorte() {
