@@ -1,5 +1,6 @@
 package com.unsada.integradora.controller;
 
+import java.lang.StackWalker.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unsada.integradora.model.Actividad;
 import com.unsada.integradora.model.Cohorte;
+import com.unsada.integradora.model.Sede;
+import com.unsada.integradora.service.ActividadServiceApi;
 import com.unsada.integradora.service.CohorteServiceApi;
+import com.unsada.integradora.service.SedeServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/cohorte")
@@ -27,6 +32,11 @@ import com.unsada.integradora.service.CohorteServiceApi;
 public class CohorteController {
 	@Autowired
 	CohorteServiceApi cohorteServiceApi;
+	@Autowired
+	SedeServiceApi sedeServiceApi;
+	@Autowired
+	ActividadServiceApi actividadServiceApi;
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
@@ -52,9 +62,7 @@ public class CohorteController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-
 			Optional<Cohorte> clase = cohorteServiceApi.findById(id);
-
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
 				response.put("data", clase);
@@ -74,10 +82,13 @@ public class CohorteController {
 		}
 	}
 	
-	@PostMapping(value = "/create")
-	public ResponseEntity<String> create(@RequestBody Cohorte data) {
-
+	@PostMapping(value = "/create/{idActividad}/{idSede}")
+	public ResponseEntity<String> create(@RequestBody Cohorte data, @PathVariable ("idActividad") int idActividad, @PathVariable("idSede") int idSede) {
+		Optional<Sede> sede = sedeServiceApi.findById(idSede);
+		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
+			data.setActividad(actividad.get());
+			data.setSede(sede.get());;
 			cohorteServiceApi.save(data);
 			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 		} catch (Exception e) {

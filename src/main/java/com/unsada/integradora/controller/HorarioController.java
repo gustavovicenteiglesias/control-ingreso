@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Horario;
+import com.unsada.integradora.service.ActividadServiceApi;
+import com.unsada.integradora.service.CohorteServiceApi;
 import com.unsada.integradora.service.HorarioServiceApi;
 
 @RestController
@@ -27,6 +29,10 @@ import com.unsada.integradora.service.HorarioServiceApi;
 public class HorarioController {
 	@Autowired
 	HorarioServiceApi horarioServiceApi;
+	@Autowired
+	ActividadServiceApi actividadServiceApi;
+	@Autowired 
+	CohorteServiceApi cohorteServiceApi;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -76,10 +82,13 @@ public class HorarioController {
 		}
 	}
 
-	@PostMapping(value = "/create")
-	public ResponseEntity<String> create(@RequestBody Horario data) {
+	@PostMapping(value = "/create/{idActividad}")
+	public ResponseEntity<String> create(@RequestBody Horario data, @PathVariable("idActividad") int idActividad) {
 
 		try {
+			cohorteServiceApi.findByActividad(idActividad);
+			System.out.println("numero de cohortes : " + cohorteServiceApi.findByActividad(idActividad).size());
+			actividadServiceApi.findById(idActividad);
 			horarioServiceApi.save(data);
 			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 		} catch (Exception e) {

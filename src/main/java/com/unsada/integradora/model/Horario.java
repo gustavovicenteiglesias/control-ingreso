@@ -1,6 +1,8 @@
 package com.unsada.integradora.model;
 
 import java.io.Serializable;
+import java.sql.Time;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,26 +25,13 @@ public class Horario implements Serializable {
 	@Column(name="id_horario")
 	private int idHorario;
 
-	
-
 	private String dia;
 
-	
+	@Column(name="hora_inicio")
+	private Time horaInicio;
 
 	@Column(name="hora_fin")
-	private Date horaFin1;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="hora_fin", insertable = false, updatable = false)
-	private Date horaFin;
-
-	@Column(name="hora_inicio")
-	private String horaInicio1;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="hora_inicio", insertable = false, updatable = false)
-	private Date horaInicio;
-
+	private Time horaFin;
 
 
 	private String nombre;
@@ -76,39 +65,21 @@ public class Horario implements Serializable {
 
 	
 
-	public Date getHoraFin1() {
-		return horaFin1;
-	}
-
-	public void setHoraFin1(Date horaFin1) {
-		this.horaFin1 = horaFin1;
-	}
-
-	public Date getHoraFin() {
+	public Time getHoraFin() {
 		return horaFin;
 	}
 
-	public void setHoraFin(Date horaFin) {
+	public void setHoraFin(Time horaFin) {
 		this.horaFin = horaFin;
 	}
 
-	public String getHoraInicio1() {
-		return horaInicio1;
-	}
-
-	public void setHoraInicio1(String horaInicio1) {
-		this.horaInicio1 = horaInicio1;
-	}
-
-	public Date getHoraInicio() {
+	public Time getHoraInicio() {
 		return horaInicio;
 	}
 
-	public void setHoraInicio(Date horaInicio) {
+	public void setHoraInicio(Time horaInicio) {
 		this.horaInicio = horaInicio;
 	}
-
-	
 
 	public String getNombre() {
 		return nombre;

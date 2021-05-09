@@ -55,9 +55,7 @@ public class SolicitudController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-
 			Optional<Solicitud> clase = solicitudServiceApi.findById(id);
-
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
 				response.put("data", clase);
