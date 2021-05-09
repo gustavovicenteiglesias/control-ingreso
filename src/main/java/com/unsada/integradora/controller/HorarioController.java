@@ -1,5 +1,6 @@
 package com.unsada.integradora.controller;
 
+import java.lang.StackWalker.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unsada.integradora.model.Actividad;
+import com.unsada.integradora.model.Cohorte;
 import com.unsada.integradora.model.Horario;
 import com.unsada.integradora.service.ActividadServiceApi;
 import com.unsada.integradora.service.CohorteServiceApi;
@@ -83,14 +86,13 @@ public class HorarioController {
 	}
 
 	@PostMapping(value = "/create/{idActividad}")
-	public ResponseEntity<String> create(@RequestBody Horario data, @PathVariable("idActividad") int idActividad) {
-
+	public ResponseEntity<String> create( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
+		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
-			cohorteServiceApi.findByActividad(idActividad);
-			System.out.println("numero de cohortes : " + cohorteServiceApi.findByActividad(idActividad).size());
-			actividadServiceApi.findById(idActividad);
-			horarioServiceApi.save(data);
-			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
+			List<Cohorte>  cohortes =cohorteServiceApi.findByActividad(actividad);
+			System.out.println("cohortes are: " + cohortes.size());
+		  //horarioServiceApi.save(data);
+			return new ResponseEntity<>("Save successful: Se encontraron " + cohortes.size() + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
 
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
