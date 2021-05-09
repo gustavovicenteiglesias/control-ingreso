@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Actividad;
+import com.unsada.integradora.model.Propuesta;
 import com.unsada.integradora.service.ActividadServiceApi;
+import com.unsada.integradora.service.PropuestaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/actividad")
@@ -27,6 +30,9 @@ import com.unsada.integradora.service.ActividadServiceApi;
 public class ActividadController {
 	@Autowired
 	ActividadServiceApi actividadServiceApi;
+	@Autowired
+	@Qualifier("propuestaServiceApi")
+	PropuestaServiceApi propuestaServiceApi ;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -97,6 +103,28 @@ public class ActividadController {
 
 		try {
 			data.setIdActividad(id);
+			actividadServiceApi.save(data);
+			response.put("message", "Successful update");
+			response.put("success", true);
+			return response;
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+
+	}
+	@PutMapping(value = "/update/propuesta/{id}/{idPropuesta}")
+
+	public Map<String, Object> update1(@PathVariable("id") Integer id,@PathVariable("idPropuesta") Integer idPropuesta, @RequestBody Actividad data) {
+
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		Propuesta propuesta=propuestaServiceApi.findById(idPropuesta).get();
+		System.out.print(propuesta);
+
+		try {
+			data.setIdActividad(id);
+			data.setPropuesta(propuesta);
 			actividadServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);

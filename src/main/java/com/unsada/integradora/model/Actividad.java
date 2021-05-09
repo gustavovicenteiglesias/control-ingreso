@@ -27,7 +27,7 @@ public class Actividad implements Serializable {
 
 	//bi-directional many-to-one association to Propuesta
 	@ManyToOne
-	@JoinColumn(name="id_propuesta")
+	@JoinColumn(name="id_propuesta",nullable = true)
 	@JsonBackReference("propuesta-actividad")
 	private Propuesta propuesta;
 
