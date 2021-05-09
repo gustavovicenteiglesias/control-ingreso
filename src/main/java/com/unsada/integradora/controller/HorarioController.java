@@ -91,7 +91,7 @@ public class HorarioController {
 		try {
 			List<Cohorte>  cohortes =cohorteServiceApi.findByActividad(actividad);
 			System.out.println("cohortes are: " + cohortes.size());
-		  //horarioServiceApi.save(data);
+		  horarioServiceApi.save(data);
 			return new ResponseEntity<>("Save successful: Se encontraron " + cohortes.size() + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
 
