@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @NamedQuery(name="Actividad.findAll", query="SELECT a FROM Actividad a")
 public class Actividad implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_actividad")
 	private int idActividad;
@@ -32,7 +33,8 @@ public class Actividad implements Serializable {
 
 	//bi-directional many-to-one association to Cohorte
 	@OneToMany(mappedBy="actividad")
-	@JsonManagedReference("actividad-cohorte")
+	@JsonIgnore
+	//@JsonManagedReference("actividad-cohorte")
 	private List<Cohorte> cohortes;
 
 	public Actividad() {

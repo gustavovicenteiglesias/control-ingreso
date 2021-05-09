@@ -2,6 +2,10 @@ package com.unsada.integradora.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -13,7 +17,7 @@ import java.util.List;
 @NamedQuery(name="Dependencia.findAll", query="SELECT d FROM Dependencia d")
 public class Dependencia implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_dependencia")
 	private int idDependencia;
@@ -22,6 +26,7 @@ public class Dependencia implements Serializable {
 
 	//bi-directional many-to-one association to Propuesta
 	@OneToMany(mappedBy="dependencia")
+	@JsonManagedReference("propuesta-dependencia")
 	private List<Propuesta> propuestas;
 
 	public Dependencia() {

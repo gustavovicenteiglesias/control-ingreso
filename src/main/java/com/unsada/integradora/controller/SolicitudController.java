@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Solicitud;
+import com.unsada.integradora.model.SolicitudPK;
 import com.unsada.integradora.service.SolicitudServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/entidadaula")
+@RequestMapping(value = "/api/solicitud")
 @CrossOrigin("*")
 public class SolicitudController {
 	@Autowired
@@ -88,10 +89,10 @@ public class SolicitudController {
 		}
 
 	}
-/*
+
 	@PutMapping(value = "/update/{id}")
 
-	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Solicitud data) {
+	public Map<String, Object> update(@PathVariable("id") SolicitudPK id, @RequestBody Solicitud data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
@@ -108,7 +109,7 @@ public class SolicitudController {
 		}
 
 	}
-*/
+
 	@DeleteMapping(value = "/delete/{id}")
 
 	public Map<String, Object> update(@PathVariable("id") Integer id) {

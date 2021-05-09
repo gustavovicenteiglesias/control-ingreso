@@ -2,6 +2,10 @@ package com.unsada.integradora.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 
 
@@ -13,7 +17,7 @@ import java.util.Date;
 @NamedQuery(name="Solicitud.findAll", query="SELECT s FROM Solicitud s")
 public class Solicitud implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@EmbeddedId
 	private SolicitudPK id;
 
@@ -29,11 +33,13 @@ public class Solicitud implements Serializable {
 	//bi-directional many-to-one association to Ddjj
 	@ManyToOne
 	@JoinColumn(name="id_ddjj")
+	@JsonBackReference("solicitud-ddjj")
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to SesionPresencial
 	@ManyToOne
 	@JoinColumn(name="id_sesion_presencial", insertable = false, updatable = false)
+	@JsonManagedReference("solicitud-sessionpresencial")
 	private SesionPresencial sesionPresencial;
 
 	public Solicitud() {

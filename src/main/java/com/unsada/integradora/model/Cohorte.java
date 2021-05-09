@@ -3,8 +3,12 @@ package com.unsada.integradora.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.List;
 @NamedQuery(name="Cohorte.findAll", query="SELECT c FROM Cohorte c")
 public class Cohorte implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_cohorte")
 	private int idCohorte;
@@ -32,20 +36,23 @@ public class Cohorte implements Serializable {
 	private Date fechaInicio;
 
 	//bi-directional many-to-one association to Actividad
-	@ManyToOne
+	@ManyToOne(optional = true)
 	@JoinColumn(name="id_actividad")
+	//@JsonIgnore
 	@JsonBackReference("actividad-cohorte")
 	private Actividad actividad;
 
 	//bi-directional many-to-one association to Sede
 	@ManyToOne
 	@JoinColumn(name="id_sede")
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonBackReference("cohorte-sede")
 	private Sede sede;
 
 	//bi-directional many-to-one association to CohorteHorario
 	@OneToMany(mappedBy="cohorte")
-	@JsonIgnore
+	
+	@JsonManagedReference("cohorte-horario")
 	private List<CohorteHorario> cohorteHorarios;
 
 	public Cohorte() {

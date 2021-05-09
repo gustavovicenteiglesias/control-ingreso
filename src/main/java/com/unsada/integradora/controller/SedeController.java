@@ -22,7 +22,7 @@ import com.unsada.integradora.model.Sede;
 import com.unsada.integradora.service.SedeServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/entidadaula")
+@RequestMapping(value = "/api/sede")
 @CrossOrigin("*")
 public class SedeController {
 	@Autowired

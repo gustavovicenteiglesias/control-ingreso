@@ -2,6 +2,9 @@ package com.unsada.integradora.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -13,7 +16,7 @@ import java.util.List;
 @NamedQuery(name="Sede.findAll", query="SELECT s FROM Sede s")
 public class Sede implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_sede")
 	private int idSede;
@@ -22,10 +25,12 @@ public class Sede implements Serializable {
 
 	//bi-directional many-to-one association to Cohorte
 	@OneToMany(mappedBy="sede")
+	@JsonManagedReference("cohorte-sede")
 	private List<Cohorte> cohortes;
 
 	//bi-directional many-to-one association to Edificio
 	@OneToMany(mappedBy="sede")
+	@JsonManagedReference("sede-edificios")
 	private List<Edificio> edificios;
 
 	public Sede() {

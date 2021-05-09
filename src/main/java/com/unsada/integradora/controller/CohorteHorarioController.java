@@ -27,7 +27,7 @@ import com.unsada.integradora.service.CohorteHorarioServiceApi;
 public class CohorteHorarioController {
 	@Autowired
 	CohorteHorarioServiceApi cohorteHorarioServiceApi;
-
+	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();

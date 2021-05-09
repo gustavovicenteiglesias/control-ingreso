@@ -3,6 +3,8 @@ package com.unsada.integradora.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the ddjj_factor_de_riesgo database table.
@@ -13,7 +15,7 @@ import javax.persistence.*;
 @NamedQuery(name="DdjjFactorDeRiesgo.findAll", query="SELECT d FROM DdjjFactorDeRiesgo d")
 public class DdjjFactorDeRiesgo implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_ddjj")
 	private int idDdjj;
@@ -21,11 +23,13 @@ public class DdjjFactorDeRiesgo implements Serializable {
 	//bi-directional one-to-one association to Ddjj
 	@OneToOne
 	@JoinColumn(name="id_ddjj")
+	@JsonBackReference("DdjjFactorDeRiesgo-ddjj")
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to FactorDeRiesgo
 	@ManyToOne
 	@JoinColumn(name="id_factor_de_riesgo")
+	@JsonBackReference("DdjjFactorDeRiesgo-FactorDeRiesgo")
 	private FactorDeRiesgo factorDeRiesgo;
 
 	public DdjjFactorDeRiesgo() {

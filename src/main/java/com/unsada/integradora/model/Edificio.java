@@ -2,6 +2,10 @@ package com.unsada.integradora.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -13,7 +17,7 @@ import java.util.List;
 @NamedQuery(name="Edificio.findAll", query="SELECT e FROM Edificio e")
 public class Edificio implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_edificio")
 	private int idEdificio;
@@ -25,10 +29,12 @@ public class Edificio implements Serializable {
 	//bi-directional many-to-one association to Sede
 	@ManyToOne
 	@JoinColumn(name="id_sede")
+	@JsonBackReference("sede-edificios")
 	private Sede sede;
 
 	//bi-directional many-to-one association to EntidadAula
 	@OneToMany(mappedBy="edificio")
+	@JsonManagedReference("edificio-aula")
 	private List<EntidadAula> entidadAulas;
 
 	public Edificio() {

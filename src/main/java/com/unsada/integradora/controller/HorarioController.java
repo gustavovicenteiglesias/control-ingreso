@@ -22,7 +22,7 @@ import com.unsada.integradora.model.Horario;
 import com.unsada.integradora.service.HorarioServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/entidadaula")
+@RequestMapping(value = "/api/horario")
 @CrossOrigin("*")
 public class HorarioController {
 	@Autowired

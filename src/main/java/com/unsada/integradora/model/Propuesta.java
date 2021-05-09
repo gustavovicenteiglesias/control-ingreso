@@ -3,7 +3,8 @@ package com.unsada.integradora.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @NamedQuery(name="Propuesta.findAll", query="SELECT p FROM Propuesta p")
 public class Propuesta implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_propuesta")
 	private int idPropuesta;
@@ -32,7 +33,7 @@ public class Propuesta implements Serializable {
 	//bi-directional many-to-one association to Dependencia
 	@ManyToOne
 	@JoinColumn(name="id_dependencia")
-	@JsonIgnore
+	@JsonBackReference("propuesta-dependencia")
 	private Dependencia dependencia;
 
 	public Propuesta() {

@@ -3,6 +3,8 @@ package com.unsada.integradora.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the respuesta database table.
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @NamedQuery(name="Respuesta.findAll", query="SELECT r FROM Respuesta r")
 public class Respuesta implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@EmbeddedId
 	private RespuestaPK id;
 
@@ -21,11 +23,13 @@ public class Respuesta implements Serializable {
 	//bi-directional many-to-one association to Ddjj
 	@ManyToOne
 	@JoinColumn(name="id_ddjj", insertable = false, updatable = false )
+	@JsonBackReference("respuestas-ddjj")
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to Pregunta
 	@ManyToOne
 	@JoinColumn(name="id_pregunta")
+	@JsonBackReference("pregunta-respuesta")
 	private Pregunta pregunta;
 
 	public Respuesta() {

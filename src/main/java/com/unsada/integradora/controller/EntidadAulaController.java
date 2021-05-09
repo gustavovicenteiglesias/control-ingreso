@@ -22,7 +22,7 @@ import com.unsada.integradora.model.EntidadAula;
 import com.unsada.integradora.service.EntidadAulaServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/entidadaula")
+@RequestMapping(value = "/api/aula")
 @CrossOrigin("*")
 public class EntidadAulaController {
 	@Autowired

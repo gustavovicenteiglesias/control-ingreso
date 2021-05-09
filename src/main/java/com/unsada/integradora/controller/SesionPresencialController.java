@@ -22,7 +22,7 @@ import com.unsada.integradora.model.SesionPresencial;
 import com.unsada.integradora.service.SesionPresencialServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/entidadaula")
+@RequestMapping(value = "/api/sesion[resencial")
 @CrossOrigin("*")
 public class SesionPresencialController {
 	@Autowired

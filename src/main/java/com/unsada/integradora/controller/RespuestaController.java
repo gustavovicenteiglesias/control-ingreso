@@ -22,7 +22,7 @@ import com.unsada.integradora.model.Respuesta;
 import com.unsada.integradora.service.RespuestaServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/entidadaula")
+@RequestMapping(value = "/api/respuesta")
 @CrossOrigin("*")
 public class RespuestaController {
 	@Autowired

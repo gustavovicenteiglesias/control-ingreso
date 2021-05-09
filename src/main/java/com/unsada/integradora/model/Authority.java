@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NamedQuery(name="Authority.findAll", query="SELECT a FROM Authority a")
 public class Authority implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_authority")
 	private int idAuthority;

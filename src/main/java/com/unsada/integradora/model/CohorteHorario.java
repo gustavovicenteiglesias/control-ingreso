@@ -2,6 +2,11 @@ package com.unsada.integradora.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -11,10 +16,10 @@ import java.util.List;
  */
 @Entity
 @Table(name="cohorte_horario")
-@NamedQuery(name="CohorteHorario.findAll", query="SELECT c FROM CohorteHorario c")
+
 public class CohorteHorario implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_cohorte_horario")
 	private int idCohorteHorario;
@@ -22,15 +27,22 @@ public class CohorteHorario implements Serializable {
 	//bi-directional many-to-one association to Cohorte
 	@ManyToOne
 	@JoinColumn(name="id_cohorte")
+	
+	@JsonBackReference("cohorte-horario")
 	private Cohorte cohorte;
 
 	//bi-directional many-to-one association to Horario
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="id_horario")
+	
+	//@JsonBackReference("horario-cohortehorario")
 	private Horario horario;
 
 	//bi-directional many-to-one association to SesionPresencial
 	@OneToMany(mappedBy="cohorteHorario")
+	@JsonIgnore
+	//@JsonManagedReference("SesionPresencial-cohorteHorario")
 	private List<SesionPresencial> sesionPresencials;
 
 	public CohorteHorario() {

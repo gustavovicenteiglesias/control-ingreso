@@ -22,7 +22,7 @@ import com.unsada.integradora.model.Persona;
 import com.unsada.integradora.service.PersonaServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/entidadaula")
+@RequestMapping(value = "/api/persona")
 @CrossOrigin("*")
 public class PersonaController {
 	@Autowired

@@ -27,7 +27,7 @@ import com.unsada.integradora.service.DDjjServiceApi;
 public class DdjjController {
 	@Autowired
 	DDjjServiceApi ddjjServiceApi;
-	
+	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
