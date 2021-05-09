@@ -6,5 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.unsada.integradora.model.EntidadAula;
 @Transactional
 public interface EntidadAulaDao extends CrudRepository<EntidadAula, Integer> {
+	Iterable<EntidadAula> findByEdificio (int idEdificio);
 
 }

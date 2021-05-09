@@ -77,4 +77,10 @@ public class EdificioServiceImpl implements EdificioDao {
 
 	}
 
+	@Override
+	public Iterable<Edificio> findBysede(int sede) {
+		// TODO Auto-generated method stub
+		return edificioDao.findBysede(sede);
+	}
+
 }

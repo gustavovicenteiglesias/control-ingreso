@@ -77,4 +77,10 @@ public class EntidadAulaServiceImpl implements EntidadAulaDao {
 
 	}
 
+	@Override
+	public Iterable<EntidadAula> findByEdificio(int idEdificio) {
+		// TODO Auto-generated method stub
+		return entidadAulaDao.findByEdificio(idEdificio);
+	}
+
 }

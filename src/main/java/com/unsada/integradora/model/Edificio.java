@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -34,7 +35,8 @@ public class Edificio implements Serializable {
 
 	//bi-directional many-to-one association to EntidadAula
 	@OneToMany(mappedBy="edificio")
-	@JsonManagedReference("edificio-aula")
+	@JsonIgnore
+	//@JsonManagedReference("edificio-aula")
 	private List<EntidadAula> entidadAulas;
 
 	public Edificio() {
