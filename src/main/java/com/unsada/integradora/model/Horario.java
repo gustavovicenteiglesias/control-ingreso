@@ -49,7 +49,7 @@ public class Horario implements Serializable {
 
 	//bi-directional many-to-one association to CohorteHorario
 	@OneToMany(mappedBy="horario")
-	
+	//@JsonIgnore
 	@JsonManagedReference("horario-cohortehorario")
 	private List<CohorteHorario> cohorteHorarios;
 

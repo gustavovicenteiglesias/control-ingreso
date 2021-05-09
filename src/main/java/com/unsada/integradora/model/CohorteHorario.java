@@ -33,10 +33,9 @@ public class CohorteHorario implements Serializable {
 
 	//bi-directional many-to-one association to Horario
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonBackReference("horario-cohortehorario")
 	@JoinColumn(name="id_horario")
-	
-	//@JsonBackReference("horario-cohortehorario")
 	private Horario horario;
 
 	//bi-directional many-to-one association to SesionPresencial

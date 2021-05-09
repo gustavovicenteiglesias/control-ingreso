@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
@@ -30,17 +31,20 @@ public class SesionPresencial implements Serializable {
 	//bi-directional many-to-one association to CohorteHorario
 	@ManyToOne
 	@JoinColumn(name="id_cohorte_horario")
+	//@JsonIgnore
 	@JsonBackReference("SesionPresencial-cohorteHorario")
 	private CohorteHorario cohorteHorario;
 
 	//bi-directional many-to-one association to EntidadAula
 	@ManyToOne
 	@JoinColumn(name="id_aula")
+	//@JsonIgnore
 	@JsonBackReference("aula-sesionPresencials")
 	private EntidadAula entidadAula;
 
 	//bi-directional many-to-one association to Solicitud
 	@OneToMany(mappedBy="sesionPresencial")
+	//@JsonIgnore
 	@JsonManagedReference("solicitud-sessionpresencial")
 	private List<Solicitud> solicituds;
 
