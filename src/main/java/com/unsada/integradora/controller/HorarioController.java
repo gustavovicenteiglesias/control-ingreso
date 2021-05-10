@@ -1,10 +1,14 @@
 package com.unsada.integradora.controller;
 
-import java.lang.StackWalker.Option;
+import java.sql.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Actividad;
 import com.unsada.integradora.model.Cohorte;
+import com.unsada.integradora.model.CohorteHorario;
 import com.unsada.integradora.model.Horario;
+import com.unsada.integradora.model.SesionPresencial;
 import com.unsada.integradora.service.ActividadServiceApi;
+import com.unsada.integradora.service.CohorteHorarioServiceApi;
 import com.unsada.integradora.service.CohorteServiceApi;
 import com.unsada.integradora.service.HorarioServiceApi;
+import com.unsada.integradora.service.SesionPresencialServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/horario")
@@ -36,6 +44,10 @@ public class HorarioController {
 	ActividadServiceApi actividadServiceApi;
 	@Autowired 
 	CohorteServiceApi cohorteServiceApi;
+	@Autowired 
+	CohorteHorarioServiceApi cohorteHorarioServiceApi;
+	@Autowired
+	SesionPresencialServiceApi sesionPresencialServiceApi;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -90,8 +102,10 @@ public class HorarioController {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
 			List<Cohorte>  cohortes =cohorteServiceApi.findByActividad(actividad);
-			System.out.println("cohortes are: " + cohortes.size());
-		  horarioServiceApi.save(data);
+			if(!cohortes.isEmpty()){
+
+				crearSesiones(cohortes, horarioServiceApi.save(data));
+			}
 			return new ResponseEntity<>("Save successful: Se encontraron " + cohortes.size() + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
 
@@ -99,6 +113,67 @@ public class HorarioController {
 		}
 
 	}
+/* 
+En base a la fecha fin y de inicio, evalua los dias del horario a registrar. Para las fechas
+entre inicio y fin que corerspondan al dia, se genera una sesion.
+*/
+	private void crearSesiones(List<Cohorte> cohortes, Horario data) {
+		for(Cohorte cohorte : cohortes){
+			List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
+			Date inicio = (Date) cohorte.getFechaInicio();
+			Date fin = (Date) cohorte.getFechaFin();
+			List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
+			System.out.println(fechas.size());
+			for(LocalDate fecha : fechas){
+				if(fecha.getDayOfWeek().equals(maskDay(data.getDia()))){
+					SesionPresencial sesion = new SesionPresencial();
+					if(!cohorteHorario.isEmpty()){
+						sesion.setCohorteHorario(cohorteHorario.get(0));
+						System.out.println("Cohorte existe pe");
+					}else{
+						sesion.setCohorteHorario(crearCohorteHorario(cohorte, data));
+					}
+					sesion.setFecha(Date.from(fecha.atStartOfDay(ZoneId.of("America/Argentina/Catamarca")).toInstant()));
+					sesionPresencialServiceApi.save(sesion);
+				}
+			}			
+		}
+	}
+	private CohorteHorario crearCohorteHorario(Cohorte cohorte, Horario data){
+		CohorteHorario cohorteHorario = new CohorteHorario();
+		cohorteHorario.setCohorte(cohorte);
+		cohorteHorario.setHorario(data);
+		return cohorteHorarioServiceApi.save(cohorteHorario);
+	}
+
+	public static DayOfWeek maskDay(String dia) {
+		switch (dia.toUpperCase()) {
+		case "LUNES":
+						return DayOfWeek.MONDAY;
+
+		case "MARTES":
+						return DayOfWeek.TUESDAY ;
+
+		case "MIERCOLES":
+						return DayOfWeek.WEDNESDAY ;
+
+		case "JUEVES":
+						return DayOfWeek.THURSDAY;
+
+		case "VIERNES":
+						return DayOfWeek.FRIDAY ;
+
+		case "SABADO":
+						return DayOfWeek.SATURDAY;
+
+		case "DOMINGO":
+						return DayOfWeek.SUNDAY;
+		default:
+						return null;
+		}
+}
+
+
 
 	@PutMapping(value = "/update/{id}")
 
