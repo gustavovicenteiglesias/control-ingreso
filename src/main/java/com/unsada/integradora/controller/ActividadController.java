@@ -1,10 +1,13 @@
 package com.unsada.integradora.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -74,11 +77,33 @@ public class ActividadController {
 		}
 
 	}
-
+	@GetMapping(value= "/find-por-fecha/")
+	public Map<String, Object> actividadPorFecha(@RequestParam("fecha") Date fecha){
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		try{
+			Iterable<Cohorte> cohortes =cohorteServiceApi.findAll();
+			List<Actividad> actividades = new ArrayList<Actividad>();
+			for(Cohorte cohorte : cohortes){
+				Date inicio = (Date) cohorte.getFechaInicio();
+				Date fin = (Date) cohorte.getFechaFin();
+				List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
+				if(fechas.contains(fecha.toLocalDate())){
+					if(!actividades.contains(cohorte.getActividad())){
+						actividades.add(cohorte.getActividad());
+					}
+				}
+			}
+			response.put("data", actividades);
+			return response;
+		}catch(Exception e){
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+	}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
-
 		try {
 
 			Optional<Actividad> clase = actividadServiceApi.findById(id);
