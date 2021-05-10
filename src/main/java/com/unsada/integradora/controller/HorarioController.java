@@ -85,7 +85,7 @@ public class HorarioController {
 		}
 	}
 
-	/*@PostMapping(value = "/create/{idActividad}")
+	@PostMapping(value = "/create/{idActividad}")
 	public ResponseEntity<String> create( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
@@ -98,7 +98,7 @@ public class HorarioController {
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}*/
+	}
 
 	@PutMapping(value = "/update/{id}")
 

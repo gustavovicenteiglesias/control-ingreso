@@ -89,14 +89,14 @@ public class RespuestaController {
 
 	}
 
-/*	@PutMapping(value = "/update/{id}")
+	@PutMapping(value = "/update/{id}")
 
 	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Respuesta data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-			data.setId(id);
+			data.setId_respuesta(id);
 			respuestaServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);
@@ -108,7 +108,7 @@ public class RespuestaController {
 		}
 
 	}
-*/
+
 	@DeleteMapping(value = "/delete/{id}")
 
 	public Map<String, Object> update(@PathVariable("id") Integer id) {
