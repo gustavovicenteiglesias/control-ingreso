@@ -1,5 +1,6 @@
 package com.unsada.integradora.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +119,34 @@ public class ActividadController {
 
 
 	}
+	//Si ya existe el registro de fecha sobreescribe el aula, sino crea uno nuevo 
+	@PostMapping(value="/asignar-aula-por-cohorte-horario-fecha/{idAula}/{idCohorte}/{idHorario}/")
+	public ResponseEntity<String> asignarAulaPorFecha( @PathVariable("idAula") int idAula, @PathVariable("idCohorte") int idCohorte, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date ) {
+		Optional<Horario> horario = horarioServiceApi.findById(idHorario);
+		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
+		Optional<Cohorte> cohorte = cohorteServiceApi.findById(idCohorte);
+		try {
+			Optional<CohorteHorario> cohorteHorario = cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte.get(), horario.get());
+			Optional<SesionPresencial> sesion = sesionPresencialServiceApi.findByCohorteHorarioAndFecha(cohorteHorario.get(), date);
+			if(sesion.isPresent()){
+				sesion.get().setEntidadAula(aula.get());
+				sesionPresencialServiceApi.save(sesion.get());
+			}else{
+				SesionPresencial sesionPresencial = new SesionPresencial();
+				sesionPresencial.setCohorteHorario(cohorteHorario.get());
+				sesionPresencial.setEntidadAula(aula.get());
+				sesionPresencial.setFecha(date);
+				sesionPresencialServiceApi.save(sesionPresencial);
+			}
+			
+			return new ResponseEntity<>("Save successful " + date, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+
 	@PostMapping(value="/asignar-aula-por-cohorte-horario/{idAula}/{idCohorte}/{idHorario}")
 	public ResponseEntity<String> asignarAula( @PathVariable("idAula") int idAula, @PathVariable("idCohorte") int idCohorte, @PathVariable("idHorario") int idHorario ) {
 		Optional<Horario> horario = horarioServiceApi.findById(idHorario);
@@ -127,7 +156,7 @@ public class ActividadController {
 			Optional<CohorteHorario> cohorteHorario = cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte.get(), horario.get());
 			List<SesionPresencial> sesiones = sesionPresencialServiceApi.findByCohorteHorario(cohorteHorario.get());
 			for (SesionPresencial sesionPresencial : sesiones) {
-				sesionPresencial.setEntidadAula(aula.get());;
+				sesionPresencial.setEntidadAula(aula.get());
 				sesionPresencialServiceApi.save(sesionPresencial);
 			}
 			
