@@ -159,8 +159,18 @@ public class ActividadController {
 
 	}
 	@GetMapping(value ="/cohortes/{idActividad}")
-	public Map<String, Object> listCohortes(){
+	public Map<String, Object> listCohortes(@PathVariable("idActividad") int idActividad){
 		HashMap<String, Object> response = new HashMap<String, Object>();
+		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+		try{
+		  List<Cohorte> cohortes = cohorteServiceApi.findByActividad(actividad);
+			response.put("data", cohortes );
+			response.put("success", true);
+			return response;
+		}catch(Exception e){
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+		}
 		return response;
 
 
