@@ -97,8 +97,8 @@ public class HorarioController {
 		}
 	}
 
-	@PostMapping(value = "/create/{idActividad}")
-	public ResponseEntity<String> create( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
+	@PostMapping(value = "/create-todos-cohortes/{idActividad}")
+	public ResponseEntity<String> createForAll( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
 			List<Cohorte>  cohortes =cohorteServiceApi.findByActividad(actividad);
@@ -107,6 +107,22 @@ public class HorarioController {
 				crearSesiones(cohortes, horarioServiceApi.save(data));
 			}
 			return new ResponseEntity<>("Save successful: Se encontraron " + cohortes.size() + " cohortes", HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idCohorte}")
+	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
+		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+		try {
+			List<Cohorte>  cohorte =cohorteServiceApi.findByIdCohorteAndActividad(idCohorte, actividad.get());
+			if(!cohorte.isEmpty()){
+
+				crearSesiones(cohorte, horarioServiceApi.save(data));
+			}
+			return new ResponseEntity<>("Save successful: Se encontraron " + cohorte.size() + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
 
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
