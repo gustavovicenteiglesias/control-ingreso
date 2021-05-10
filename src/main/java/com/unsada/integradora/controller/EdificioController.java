@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Edificio;
+
+import com.unsada.integradora.model.Sede;
 import com.unsada.integradora.service.EdificioServiceApi;
+import com.unsada.integradora.service.SedeServiceApi;
+
 
 @RestController
 @RequestMapping(value = "/api/edificio")
@@ -27,6 +32,10 @@ import com.unsada.integradora.service.EdificioServiceApi;
 public class EdificioController {
 	@Autowired
 	EdificioServiceApi edificioServiceApi;
+	
+	@Autowired
+	@Qualifier(" SedeServiceApi")
+	SedeServiceApi sedeServiceApi;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -75,7 +84,24 @@ public class EdificioController {
 			return response;
 		}
 	}
+	@GetMapping(value = "/sede/find/{id}")
+	public Map<String, Object> dataClase1(@PathVariable("id") int id) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
 
+		try {
+			List<Edificio> claseData;
+			claseData = (List<Edificio>) edificioServiceApi.findBysede(id);
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+	}
 	@PostMapping(value = "/create")
 	public ResponseEntity<String> create(@RequestBody Edificio data) {
 
@@ -97,6 +123,30 @@ public class EdificioController {
 
 		try {
 			data.setIdEdificio(id);
+			edificioServiceApi.save(data);
+			response.put("message", "Successful update");
+			response.put("success", true);
+			return response;
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+
+	}
+	
+	@PutMapping(value = "/update/sede/{id}/{idSede}")
+
+	public Map<String, Object> update1(@PathVariable("id") Integer id,@PathVariable("idSede") Integer idSede, @RequestBody Edificio data) {
+
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		Sede sede=sedeServiceApi.findById(idSede).get();
+				
+	
+
+		try {
+			data.setIdEdificio(id);
+			data.setSede(sede);
 			edificioServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);

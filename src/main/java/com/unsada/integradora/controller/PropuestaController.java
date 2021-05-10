@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unsada.integradora.model.Dependencia;
 import com.unsada.integradora.model.Propuesta;
+import com.unsada.integradora.service.DependenciaServiceApi;
 import com.unsada.integradora.service.PropuestaServiceApi;
 
 @RestController
@@ -27,6 +30,9 @@ import com.unsada.integradora.service.PropuestaServiceApi;
 public class PropuestaController {
 	@Autowired
 	PropuestaServiceApi propuestaServiceApi;
+	@Autowired
+	@Qualifier("DependenciaServiceApi")
+	DependenciaServiceApi dependenciaServiceApi;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -36,6 +42,27 @@ public class PropuestaController {
 		try {
 			List<Propuesta> claseData;
 			claseData = (List<Propuesta>) propuestaServiceApi.findAll();
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+
+	}
+	
+	@GetMapping(value = "/find/dependencia/{id}")
+	public Map<String, Object> listclase1(@PathVariable("id") Integer id) {
+
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+			List<Propuesta> claseData;
+			claseData = (List<Propuesta>) propuestaServiceApi.findByDependencia(id);
 			response.put("message", "Successful load");
 			response.put("data", claseData);
 			response.put("success", true);
@@ -89,14 +116,16 @@ public class PropuestaController {
 
 	}
 
-	@PutMapping(value = "/update/{id}")
+	@PutMapping(value = "/update/dependencia/{id}/iddependencia")
 
-	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Propuesta data) {
+	public Map<String, Object> update(@PathVariable("id") Integer id,@PathVariable("iddependencia") Integer iddependencia, @RequestBody Propuesta data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
+		Dependencia dependencia= dependenciaServiceApi.findById(iddependencia).get();
 
 		try {
 			data.setIdPropuesta(id);
+			data.setDependencia(dependencia);
 			propuestaServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);
@@ -108,6 +137,8 @@ public class PropuestaController {
 		}
 
 	}
+	
+	
 
 	@DeleteMapping(value = "/delete/{id}")
 

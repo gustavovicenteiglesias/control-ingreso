@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -27,7 +27,8 @@ public class Propuesta implements Serializable {
 
 	//bi-directional many-to-one association to Actividad
 	@OneToMany(mappedBy="propuesta")
-	@JsonManagedReference("propuesta-actividad")
+	@JsonIgnore
+	//@JsonManagedReference("propuesta-actividad")
 	private List<Actividad> actividads;
 
 	//bi-directional many-to-one association to Dependencia

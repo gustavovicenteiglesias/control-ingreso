@@ -6,5 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.unsada.integradora.model.Propuesta;
 @Transactional
 public interface PropuestaDao extends CrudRepository<Propuesta, Integer>{
+	Iterable<Propuesta> findByDependencia (int idDependencia);
 
 }

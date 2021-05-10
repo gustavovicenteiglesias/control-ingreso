@@ -77,4 +77,10 @@ public class PropuestaServiceImpl implements PropuestaDao {
 
 	}
 
+	@Override
+	public Iterable<Propuesta> findByDependencia(int idDependencia) {
+		// TODO Auto-generated method stub
+		return propuestaDao.findByDependencia(idDependencia);
+	}
+
 }

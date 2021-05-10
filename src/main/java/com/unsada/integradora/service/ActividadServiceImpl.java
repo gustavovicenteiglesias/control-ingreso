@@ -77,4 +77,10 @@ public class ActividadServiceImpl implements ActividadServiceApi {
 
 	}
 
+	@Override
+	public Iterable<Actividad> findByPropuesta(int idpropuesta) {
+		// TODO Auto-generated method stub
+		return actividadDao.findByPropuesta(idpropuesta);
+	}
+
 }

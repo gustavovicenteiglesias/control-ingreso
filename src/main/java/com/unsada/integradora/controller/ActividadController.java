@@ -77,6 +77,7 @@ public class ActividadController {
 		}
 
 	}
+
 	@GetMapping(value= "/find-por-fecha/")
 	public Map<String, Object> actividadPorFecha(@RequestParam("fecha") Date fecha){
 		HashMap<String, Object> response = new HashMap<String, Object>();
@@ -99,7 +100,27 @@ public class ActividadController {
 			response.put("message", "" + e.getMessage());
 			response.put("success", false);
 			return response;
+			}
 		}
+	@GetMapping(value = "/find/propuesta/{id}")
+	public Map<String, Object> listclase1(@PathVariable("id") Integer id) {
+
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+			List<Actividad> claseData;
+			claseData = (List<Actividad>) actividadServiceApi.findByPropuesta(id);
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+
 	}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {

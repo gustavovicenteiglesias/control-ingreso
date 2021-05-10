@@ -1,9 +1,13 @@
 package com.unsada.integradora.controller;
 
+<<<<<<< HEAD
 import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
+=======
+//import java.lang.StackWalker.Option;
+>>>>>>> 8ebbd60ce748c2038303aff18608f3a98e1f4ab3
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,8 +101,13 @@ public class HorarioController {
 		}
 	}
 
+<<<<<<< HEAD
 	@PostMapping(value = "/create-todos-cohortes/{idActividad}")
 	public ResponseEntity<String> createForAll( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
+=======
+	/*@PostMapping(value = "/create/{idActividad}")
+	public ResponseEntity<String> create( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
+>>>>>>> 8ebbd60ce748c2038303aff18608f3a98e1f4ab3
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
 			List<Cohorte>  cohortes =cohorteServiceApi.findByActividad(actividad);
@@ -112,6 +121,7 @@ public class HorarioController {
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+<<<<<<< HEAD
 	}
 	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idCohorte}")
 	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
@@ -190,6 +200,9 @@ entre inicio y fin que corerspondan al dia, se genera una sesion.
 }
 
 
+=======
+	}*/
+>>>>>>> 8ebbd60ce748c2038303aff18608f3a98e1f4ab3
 
 	@PutMapping(value = "/update/{id}")
 
