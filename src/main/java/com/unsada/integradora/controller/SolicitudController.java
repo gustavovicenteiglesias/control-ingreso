@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -123,31 +124,30 @@ public class SolicitudController {
 			System.out.println("cohorte is:" + cohorte.getIdCohorte());
 			Optional<CohorteHorario> cohorteHorario = Optional.empty();
 			Optional<SesionPresencial> sesion = Optional.empty();
-			if(cohorte != null){
+			try{
 				System.out.println("here");
 				System.out.println("cohorte : " + cohorte.getIdCohorte() + " horario: " + horario.get().getIdHorario());
 				cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
 				System.out.println("cohorte horario is: " + cohorteHorario.get().getIdCohorteHorario());
+			}catch(NoSuchElementException e){
+				return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
 			}
-			if(cohorteHorario.isPresent()){
+			try{
 				sesion = sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(), cohorteHorario.get(), date);
-				System.out.println("sesion  is:" + sesion.get().getIdSesionPresencial());
-
-				System.out.println("sesion is present");
-			}
-			if(sesion.isPresent()){
 				pk.setIdSesionPresencial(sesion.get().getIdSesionPresencial());
+				data.setId(pk);
+				data.setSesionPresencial(sesion.get());
+				data.setDdjj(declaracion.get());
+				data.setFechaCarga(date);
+				data.setQrAcceso(QrCreatorService.generateQrId());
+				solicitudServiceApi.save(data);
+			}catch(NoSuchElementException e){
+				return new ResponseEntity<>("Sesion no encontrada" , HttpStatus.NOT_FOUND);
 			}
-			data.setId(pk);
-			data.setSesionPresencial(sesion.get());
-			data.setDdjj(declaracion.get());
-			data.setFechaCarga(date);
-			data.setQrAcceso(QrCreatorService.generateQrId());
-			solicitudServiceApi.save(data);
 			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 
-			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
