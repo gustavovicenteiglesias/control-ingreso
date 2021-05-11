@@ -111,7 +111,7 @@ public class SolicitudController {
 		}
 	}
 
-	@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
+/*	@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
 	public ResponseEntity<String> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
 		Optional<Ddjj> declaracion = ddjjServiceApi.findById(idDdjj);
 		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
@@ -151,7 +151,7 @@ public class SolicitudController {
 			return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}
+	}*/
 	@GetMapping(value = "/find/uuid/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") String id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
