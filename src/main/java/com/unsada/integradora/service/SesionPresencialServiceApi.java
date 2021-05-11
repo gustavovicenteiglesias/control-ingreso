@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.unsada.integradora.model.CohorteHorario;
+import com.unsada.integradora.model.EntidadAula;
 import com.unsada.integradora.model.SesionPresencial;
 
 public interface SesionPresencialServiceApi extends CrudRepository<SesionPresencial, Integer>{
@@ -14,5 +15,8 @@ public interface SesionPresencialServiceApi extends CrudRepository<SesionPresenc
   List<SesionPresencial> findByCohorteHorario(CohorteHorario cohorteHorario);
 
   Optional<SesionPresencial> findByCohorteHorarioAndFecha(CohorteHorario cohorteHorario, Date date);
+
+  Optional<SesionPresencial> findByEntidadAulaAndCohorteHorarioAndFecha(EntidadAula entidadAula, CohorteHorario cohorteHorario,
+      java.sql.Date date);
 
 }
