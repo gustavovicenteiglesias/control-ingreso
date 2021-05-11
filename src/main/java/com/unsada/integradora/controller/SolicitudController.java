@@ -111,46 +111,47 @@ public class SolicitudController {
 		}
 	}
 
-	@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
-	public ResponseEntity<String> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
-		Optional<Ddjj> declaracion = ddjjServiceApi.findById(idDdjj);
-		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
-		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
-		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
-		List<Cohorte> cohortes = cohorteServiceApi.findByActividad(actividad);
-		SolicitudPK pk = new SolicitudPK();
+	// @PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
+	// public ResponseEntity<String> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
+	// 	Optional<Ddjj> declaracion = ddjjServiceApi.findById(idDdjj);
+	// 	Optional<Horario> horario= horarioServiceApi.findById(idHorario);
+	// 	Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+	// 	Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
+	// 	List<Cohorte> cohortes = cohorteServiceApi.findByActividad(actividad);
+	// 	SolicitudPK pk = new SolicitudPK();
 
-		try {
-			Cohorte cohorte = getCohorte(cohortes, date);
-			System.out.println("cohorte is:" + cohorte.getIdCohorte());
-			Optional<CohorteHorario> cohorteHorario = Optional.empty();
-			Optional<SesionPresencial> sesion = Optional.empty();
-			try{
-				System.out.println("here");
-				System.out.println("cohorte : " + cohorte.getIdCohorte() + " horario: " + horario.get().getIdHorario());
-				cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
-				System.out.println("cohorte horario is: " + cohorteHorario.get().getIdCohorteHorario());
-			}catch(NoSuchElementException e){
-				return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
-			}
-			try{
-				sesion = sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(), cohorteHorario.get(), date);
-				pk.setIdSesionPresencial(sesion.get().getIdSesionPresencial());
-				data.setSesionPresencial(sesion.get());
-				data.setDdjj(declaracion.get());
-				data.setFechaCarga(date);
-				data.setQrAcceso(QrCreatorService.generateQrId());
-				solicitudServiceApi.save(data);
-			}catch(NoSuchElementException e){
-				return new ResponseEntity<>("Sesion no encontrada" , HttpStatus.NOT_FOUND);
-			}
-			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
-		} catch (NullPointerException e) {
+	// 	try {
+	// 		Cohorte cohorte = getCohorte(cohortes, date);
+	// 		System.out.println("cohorte is:" + cohorte.getIdCohorte());
+	// 		Optional<CohorteHorario> cohorteHorario = Optional.empty();
+	// 		Optional<SesionPresencial> sesion = Optional.empty();
+	// 		try{
+	// 			System.out.println("here");
+	// 			System.out.println("cohorte : " + cohorte.getIdCohorte() + " horario: " + horario.get().getIdHorario());
+	// 			cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
+	// 			System.out.println("cohorte horario is: " + cohorteHorario.get().getIdCohorteHorario());
+	// 		}catch(NoSuchElementException e){
+	// 			return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
+	// 		}
+	// 		try{
+	// 			sesion = sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(), cohorteHorario.get(), date);
+	// 			pk.setIdSesionPresencial(sesion.get().getIdSesionPresencial());
+	// 			data.setId_solicitud(id_solicitud);
+	// 			data.setSesionPresencial(sesion.get());
+	// 			data.setDdjj(declaracion.get());
+	// 			data.setFechaCarga(date);
+	// 			data.setQrAcceso(QrCreatorService.generateQrId());
+	// 			solicitudServiceApi.save(data);
+	// 		}catch(NoSuchElementException e){
+	// 			return new ResponseEntity<>("Sesion no encontrada" , HttpStatus.NOT_FOUND);
+	// 		}
+	// 		return new ResponseEntity<>("Save successful ", HttpStatus.OK);
+	// 	} catch (NullPointerException e) {
 
-			return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	// 		return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
+	// 	}
 
-	}
+	// }
 	@GetMapping(value = "/find/uuid/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") String id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
