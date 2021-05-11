@@ -75,6 +75,32 @@ public class PersonaController {
 			return response;
 		}
 	}
+	@GetMapping(value = "/find/dni/{id}")
+	public Map<String, Object> dataClase(@PathVariable("id") String id) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+
+			Optional<Persona> clase = personaServiceApi.findByDni(id);
+
+			if (clase.isPresent()) {
+				response.put("message", "Successful load");
+				response.put("data", clase);
+				response.put("success", true);
+				return response;
+			} else {
+				response.put("message", "Not found data");
+				response.put("data", null);
+				response.put("success", false);
+				return response;
+			}
+
+		} catch (Exception e) {
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+	}
 
 	@PostMapping(value = "/create")
 	public ResponseEntity<String> create(@RequestBody Persona data) {

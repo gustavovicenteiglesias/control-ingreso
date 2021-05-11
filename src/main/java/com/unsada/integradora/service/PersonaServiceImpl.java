@@ -77,4 +77,10 @@ public class PersonaServiceImpl implements PersonaDao {
 
 	}
 
+	@Override
+	public Optional<Persona> findByDni(String dni) {
+		// TODO Auto-generated method stub
+		return personaDao.findByDni(dni);
+	}
+
 }

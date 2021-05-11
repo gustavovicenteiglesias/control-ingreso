@@ -15,8 +15,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Respuesta implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@EmbeddedId
-	private RespuestaPK id;
+	@Id
+	private Integer id_respuesta;
 
 	private byte afirmativo;
 
@@ -35,13 +35,19 @@ public class Respuesta implements Serializable {
 	public Respuesta() {
 	}
 
-	public RespuestaPK getId() {
-		return this.id;
+	
+
+	public Integer getId_respuesta() {
+		return id_respuesta;
 	}
 
-	public void setId(RespuestaPK id) {
-		this.id = id;
+
+
+	public void setId_respuesta(Integer id_respuesta) {
+		this.id_respuesta = id_respuesta;
 	}
+
+
 
 	public byte getAfirmativo() {
 		return this.afirmativo;
