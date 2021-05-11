@@ -138,12 +138,8 @@ public class EdificioController {
 	@PutMapping(value = "/update/sede/{id}/{idSede}")
 
 	public Map<String, Object> update1(@PathVariable("id") Integer id,@PathVariable("idSede") Integer idSede, @RequestBody Edificio data) {
-
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		Sede sede=sedeServiceApi.findById(idSede).get();
-				
-	
-
 		try {
 			data.setIdEdificio(id);
 			data.setSede(sede);

@@ -1,5 +1,6 @@
 package com.unsada.integradora.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unsada.integradora.model.Ddjj;
 import com.unsada.integradora.model.Persona;
 import com.unsada.integradora.service.PersonaServiceApi;
 
@@ -49,10 +52,23 @@ public class PersonaController {
 
 	}
 
+	// @GetMapping(value = "/find-en-contacto/{idPersona}")
+	// public Map<String, Object> personasEnContacto(@PathVariable("idPersona") Integer idPersona, @RequestParam("fechaInicio") Date inicio, @RequestParam("fechaFin") Date fin){
+	// 	HashMap<String, Object> response = new HashMap<String, Object>();
+	// 	try {
+	// 		Optional<Persona> persona = personaServiceApi.findById(idPersona);
+	// 		for(Ddjj declaracion : persona.get().getDdjjs()){
+	// 			declaracion.
+
+	// 		}
+	// 	} catch (Exception e) {
+	// 		//TODO: handle exception
+	// 	}
+	// 	return response;
+	// }
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
-
 		try {
 
 			Optional<Persona> clase = personaServiceApi.findById(id);

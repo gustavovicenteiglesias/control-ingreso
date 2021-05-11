@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 //import java.lang.StackWalker.Option;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Actividad;
@@ -54,7 +56,6 @@ public class HorarioController {
 	public Map<String, Object> listclase() {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
-
 		try {
 			List<Horario> claseData;
 			claseData = (List<Horario>) horarioServiceApi.findAll();
@@ -70,7 +71,40 @@ public class HorarioController {
 		}
 
 	}
+	@GetMapping(value = "/find-actividad-fecha/{idActividad}/")
+	public Map<String, Object> dat(@PathVariable("idActividad") Integer idActividad, @RequestParam("fecha") Date fecha){
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+		try{
+			Cohorte cohorte = getCohorte(actividad.get().getCohortes(), fecha);
+			List<CohorteHorario> cohorteHorarios = cohorteHorarioServiceApi.findByCohorte(cohorte);
+			List<Horario> horarios = new ArrayList<Horario>();
+			for(CohorteHorario cohorteHorario : cohorteHorarios){
+				horarios.add(cohorteHorario.getHorario());
+			}
+			response.put("message", "Successful load");
+			response.put("data", horarios);
+			response.put("success", true);
+			return response;
+		}catch(Exception e){
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
 
+		}
+	}
+
+	private Cohorte getCohorte(List<Cohorte> cohortes, Date date){
+		for(Cohorte cohorte : cohortes){
+			Date inicio = (Date) cohorte.getFechaInicio();
+			Date fin = (Date) cohorte.getFechaFin();
+			List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
+			if(fechas.contains(date.toLocalDate())){
+				return cohorte;
+			}
+		}
+		return null;
+	}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
@@ -112,6 +146,7 @@ public class HorarioController {
 
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 	}
 	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idCohorte}")
 	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {

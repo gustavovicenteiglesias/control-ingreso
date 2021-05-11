@@ -9,4 +9,5 @@ import com.unsada.integradora.model.Persona;
 public interface PersonaServiceApi extends CrudRepository<Persona, Integer> {
 	Optional<Persona> findByDni (String dni);
 	
+	
 }
