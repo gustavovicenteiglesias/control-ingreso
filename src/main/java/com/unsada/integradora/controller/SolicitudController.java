@@ -1,7 +1,7 @@
 package com.unsada.integradora.controller;
 
 import java.sql.Date;
-import java.time.LocalDate;
+//import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +111,7 @@ public class SolicitudController {
 		}
 	}
 
-	@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
+	/*@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
 	public ResponseEntity<String> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
 		Optional<Ddjj> declaracion = ddjjServiceApi.findById(idDdjj);
 		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
@@ -151,7 +151,7 @@ public class SolicitudController {
 			return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}
+	}*/
 	@GetMapping(value = "/find/uuid/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") String id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
@@ -178,7 +178,7 @@ public class SolicitudController {
 			return response;
 		}
 	}
-	private Cohorte getCohorte(List<Cohorte> cohortes, Date date){
+	/*private Cohorte getCohorte(List<Cohorte> cohortes, Date date){
 		for(Cohorte cohorte : cohortes){
 			Date inicio = (Date) cohorte.getFechaInicio();
 			Date fin = (Date) cohorte.getFechaFin();
@@ -189,15 +189,22 @@ public class SolicitudController {
 		}
 		return null;
 	}
+*/
+	@PutMapping(value = "/update/{idsolicitud}/{idsesionpresencial}")
 
-	@PutMapping(value = "/update/{id}")
-
-	public Map<String, Object> update(@PathVariable("id") SolicitudPK id, @RequestBody Solicitud data) {
+	public Map<String, Object> update(@PathVariable("idsolicitud") Integer idsolicitud,@PathVariable("idsesionpresencial") Integer idsesionpresencial,  @RequestBody Solicitud data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
+		Ddjj ddjjs=ddjjServiceApi.findById(1).get();
+		SesionPresencial sesionPresencial=sesionPresencialServiceApi.findById(idsesionpresencial).get();
 
 		try {
-			data.setId(id);
+			data.setId_solicitud(idsolicitud);
+			data.setDdjj(ddjjs);
+			data.setFechaCarga(solicitudServiceApi.findById(idsolicitud).get().getFechaCarga());
+			data.setQrAcceso(solicitudServiceApi.findById(idsolicitud).get().getQrAcceso());
+			data.setSesionPresencial(sesionPresencial);
+			
 			solicitudServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);
@@ -209,6 +216,7 @@ public class SolicitudController {
 		}
 
 	}
+
 
 	@DeleteMapping(value = "/delete/{id}")
 
