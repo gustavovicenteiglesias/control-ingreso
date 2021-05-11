@@ -136,7 +136,6 @@ public class SolicitudController {
 			try{
 				sesion = sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(), cohorteHorario.get(), date);
 				pk.setIdSesionPresencial(sesion.get().getIdSesionPresencial());
-				data.setId(pk);
 				data.setSesionPresencial(sesion.get());
 				data.setDdjj(declaracion.get());
 				data.setFechaCarga(date);
@@ -190,14 +189,21 @@ public class SolicitudController {
 		return null;
 	}
 
-	@PutMapping(value = "/update/{id}")
+	@PutMapping(value = "/update/{idsolicitud}/{idsesionpresencial}")
 
-	public Map<String, Object> update(@PathVariable("id") SolicitudPK id, @RequestBody Solicitud data) {
+	public Map<String, Object> update(@PathVariable("idsolicitud") Integer idsolicitud,@PathVariable("idsesionpresencial") Integer idsesionpresencial,  @RequestBody Solicitud data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
+		Ddjj ddjjs=ddjjServiceApi.findById(1).get();
+		SesionPresencial sesionPresencial=sesionPresencialServiceApi.findById(idsesionpresencial).get();
 
 		try {
-			data.setId(id);
+			data.setId_solicitud(idsolicitud);
+			data.setDdjj(ddjjs);
+			data.setFechaCarga(solicitudServiceApi.findById(idsolicitud).get().getFechaCarga());
+			data.setQrAcceso(solicitudServiceApi.findById(idsolicitud).get().getQrAcceso());
+			data.setSesionPresencial(sesionPresencial);
+			
 			solicitudServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);
@@ -209,6 +215,7 @@ public class SolicitudController {
 		}
 
 	}
+
 
 	@DeleteMapping(value = "/delete/{id}")
 

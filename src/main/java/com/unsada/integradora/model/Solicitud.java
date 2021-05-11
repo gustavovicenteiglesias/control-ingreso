@@ -19,8 +19,8 @@ import java.util.Date;
 public class Solicitud implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@EmbeddedId
-	private SolicitudPK id;
+	@Id
+	private Integer id_solicitud;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="fecha_carga")
@@ -48,13 +48,19 @@ public class Solicitud implements Serializable {
 	public Solicitud() {
 	}
 
-	public SolicitudPK getId() {
-		return this.id;
+	
+
+	public Integer getId_solicitud() {
+		return id_solicitud;
 	}
 
-	public void setId(SolicitudPK id) {
-		this.id = id;
+
+
+	public void setId_solicitud(Integer id_solicitud) {
+		this.id_solicitud = id_solicitud;
 	}
+
+
 
 	public Date getFechaCarga() {
 		return this.fechaCarga;
