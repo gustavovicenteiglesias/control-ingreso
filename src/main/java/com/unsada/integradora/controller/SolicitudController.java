@@ -43,6 +43,7 @@ import com.unsada.integradora.service.SesionPresencialServiceApi;
 import com.unsada.integradora.service.SolicitudServiceApi;
 import com.unsada.integradora.util.QrCreatorService;
 
+
 @RestController
 @RequestMapping(value = "/api/solicitud")
 @CrossOrigin("*")
@@ -150,6 +151,32 @@ public class SolicitudController {
 			return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+	}
+	@GetMapping(value = "/find/uuid/{id}")
+	public Map<String, Object> dataClase(@PathVariable("id") String id) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+
+			Optional<Solicitud> clase = solicitudServiceApi.findByQr(id);
+
+			if (clase.isPresent()) {
+				response.put("message", "Successful load");
+				response.put("data", clase);
+				response.put("success", true);
+				return response;
+			} else {
+				response.put("message", "Not found data");
+				response.put("data", null);
+				response.put("success", false);
+				return response;
+			}
+
+		} catch (Exception e) {
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+		}
 	}
 	private Cohorte getCohorte(List<Cohorte> cohortes, Date date){
 		for(Cohorte cohorte : cohortes){

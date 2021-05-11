@@ -112,7 +112,6 @@ public class HorarioController {
 
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idCohorte}")
 	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {

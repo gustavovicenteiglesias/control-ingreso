@@ -77,4 +77,10 @@ public class SolicitudServiceImpl implements SolicitudDao {
 
 	}
 
+	@Override
+	public Optional<Solicitud> findByQr(String qr_acceso) {
+		// TODO Auto-generated method stub
+		return solicitudDao.findByQr(qr_acceso);
+	}
+
 }
