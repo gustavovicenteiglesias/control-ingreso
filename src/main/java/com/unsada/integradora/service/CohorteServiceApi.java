@@ -12,5 +12,7 @@ public interface CohorteServiceApi extends CrudRepository<Cohorte, Integer> {
 
   public List<Cohorte> findByActividad(Optional<Actividad> actividad);
 
+  public List<Cohorte> findByIdCohorteAndActividad(int idCohorte, Actividad actividad);
+
 
 }
