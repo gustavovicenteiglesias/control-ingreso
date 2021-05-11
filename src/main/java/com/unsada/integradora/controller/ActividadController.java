@@ -1,7 +1,7 @@
 package com.unsada.integradora.controller;
 
 import java.sql.Date;
-import java.time.LocalDate;
+//import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +78,7 @@ public class ActividadController {
 
 	}
 
-	@GetMapping(value= "/find-por-fecha/")
+	/*@GetMapping(value= "/find-por-fecha/")
 	public Map<String, Object> actividadPorFecha(@RequestParam("fecha") Date fecha){
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		try{
@@ -101,7 +101,7 @@ public class ActividadController {
 			response.put("success", false);
 			return response;
 			}
-		}
+		}*/
 	@GetMapping(value = "/find/propuesta/{id}")
 	public Map<String, Object> listclase1(@PathVariable("id") Integer id) {
 
@@ -176,7 +176,7 @@ public class ActividadController {
 
 	}
 	//Si ya existe el registro de fecha sobreescribe el aula, sino crea uno nuevo 
-	@PostMapping(value="/asignar-aula-por-cohorte-horario-fecha/{idAula}/{idCohorte}/{idHorario}/")
+	/*@PostMapping(value="/asignar-aula-por-cohorte-horario-fecha/{idAula}/{idCohorte}/{idHorario}/")
 	public ResponseEntity<String> asignarAulaPorFecha( @PathVariable("idAula") int idAula, @PathVariable("idCohorte") int idCohorte, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date ) {
 		Optional<Horario> horario = horarioServiceApi.findById(idHorario);
 		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
@@ -201,9 +201,9 @@ public class ActividadController {
 		}
 
 	}
+*/
 
-
-	@PostMapping(value="/asignar-aula-por-cohorte-horario/{idAula}/{idCohorte}/{idHorario}")
+	/*@PostMapping(value="/asignar-aula-por-cohorte-horario/{idAula}/{idCohorte}/{idHorario}")
 	public ResponseEntity<String> asignarAula( @PathVariable("idAula") int idAula, @PathVariable("idCohorte") int idCohorte, @PathVariable("idHorario") int idHorario ) {
 		Optional<Horario> horario = horarioServiceApi.findById(idHorario);
 		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
@@ -221,7 +221,7 @@ public class ActividadController {
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}
+	}*/
 
 	@PutMapping(value = "/update/{id}")
 	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Actividad data) {

@@ -2,7 +2,7 @@ package com.unsada.integradora.controller;
 
 import java.sql.Date;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
+//import java.time.LocalDate;
 import java.time.ZoneId;
 //import java.lang.StackWalker.Option;
 import java.util.HashMap;
@@ -98,7 +98,7 @@ public class HorarioController {
 		}
 	}
 
-	@PostMapping(value = "/create-todos-cohortes/{idActividad}")
+	/*@PostMapping(value = "/create-todos-cohortes/{idActividad}")
 	public ResponseEntity<String> createForAll( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
@@ -112,8 +112,8 @@ public class HorarioController {
 
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idCohorte}")
+	}*/
+	/*@PostMapping(value = "/create-por-cohorte/{idActividad}/{idCohorte}")
 	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try {
@@ -128,12 +128,12 @@ public class HorarioController {
 			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}
+	}*/
 /* 
 En base a la fecha fin y de inicio, evalua los dias del horario a registrar. Para las fechas
 entre inicio y fin que corerspondan al dia, se genera una sesion.
 */
-	private void crearSesiones(List<Cohorte> cohortes, Horario data) {
+	/*private void crearSesiones(List<Cohorte> cohortes, Horario data) {
 		for(Cohorte cohorte : cohortes){
 			List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
 			Date inicio = (Date) cohorte.getFechaInicio();
@@ -154,7 +154,7 @@ entre inicio y fin que corerspondan al dia, se genera una sesion.
 				}
 			}			
 		}
-	}
+	}*/
 	private CohorteHorario crearCohorteHorario(Cohorte cohorte, Horario data){
 		CohorteHorario cohorteHorario = new CohorteHorario();
 		cohorteHorario.setCohorte(cohorte);
