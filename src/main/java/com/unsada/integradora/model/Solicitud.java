@@ -40,7 +40,7 @@ public class Solicitud implements Serializable {
 
 	//bi-directional many-to-one association to SesionPresencial
 	@ManyToOne
-	@JoinColumn(name="id_sesion_presencial", insertable = false, updatable = false)
+	@JoinColumn(name="id_sesion_presencial")
 	//@JsonIgnore
 	@JsonBackReference("solicitud-sessionpresencial")
 	private SesionPresencial sesionPresencial;

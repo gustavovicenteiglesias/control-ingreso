@@ -111,14 +111,15 @@ public class SolicitudController {
 		}
 	}
 
-/*	@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
+	@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
 	public ResponseEntity<String> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
 		Optional<Ddjj> declaracion = ddjjServiceApi.findById(idDdjj);
 		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
 		List<Cohorte> cohortes = cohorteServiceApi.findByActividad(actividad);
-		SolicitudPK pk = new SolicitudPK();
+		//SolicitudPK pk = new SolicitudPK();
+		int idsesion=0;
 
 		try {
 			Cohorte cohorte = getCohorte(cohortes, date);
@@ -133,11 +134,29 @@ public class SolicitudController {
 			}catch(NoSuchElementException e){
 				return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
 			}
+			
+			try {
+				SesionPresencial  sesionn=new SesionPresencial();
+				sesionn.setCohorteHorario(cohorteHorario.get());
+				sesionn.setEntidadAula(aula.get());
+				sesionn.setFecha(date);
+				idsesion=sesionPresencialServiceApi.save(sesionn).getIdSesionPresencial();
+				
+				
+
+
+				
+			}
+			catch(NoSuchElementException e){
+				return new ResponseEntity<>("Session no guardada", HttpStatus.NOT_FOUND);
+			}
+			
 			try{
-				sesion = sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(), cohorteHorario.get(), date);
-				pk.setIdSesionPresencial(sesion.get().getIdSesionPresencial());
-				data.setId(pk);
-				data.setSesionPresencial(sesion.get());
+				//sesion = sesionPresencialServiceApi.findById(1);
+						//findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(), cohorteHorario.get(), date);
+				//pk.setIdSesionPresencial(sesion.get().getIdSesionPresencial());
+				Optional<SesionPresencial>idSession=sesionPresencialServiceApi.findById(idsesion);
+				data.setSesionPresencial(idSession.get());
 				data.setDdjj(declaracion.get());
 				data.setFechaCarga(date);
 				data.setQrAcceso(QrCreatorService.generateQrId());
@@ -151,7 +170,7 @@ public class SolicitudController {
 			return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}*/
+	}
 	@GetMapping(value = "/find/uuid/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") String id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
