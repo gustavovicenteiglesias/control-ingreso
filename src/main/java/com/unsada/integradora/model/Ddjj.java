@@ -4,10 +4,12 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -32,10 +34,12 @@ public class Ddjj implements Serializable {
 	@JsonBackReference("Persona-ddjj")
 	private Persona persona;
 
-	//bi-directional one-to-one association to DdjjFactorDeRiesgo
-	@OneToOne(mappedBy="ddjj")
-	@JsonBackReference("DdjjFactorDeRiesgo-ddjj")
-	private DdjjFactorDeRiesgo ddjjFactorDeRiesgo;
+	//bi-directional  to DdjjFactorDeRiesgo
+	  
+    
+	@ManyToMany(mappedBy = "ddjj")
+	
+	private Set<FactorDeRiesgo> factorDeRiesgo;
 
 	//bi-directional many-to-one association to Respuesta
 	@OneToMany(mappedBy="ddjj")
@@ -74,12 +78,19 @@ public class Ddjj implements Serializable {
 		this.persona = persona;
 	}
 
-	public DdjjFactorDeRiesgo getDdjjFactorDeRiesgo() {
-		return this.ddjjFactorDeRiesgo;
+	
+
+
+	
+
+	
+
+	public Set<FactorDeRiesgo> getFactorDeRiesgo() {
+		return factorDeRiesgo;
 	}
 
-	public void setDdjjFactorDeRiesgo(DdjjFactorDeRiesgo ddjjFactorDeRiesgo) {
-		this.ddjjFactorDeRiesgo = ddjjFactorDeRiesgo;
+	public void setFactorDeRiesgo(Set<FactorDeRiesgo> factorDeRiesgo) {
+		this.factorDeRiesgo = factorDeRiesgo;
 	}
 
 	public List<Respuesta> getRespuestas() {

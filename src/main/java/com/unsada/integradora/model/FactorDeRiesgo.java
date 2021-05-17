@@ -3,9 +3,14 @@ package com.unsada.integradora.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -24,10 +29,19 @@ public class FactorDeRiesgo implements Serializable {
 
 	private String nombre;
 
-	//bi-directional many-to-one association to DdjjFactorDeRiesgo
-	@OneToMany(mappedBy="factorDeRiesgo")
-	@JsonManagedReference("DdjjFactorDeRiesgo-FactorDeRiesgo")
-	private List<DdjjFactorDeRiesgo> ddjjFactorDeRiesgos;
+	//bi-directional many-to-many association to Ddjj 
+	@ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+	@JoinTable(
+	        name = "factor_de_riesgo_ddjj",
+	        joinColumns = @JoinColumn(name = "id_factor_de_riesgo1", nullable = false),
+	        inverseJoinColumns = @JoinColumn(name="id_ddjj1", nullable = false)
+	    )
+	@JsonIgnore
+	//@JsonBackReference("DdjjFactorDeRiesgo-FactorDeRiesgo")
+	private Set<Ddjj> ddjj;
 
 	public FactorDeRiesgo() {
 	}
@@ -48,26 +62,17 @@ public class FactorDeRiesgo implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<DdjjFactorDeRiesgo> getDdjjFactorDeRiesgos() {
-		return this.ddjjFactorDeRiesgos;
+	public Set<Ddjj> getDdjj() {
+		return ddjj;
 	}
 
-	public void setDdjjFactorDeRiesgos(List<DdjjFactorDeRiesgo> ddjjFactorDeRiesgos) {
-		this.ddjjFactorDeRiesgos = ddjjFactorDeRiesgos;
+	public void setDdjj(Set<Ddjj> ddjj) {
+		this.ddjj = ddjj;
 	}
 
-	public DdjjFactorDeRiesgo addDdjjFactorDeRiesgo(DdjjFactorDeRiesgo ddjjFactorDeRiesgo) {
-		getDdjjFactorDeRiesgos().add(ddjjFactorDeRiesgo);
-		ddjjFactorDeRiesgo.setFactorDeRiesgo(this);
-
-		return ddjjFactorDeRiesgo;
-	}
-
-	public DdjjFactorDeRiesgo removeDdjjFactorDeRiesgo(DdjjFactorDeRiesgo ddjjFactorDeRiesgo) {
-		getDdjjFactorDeRiesgos().remove(ddjjFactorDeRiesgo);
-		ddjjFactorDeRiesgo.setFactorDeRiesgo(null);
-
-		return ddjjFactorDeRiesgo;
-	}
+	
+	
+	
+	
 
 }

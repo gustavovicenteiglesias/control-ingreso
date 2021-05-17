@@ -22,7 +22,7 @@ import com.unsada.integradora.model.FactorDeRiesgo;
 import com.unsada.integradora.service.FactorDeRiesgoServiceApi;
 
 @RestController
-@RequestMapping(value = "/api/factorderiesgo")
+@RequestMapping(value = "/api/FactorDeRiesgo")
 @CrossOrigin("*")
 public class FactorDeRiesgoController {
 	@Autowired
