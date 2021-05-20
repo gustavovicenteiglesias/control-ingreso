@@ -32,7 +32,7 @@ public class FactorDeRiesgo implements Serializable {
 	//bi-directional many-to-many association to Ddjj 
 	@ManyToMany(mappedBy = "factorDeRiesgo")
 	
-	//@JsonIgnore
+	@JsonIgnore
 	//@JsonBackReference("DdjjFactorDeRiesgo-FactorDeRiesgo")
 	private Set<Ddjj> ddjj;
 

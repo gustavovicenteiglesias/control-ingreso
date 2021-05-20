@@ -2,6 +2,9 @@ package com.unsada.integradora.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -31,6 +34,7 @@ public class Persona implements Serializable {
 
 	//bi-directional many-to-one association to Ddjj
 	@OneToMany(mappedBy="persona",cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Ddjj> ddjjs;
 
 	public Persona() {

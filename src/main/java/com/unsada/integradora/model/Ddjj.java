@@ -31,7 +31,7 @@ public class Ddjj implements Serializable {
 	//bi-directional many-to-one association to Persona
 	@ManyToOne
 	@JoinColumn(name="id_persona")
-	@JsonBackReference("Persona-ddjj")
+	@JsonIgnore
 	private Persona persona;
 
 	//bi-directional  to DdjjFactorDeRiesgo
@@ -47,12 +47,13 @@ public class Ddjj implements Serializable {
 
 	//bi-directional many-to-one association to Respuesta
 	@OneToMany(mappedBy="ddjj",cascade = CascadeType.ALL)
-	//@JsonManagedReference("respuestas-ddjj")
+	@JsonIgnore
+	//@JsonManagedReference("ddjj=respuesta")
 	private List<Respuesta> respuestas;
 
 	//bi-directional many-to-one association to Solicitud
 	@OneToMany(mappedBy="ddjj",cascade = CascadeType.ALL)
-	//@JsonManagedReference("solicitud-ddjj")
+	@JsonIgnore
 	private List<Solicitud> solicituds;
 
 	public Ddjj() {

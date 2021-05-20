@@ -3,6 +3,7 @@ package com.unsada.integradora.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class Pregunta implements Serializable {
 
 	//bi-directional many-to-one association to Respuesta
 	@OneToMany(mappedBy="pregunta",cascade = CascadeType.ALL)
-	//@JsonManagedReference("pregunta-respuesta")
+	@JsonIgnore
 	private List<Respuesta> respuestas;
 
 	public Pregunta() {

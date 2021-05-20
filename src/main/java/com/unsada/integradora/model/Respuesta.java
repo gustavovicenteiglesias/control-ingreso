@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -23,13 +24,13 @@ public class Respuesta implements Serializable {
 	//bi-directional many-to-one association to Ddjj
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_ddjj" )
-	//@JsonBackReference("respuestas-ddjj")
+	@JsonIgnore
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to Pregunta
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_pregunta")
-	//@JsonBackReference("pregunta-respuesta")
+	@JsonIgnore
 	private Pregunta pregunta;
 
 	public Respuesta() {
