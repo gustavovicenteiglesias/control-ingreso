@@ -16,7 +16,7 @@ import java.util.List;
 @NamedQuery(name="Pregunta.findAll", query="SELECT p FROM Pregunta p")
 public class Pregunta implements Serializable {
 	private static final long serialVersionUID = 1L;
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	@Column(name="id_pregunta")
 	private int idPregunta;
@@ -24,8 +24,8 @@ public class Pregunta implements Serializable {
 	private String descripcion;
 
 	//bi-directional many-to-one association to Respuesta
-	@OneToMany(mappedBy="pregunta")
-	@JsonManagedReference("pregunta-respuesta")
+	@OneToMany(mappedBy="pregunta",cascade = CascadeType.ALL)
+	//@JsonManagedReference("pregunta-respuesta")
 	private List<Respuesta> respuestas;
 
 	public Pregunta() {

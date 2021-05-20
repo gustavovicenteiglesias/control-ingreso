@@ -37,25 +37,29 @@ public class Ddjj implements Serializable {
 	//bi-directional  to DdjjFactorDeRiesgo
 	  
     
-	@ManyToMany(mappedBy = "ddjj")
-	
+	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST} )
+	@JoinTable(
+	        name = "ddjj_factor_de_riesgo",
+	        joinColumns = @JoinColumn(name = "id_ddjj", nullable = false),
+	        inverseJoinColumns = @JoinColumn(name="id_factor_de_riesgo", nullable = false)
+	    )
 	private Set<FactorDeRiesgo> factorDeRiesgo;
 
 	//bi-directional many-to-one association to Respuesta
-	@OneToMany(mappedBy="ddjj")
-	@JsonManagedReference("respuestas-ddjj")
+	@OneToMany(mappedBy="ddjj",cascade = CascadeType.ALL)
+	//@JsonManagedReference("respuestas-ddjj")
 	private List<Respuesta> respuestas;
 
 	//bi-directional many-to-one association to Solicitud
-	@OneToMany(mappedBy="ddjj")
-	@JsonManagedReference("solicitud-ddjj")
+	@OneToMany(mappedBy="ddjj",cascade = CascadeType.ALL)
+	//@JsonManagedReference("solicitud-ddjj")
 	private List<Solicitud> solicituds;
 
 	public Ddjj() {
 	}
 
 	public int getIdDdjj() {
-		return this.idDdjj;
+		return idDdjj;
 	}
 
 	public void setIdDdjj(int idDdjj) {
@@ -63,7 +67,7 @@ public class Ddjj implements Serializable {
 	}
 
 	public Date getFecha() {
-		return this.fecha;
+		return fecha;
 	}
 
 	public void setFecha(Date fecha) {
@@ -71,19 +75,12 @@ public class Ddjj implements Serializable {
 	}
 
 	public Persona getPersona() {
-		return this.persona;
+		return persona;
 	}
 
 	public void setPersona(Persona persona) {
 		this.persona = persona;
 	}
-
-	
-
-
-	
-
-	
 
 	public Set<FactorDeRiesgo> getFactorDeRiesgo() {
 		return factorDeRiesgo;
@@ -94,47 +91,27 @@ public class Ddjj implements Serializable {
 	}
 
 	public List<Respuesta> getRespuestas() {
-		return this.respuestas;
+		return respuestas;
 	}
 
 	public void setRespuestas(List<Respuesta> respuestas) {
 		this.respuestas = respuestas;
 	}
 
-	public Respuesta addRespuesta(Respuesta respuesta) {
-		getRespuestas().add(respuesta);
-		respuesta.setDdjj(this);
-
-		return respuesta;
-	}
-
-	public Respuesta removeRespuesta(Respuesta respuesta) {
-		getRespuestas().remove(respuesta);
-		respuesta.setDdjj(null);
-
-		return respuesta;
-	}
-
 	public List<Solicitud> getSolicituds() {
-		return this.solicituds;
+		return solicituds;
 	}
 
 	public void setSolicituds(List<Solicitud> solicituds) {
 		this.solicituds = solicituds;
 	}
 
-	public Solicitud addSolicitud(Solicitud solicitud) {
-		getSolicituds().add(solicitud);
-		solicitud.setDdjj(this);
-
-		return solicitud;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-
-	public Solicitud removeSolicitud(Solicitud solicitud) {
-		getSolicituds().remove(solicitud);
-		solicitud.setDdjj(null);
-
-		return solicitud;
-	}
+	
+	
+	
+	
 
 }

@@ -30,7 +30,7 @@ public class Persona implements Serializable {
 	private String telefono;
 
 	//bi-directional many-to-one association to Ddjj
-	@OneToMany(mappedBy="persona")
+	@OneToMany(mappedBy="persona",cascade = CascadeType.ALL)
 	private List<Ddjj> ddjjs;
 
 	public Persona() {

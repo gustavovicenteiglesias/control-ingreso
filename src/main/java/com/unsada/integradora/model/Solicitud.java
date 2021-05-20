@@ -35,7 +35,7 @@ public class Solicitud implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="id_ddjj")
 	//@JsonIgnore
-	@JsonBackReference("solicitud-ddjj")
+	//@JsonBackReference("solicitud-ddjj")
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to SesionPresencial

@@ -21,15 +21,15 @@ public class Respuesta implements Serializable {
 	private byte afirmativo;
 
 	//bi-directional many-to-one association to Ddjj
-	@ManyToOne
-	@JoinColumn(name="id_ddjj", insertable = false, updatable = false )
-	@JsonBackReference("respuestas-ddjj")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="id_ddjj" )
+	//@JsonBackReference("respuestas-ddjj")
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to Pregunta
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_pregunta")
-	@JsonBackReference("pregunta-respuesta")
+	//@JsonBackReference("pregunta-respuesta")
 	private Pregunta pregunta;
 
 	public Respuesta() {
@@ -73,4 +73,12 @@ public class Respuesta implements Serializable {
 		this.pregunta = pregunta;
 	}
 
+
+
+	@Override
+	public String toString() {
+		return "Respuesta [id_respuesta=" + id_respuesta + ", afirmativo=" + afirmativo + ", ddjj=" + ddjj
+				+ ", pregunta=" + pregunta + "]";
+	}
+	
 }

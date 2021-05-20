@@ -22,7 +22,7 @@ import java.util.Set;
 @NamedQuery(name="FactorDeRiesgo.findAll", query="SELECT f FROM FactorDeRiesgo f")
 public class FactorDeRiesgo implements Serializable {
 	private static final long serialVersionUID = 1L;
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	//@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	@Column(name="id_factor_de_riesgo")
 	private int idFactorDeRiesgo;
@@ -30,16 +30,9 @@ public class FactorDeRiesgo implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-many association to Ddjj 
-	@ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-	@JoinTable(
-	        name = "factor_de_riesgo_ddjj",
-	        joinColumns = @JoinColumn(name = "id_factor_de_riesgo1", nullable = false),
-	        inverseJoinColumns = @JoinColumn(name="id_ddjj1", nullable = false)
-	    )
-	@JsonIgnore
+	@ManyToMany(mappedBy = "factorDeRiesgo")
+	
+	//@JsonIgnore
 	//@JsonBackReference("DdjjFactorDeRiesgo-FactorDeRiesgo")
 	private Set<Ddjj> ddjj;
 
@@ -68,6 +61,11 @@ public class FactorDeRiesgo implements Serializable {
 
 	public void setDdjj(Set<Ddjj> ddjj) {
 		this.ddjj = ddjj;
+	}
+
+	@Override
+	public String toString() {
+		return "FactorDeRiesgo [idFactorDeRiesgo=" + idFactorDeRiesgo + ", nombre=" + nombre + ", ddjj=" + ddjj + "]";
 	}
 
 	

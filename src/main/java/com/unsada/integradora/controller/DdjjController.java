@@ -1,9 +1,13 @@
 package com.unsada.integradora.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Ddjj;
+import com.unsada.integradora.model.FactorDeRiesgo;
+import com.unsada.integradora.model.Persona;
+import com.unsada.integradora.model.Pregunta;
+import com.unsada.integradora.model.Respuesta;
 import com.unsada.integradora.service.DDjjServiceApi;
+import com.unsada.integradora.service.FactorDeRiesgoServiceApi;
+import com.unsada.integradora.service.PersonaServiceApi;
+import com.unsada.integradora.service.PreguntaServiceApi;
+import com.unsada.integradora.service.RespuestaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/ddjj")
@@ -27,6 +39,17 @@ import com.unsada.integradora.service.DDjjServiceApi;
 public class DdjjController {
 	@Autowired
 	DDjjServiceApi ddjjServiceApi;
+	@Autowired
+	PersonaServiceApi personaServiceApi ;
+	@Autowired
+	FactorDeRiesgoServiceApi factorDeRiesgoServiceApi;
+	@Autowired
+	PreguntaServiceApi preguntaServiceApi ;
+	@Autowired
+	RespuestaServiceApi respuestaServiceApi;
+	private Set<Ddjj> ddj=new HashSet<>();
+	
+	
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
@@ -87,15 +110,60 @@ public class DdjjController {
 		}
 
 	}
+	
+
+	@PostMapping(value = "/crear/{idpersona}")
+	public ResponseEntity<String> crear(@PathVariable("idpersona") Integer id,@RequestBody Ddjj data) {
+		Persona persona=personaServiceApi.findById(id).get();
+		
+		Ddjj ddjjss=new Ddjj();
+		
+		System.out.println(data.getFactorDeRiesgo().toString());
+		
+		try {
+			
+			int dj=ddjjServiceApi.save(ddjjss).getIdDdjj();
+			
+			ddjjss.setIdDdjj(dj);
+			ddjjss.setFecha(data.getFecha());
+			ddjjss.setPersona(persona);
+			
+			ddjjss.setRespuestas(updateRespuesta(data.getRespuestas(),ddjjss));
+			//ddjjss.setFactorDeRiesgo(data.getFactorDeRiesgo());
+			ddjjss.setFactorDeRiesgo(data.getFactorDeRiesgo());
+			//updateFactordeRiesgo(data.getFactorDeRiesgo(), ddjjss);
+			ddjjServiceApi.save(ddjjss);
+			
+			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	public List<Respuesta> updateRespuesta (List<Respuesta> respuesta, Ddjj ddjj){
+		for (int i = 0; i < respuesta.size(); i++) {
+		    respuesta.get(i).setDdjj(ddjj);
+		    respuesta.get(i).setAfirmativo(respuesta.get(i).getAfirmativo());
+		    respuesta.get(i).setPregunta(respuesta.get(i).getPregunta());
+		}
+		
+		
+		return respuesta;
+	}
+	
+	
 
 	@PutMapping(value = "/update/{id}")
 
 	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Ddjj data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
+		
 
 		try {
 			data.setIdDdjj(id);
+			
 			ddjjServiceApi.save(data);
 			response.put("message", "Successful update");
 			response.put("success", true);
