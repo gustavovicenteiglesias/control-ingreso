@@ -78,7 +78,7 @@ public class SesionPresencialServiceImpl implements SesionPresencialDao {
 	}
 
 	@Override
-	public Optional<SesionPresencial> session_persona(int id_persona) {
+	public Iterable<SesionPresencial> session_persona(int id_persona) {
 		// TODO Auto-generated method stub
 		return sesionPresencialDao.session_persona(id_persona);
 	}

@@ -80,26 +80,20 @@ public class SesionPresencialController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-
-			Optional<SesionPresencial> clase = sesionPresencialServiceApi.session_persona(id_persona);
-
-			if (clase.isPresent()) {
-				response.put("message", "Successful load");
-				response.put("data", clase);
-				response.put("success", true);
-				return response;
-			} else {
-				response.put("message", "Not found data");
-				response.put("data", null);
-				response.put("success", false);
-				return response;
-			}
+			List<SesionPresencial> claseData;
+			claseData = (List<SesionPresencial>) sesionPresencialServiceApi.session_persona(id_persona);
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
 
 		} catch (Exception e) {
-			response.put("message", "" + e.getMessage());
-			response.put("success", false);
+			response.put("message", e.getMessage());
+			response.put("success ", false);
 			return response;
 		}
+
+		
 	}
 
 	@PostMapping(value = "/create")

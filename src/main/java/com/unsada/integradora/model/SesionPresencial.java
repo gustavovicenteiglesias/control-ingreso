@@ -44,8 +44,8 @@ public class SesionPresencial implements Serializable {
 
 	//bi-directional many-to-one association to Solicitud
 	@OneToMany(mappedBy="sesionPresencial")
-	//@JsonIgnore
-	@JsonManagedReference("solicitud-sessionpresencial")
+	@JsonIgnore
+	//@JsonManagedReference("solicitud-sessionpresencial")
 	private List<Solicitud> solicituds;
 
 	public SesionPresencial() {
