@@ -75,6 +75,32 @@ public class SesionPresencialController {
 			return response;
 		}
 	}
+	@GetMapping(value = "/find/persona/{id_persona}")//trae sesion por persona 
+	public Map<String, Object> dataClase2(@PathVariable("id_persona") Integer id_persona) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+
+			Optional<SesionPresencial> clase = sesionPresencialServiceApi.session_persona(id_persona);
+
+			if (clase.isPresent()) {
+				response.put("message", "Successful load");
+				response.put("data", clase);
+				response.put("success", true);
+				return response;
+			} else {
+				response.put("message", "Not found data");
+				response.put("data", null);
+				response.put("success", false);
+				return response;
+			}
+
+		} catch (Exception e) {
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+	}
 
 	@PostMapping(value = "/create")
 	public ResponseEntity<String> create(@RequestBody SesionPresencial data) {

@@ -1,5 +1,6 @@
 package com.unsada.integradora.service;
 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,13 @@ public class PersonaServiceImpl implements PersonaDao {
 		// TODO Auto-generated method stub
 		return personaDao.findByDni(dni);
 	}
+
+	@Override
+	public Iterable<Persona> PersonaSesion(String fechainicio, String fechafin) {
+		// TODO Auto-generated method stub
+		return personaDao.PersonaSesion(fechainicio, fechafin);
+	}
+
+	
 
 }

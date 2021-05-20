@@ -75,6 +75,7 @@ public class PreguntaController {
 			return response;
 		}
 	}
+	
 
 	@PostMapping(value = "/create")
 	public ResponseEntity<String> create(@RequestBody Pregunta data) {

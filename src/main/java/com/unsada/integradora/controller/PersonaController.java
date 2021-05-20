@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Ddjj;
 import com.unsada.integradora.model.Persona;
+import com.unsada.integradora.model.Pregunta;
 import com.unsada.integradora.service.PersonaServiceApi;
+import com.unsada.integradora.service.PreguntaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/persona")
@@ -52,20 +54,24 @@ public class PersonaController {
 
 	}
 
-	// @GetMapping(value = "/find-en-contacto/{idPersona}")
-	// public Map<String, Object> personasEnContacto(@PathVariable("idPersona") Integer idPersona, @RequestParam("fechaInicio") Date inicio, @RequestParam("fechaFin") Date fin){
-	// 	HashMap<String, Object> response = new HashMap<String, Object>();
-	// 	try {
-	// 		Optional<Persona> persona = personaServiceApi.findById(idPersona);
-	// 		for(Ddjj declaracion : persona.get().getDdjjs()){
-	// 			declaracion.
+	@GetMapping(value = "/find/persona_sesion/{fechainicio}/{fechafin}")
+	public Map<String, Object> dataClase1 (@PathVariable("fechainicio") String fechainicio,@PathVariable("fechafin") String fechafin) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
 
-	// 		}
-	// 	} catch (Exception e) {
-	// 		//TODO: handle exception
-	// 	}
-	// 	return response;
-	// }
+		try {
+			List<Persona> claseData;
+			claseData = (List<Persona>) personaServiceApi.PersonaSesion(fechainicio, fechafin);
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+	}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
