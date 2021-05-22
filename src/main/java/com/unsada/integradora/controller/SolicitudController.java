@@ -117,58 +117,49 @@ public class SolicitudController {
 		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
+		Optional<CohorteHorario> cohorteHorario = Optional.empty();
 		List<Cohorte> cohortes = cohorteServiceApi.findByActividad(actividad);
-		//SolicitudPK pk = new SolicitudPK();
-		int idsesion=0;
+		if(aula.isPresent()){
+			if(aula.get().getCapacidadConAforo() > 0){
+				try {
+					Cohorte cohorte = getCohorte(cohortes, date);
+					try{
+						cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
+					}catch(NoSuchElementException e){
+						return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
+					}
+					int idSesion = generarSesion(cohorteHorario, aula, date);
+					if (idSesion != 0){
+						Optional<SesionPresencial>idSession=sesionPresencialServiceApi.findById(idSesion);
+						data.setSesionPresencial(idSession.get());
+						data.setDdjj(declaracion.get());
+						data.setFechaCarga(date);
+						data.setQrAcceso(QrCreatorService.generateQrId());
+						solicitudServiceApi.save(data);
+					}else{
+						return new ResponseEntity<>("Sesion no encontrada" , HttpStatus.NOT_FOUND);
+					}
+					
+				} catch (NullPointerException e) {
+					return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 
-		try {
-			Cohorte cohorte = getCohorte(cohortes, date);
-			System.out.println("cohorte is:" + cohorte.getIdCohorte());
-			Optional<CohorteHorario> cohorteHorario = Optional.empty();
-			Optional<SesionPresencial> sesion = Optional.empty();
-			try{
-				System.out.println("here");
-				System.out.println("cohorte : " + cohorte.getIdCohorte() + " horario: " + horario.get().getIdHorario());
-				cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
-				System.out.println("cohorte horario is: " + cohorteHorario.get().getIdCohorteHorario());
-			}catch(NoSuchElementException e){
-				return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
 			}
-			
-			try {
-				SesionPresencial  sesionn=new SesionPresencial();
-				sesionn.setCohorteHorario(cohorteHorario.get());
-				sesionn.setEntidadAula(aula.get());
-				sesionn.setFecha(date);
-				idsesion=sesionPresencialServiceApi.save(sesionn).getIdSesionPresencial();
-				
-				
-
-
-				
-			}
-			catch(NoSuchElementException e){
-				return new ResponseEntity<>("Session no guardada", HttpStatus.NOT_FOUND);
-			}
-			
-			try{
-				//sesion = sesionPresencialServiceApi.findById(1);
-						//findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(), cohorteHorario.get(), date);
-				//pk.setIdSesionPresencial(sesion.get().getIdSesionPresencial());
-				Optional<SesionPresencial>idSession=sesionPresencialServiceApi.findById(idsesion);
-				data.setSesionPresencial(idSession.get());
-				data.setDdjj(declaracion.get());
-				data.setFechaCarga(date);
-				data.setQrAcceso(QrCreatorService.generateQrId());
-				solicitudServiceApi.save(data);
-			}catch(NoSuchElementException e){
-				return new ResponseEntity<>("Sesion no encontrada" , HttpStatus.NOT_FOUND);
-			}
-			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
-		} catch (NullPointerException e) {
-
-			return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		return new ResponseEntity<>("Success", HttpStatus.CREATED);
+	}
+	private int generarSesion(Optional<CohorteHorario> cohorteHorario, Optional<EntidadAula> aula, Date date){
+		try {
+			int capacidadConAforo = aula.get().getCapacidadConAforo();
+			aula.get().setCapacidadConAforo(capacidadConAforo --);
+			Optional<SesionPresencial>  sesionn= sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(),cohorteHorario.get(), date);
+			sesionn.get().setEntidadAula(aula.get());
+			return sesionn.get().getIdSesionPresencial();
+		}
+		catch(NoSuchElementException e){
+			return 0;
+		}
+		
 
 	}
 	@GetMapping(value = "/find/uuid/{id}")
