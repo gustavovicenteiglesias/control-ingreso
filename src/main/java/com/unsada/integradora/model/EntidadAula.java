@@ -35,7 +35,7 @@ public class EntidadAula implements Serializable {
 	private Edificio edificio;
 
 	//bi-directional many-to-one association to SesionPresencial
-	@OneToMany(mappedBy="entidadAula")
+	@OneToMany(mappedBy="entidadAula", cascade = CascadeType.PERSIST)
 	@JsonManagedReference("aula-sesionPresencials")
 	private List<SesionPresencial> sesionPresencials;
 

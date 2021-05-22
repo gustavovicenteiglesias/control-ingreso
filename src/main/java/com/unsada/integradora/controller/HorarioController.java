@@ -29,11 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unsada.integradora.model.Actividad;
 import com.unsada.integradora.model.Cohorte;
 import com.unsada.integradora.model.CohorteHorario;
+import com.unsada.integradora.model.EntidadAula;
 import com.unsada.integradora.model.Horario;
 import com.unsada.integradora.model.SesionPresencial;
 import com.unsada.integradora.service.ActividadServiceApi;
 import com.unsada.integradora.service.CohorteHorarioServiceApi;
 import com.unsada.integradora.service.CohorteServiceApi;
+import com.unsada.integradora.service.EntidadAulaServiceApi;
 import com.unsada.integradora.service.HorarioServiceApi;
 import com.unsada.integradora.service.SesionPresencialServiceApi;
 
@@ -51,6 +53,8 @@ public class HorarioController {
 	CohorteHorarioServiceApi cohorteHorarioServiceApi;
 	@Autowired
 	SesionPresencialServiceApi sesionPresencialServiceApi;
+	@Autowired
+	EntidadAulaServiceApi aulaServiceApi;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -71,7 +75,7 @@ public class HorarioController {
 		}
 
 	}
-	@GetMapping(value = "/find-actividad-fecha/{idActividad}/")
+	@GetMapping(value = "/find-por-actividad-fecha/{idActividad}/")
 	public Map<String, Object> dat(@PathVariable("idActividad") Integer idActividad, @RequestParam("fecha") Date fecha){
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
@@ -132,14 +136,14 @@ public class HorarioController {
 		}
 	}
 
-	@PostMapping(value = "/create-todos-cohortes/{idActividad}")
-	public ResponseEntity<String> createForAll( @PathVariable("idActividad") int idActividad, @RequestBody Horario data) {
+	@PostMapping(value = "/create-todos-cohortes/{idActividad}/{idAula}")
+	public ResponseEntity<String> createForAll( @PathVariable("idActividad") int idActividad, @RequestBody Horario data, @PathVariable("idAula") int idAula) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
 		try {
 			List<Cohorte>  cohortes =cohorteServiceApi.findByActividad(actividad);
 			if(!cohortes.isEmpty()){
-
-				crearSesiones(cohortes, horarioServiceApi.save(data));
+				crearSesiones(cohortes, horarioServiceApi.save(data), aula.get());
 			}
 			return new ResponseEntity<>("Save successful: Se encontraron " + cohortes.size() + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
@@ -148,14 +152,14 @@ public class HorarioController {
 		}
 
 	}
-	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idCohorte}")
-	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
+	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idAula}/{idCohorte}")
+	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,  @PathVariable("idAula") int idAula,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
 		try {
 			List<Cohorte>  cohorte =cohorteServiceApi.findByIdCohorteAndActividad(idCohorte, actividad.get());
 			if(!cohorte.isEmpty()){
-
-				crearSesiones(cohorte, horarioServiceApi.save(data));
+				crearSesiones(cohorte, horarioServiceApi.save(data), aula.get());
 			}
 			return new ResponseEntity<>("Save successful: Se encontraron " + cohorte.size() + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
@@ -168,7 +172,7 @@ public class HorarioController {
 En base a la fecha fin y de inicio, evalua los dias del horario a registrar. Para las fechas
 entre inicio y fin que corerspondan al dia, se genera una sesion.
 */
-	private void crearSesiones(List<Cohorte> cohortes, Horario data) {
+	private void crearSesiones(List<Cohorte> cohortes, Horario data, EntidadAula aula) {
 		for(Cohorte cohorte : cohortes){
 			List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
 			Date inicio = (Date) cohorte.getFechaInicio();
@@ -180,10 +184,11 @@ entre inicio y fin que corerspondan al dia, se genera una sesion.
 					SesionPresencial sesion = new SesionPresencial();
 					if(!cohorteHorario.isEmpty()){
 						sesion.setCohorteHorario(cohorteHorario.get(0));
-						System.out.println("Cohorte existe pe");
+						System.out.println("Cohorte existe");
 					}else{
 						sesion.setCohorteHorario(crearCohorteHorario(cohorte, data));
 					}
+					sesion.setEntidadAula(aula);
 					sesion.setFecha(Date.from(fecha.atStartOfDay(ZoneId.of("America/Argentina/Catamarca")).toInstant()));
 					sesionPresencialServiceApi.save(sesion);
 				}
