@@ -36,7 +36,7 @@ public class SesionPresencial implements Serializable {
 	private CohorteHorario cohorteHorario;
 
 	//bi-directional many-to-one association to EntidadAula
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="id_aula")
 	//@JsonIgnore
 	@JsonBackReference("aula-sesionPresencials")

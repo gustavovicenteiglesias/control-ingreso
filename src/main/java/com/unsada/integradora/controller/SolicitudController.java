@@ -111,7 +111,7 @@ public class SolicitudController {
 		}
 	}
 
-	@PostMapping(value = "/create-ddjj-aula-actividad-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}")
+	@PostMapping(value = "/create-ddjj-actividad-aula-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}/")
 	public ResponseEntity<String> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
 		Optional<Ddjj> declaracion = ddjjServiceApi.findById(idDdjj);
 		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
@@ -123,15 +123,16 @@ public class SolicitudController {
 			if(aula.get().getCapacidadConAforo() > 0){
 				try {
 					Cohorte cohorte = getCohorte(cohortes, date);
+					System.out.println("Cohorte is : " + cohorte.getIdCohorte());
 					try{
 						cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
+						System.out.println("No hay cohortehorario definido para este horario");
 					}catch(NoSuchElementException e){
 						return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
 					}
-					int idSesion = generarSesion(cohorteHorario, aula, date);
-					if (idSesion != 0){
-						Optional<SesionPresencial>idSession=sesionPresencialServiceApi.findById(idSesion);
-						data.setSesionPresencial(idSession.get());
+					Optional<SesionPresencial> sesion = generarSesion(cohorteHorario, aula, date);
+					if (sesion.isPresent()){
+						data.setSesionPresencial(sesion.get());
 						data.setDdjj(declaracion.get());
 						data.setFechaCarga(date);
 						data.setQrAcceso(QrCreatorService.generateQrId());
@@ -144,20 +145,26 @@ public class SolicitudController {
 					return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 
+			}else{
+				return new ResponseEntity<>("El aula solicitada no tiene más espacio ", HttpStatus.UNAUTHORIZED);
+
 			}
 		}
 		return new ResponseEntity<>("Success", HttpStatus.CREATED);
 	}
-	private int generarSesion(Optional<CohorteHorario> cohorteHorario, Optional<EntidadAula> aula, Date date){
+	private Optional<SesionPresencial> generarSesion(Optional<CohorteHorario> cohorteHorario, Optional<EntidadAula> aula, Date date){
 		try {
+			System.out.println("La fecha para la busqueda es :" + date);
+			System.out.println("El cohorte horario es:" + cohorteHorario.get().getIdCohorteHorario());
+			System.out.println("El aula es:" + aula.get().getIdAula());
 			int capacidadConAforo = aula.get().getCapacidadConAforo();
-			aula.get().setCapacidadConAforo(capacidadConAforo --);
+			aula.get().setCapacidadConAforo(capacidadConAforo - 1);
 			Optional<SesionPresencial>  sesionn= sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(),cohorteHorario.get(), date);
 			sesionn.get().setEntidadAula(aula.get());
-			return sesionn.get().getIdSesionPresencial();
+			return sesionn;
 		}
 		catch(NoSuchElementException e){
-			return 0;
+			return Optional.empty();
 		}
 		
 
