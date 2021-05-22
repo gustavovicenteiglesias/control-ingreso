@@ -46,7 +46,7 @@ public class Cohorte implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="id_sede")
 	//@JsonIgnore
-	@JsonBackReference("cohorte-sede")
+	//@JsonBackReference("cohorte-sede")
 	private Sede sede;
 
 	//bi-directional many-to-one association to CohorteHorario
