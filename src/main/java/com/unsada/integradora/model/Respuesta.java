@@ -19,18 +19,18 @@ public class Respuesta implements Serializable {
 	@Id
 	private Integer id_respuesta;
 
-	private byte afirmativo;
+	private Boolean afirmativo;
 
 	//bi-directional many-to-one association to Ddjj
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_ddjj" )
-	@JsonIgnore
+	
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to Pregunta
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_pregunta")
-	@JsonIgnore
+
 	private Pregunta pregunta;
 
 	public Respuesta() {
@@ -50,14 +50,20 @@ public class Respuesta implements Serializable {
 
 
 
-	public byte getAfirmativo() {
-		return this.afirmativo;
+	
+
+	public Boolean getAfirmativo() {
+		return afirmativo;
 	}
 
-	public void setAfirmativo(byte afirmativo) {
+
+
+	public void setAfirmativo(Boolean afirmativo) {
 		this.afirmativo = afirmativo;
 	}
 
+
+	@JsonIgnore
 	public Ddjj getDdjj() {
 		return this.ddjj;
 	}
