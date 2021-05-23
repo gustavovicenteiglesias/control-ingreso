@@ -78,9 +78,11 @@ public class CohorteServiceImpl implements CohorteDao {
 	}
 
 	@Override
-	public Iterable<Cohorte> findByActividad(Integer id_actividad) {
+	public Iterable<Cohorte> findByActivity(Integer id_actividad) {
 		// TODO Auto-generated method stub
-		return cohorteDao.findByActividad(id_actividad);
+		return cohorteDao.findByActivity(id_actividad);
 	}
+
+	
 
 }

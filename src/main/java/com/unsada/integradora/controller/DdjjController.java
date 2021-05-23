@@ -114,12 +114,13 @@ public class DdjjController {
 	
 
 	@PostMapping(value = "/crear/{idpersona}")
-	public ResponseEntity<String> crear(@PathVariable("idpersona") Integer id,@RequestBody Ddjj data) {
+	public Map<String, Object> crear(@PathVariable("idpersona") Integer id,@RequestBody Ddjj data) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
 		Persona persona=personaServiceApi.findById(id).get();
 		
 		Ddjj ddjjss=new Ddjj();
 		
-		System.out.println(data.getFactorDeRiesgo().toString());
+		
 		
 		try {
 			
@@ -134,11 +135,15 @@ public class DdjjController {
 			ddjjss.setFactorDeRiesgo(data.getFactorDeRiesgo());
 			//updateFactordeRiesgo(data.getFactorDeRiesgo(), ddjjss);
 			ddjjServiceApi.save(ddjjss);
+			response.put("message", "Successful load");
+			response.put("data",dj);
+			response.put("success", true);
+			return response;
 			
-			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 		} catch (Exception e) {
-
-			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
 		}
 
 	}

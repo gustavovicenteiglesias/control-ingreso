@@ -57,14 +57,14 @@ public class CohorteController {
 	}
 
 }
-	/*@GetMapping(value = "/find/actividad/{idactividad}")
+	@GetMapping(value = "/find/actividad/{idactividad}")
 	public Map<String, Object> listclase1(@PathVariable("idactividad") Integer idactividad) {
 
 	HashMap<String, Object> response = new HashMap<String, Object>();
 
 	try {
 		List<Cohorte> claseData;
-		claseData = (List<Cohorte>) cohorteServiceApi.findByActividad(idactividad);
+		claseData = (List<Cohorte>) cohorteServiceApi.findByActivity(idactividad);
 		response.put("message", "Successful load");
 		response.put("data",claseData);
 		response.put("success", true);
@@ -76,7 +76,7 @@ public class CohorteController {
 		return response;
 	}
 
-}*/
+}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
