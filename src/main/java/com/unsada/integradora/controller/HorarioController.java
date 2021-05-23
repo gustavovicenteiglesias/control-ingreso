@@ -80,7 +80,7 @@ public class HorarioController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		try{
-			Cohorte cohorte = getCohorte(actividad.get().getCohortes(), fecha);
+			Cohorte cohorte = CohorteServiceApi.getCohorte(actividad.get().getCohortes(), fecha);
 			List<CohorteHorario> cohorteHorarios = cohorteHorarioServiceApi.findByCohorte(cohorte);
 			List<Horario> horarios = new ArrayList<Horario>();
 			for(CohorteHorario cohorteHorario : cohorteHorarios){
@@ -98,17 +98,7 @@ public class HorarioController {
 		}
 	}
 
-	private Cohorte getCohorte(List<Cohorte> cohortes, Date date){
-		for(Cohorte cohorte : cohortes){
-			Date inicio = (Date) cohorte.getFechaInicio();
-			Date fin = (Date) cohorte.getFechaFin();
-			List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
-			if(fechas.contains(date.toLocalDate())){
-				return cohorte;
-			}
-		}
-		return null;
-	}
+	
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
@@ -180,7 +170,7 @@ entre inicio y fin que corerspondan al dia, se genera una sesion.
 			List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
 			System.out.println(fechas.size());
 			for(LocalDate fecha : fechas){
-				if(fecha.getDayOfWeek().equals(maskDay(data.getDia()))){
+				if(fecha.getDayOfWeek().equals(CohorteServiceApi.maskDay(data.getDia()))){
 					SesionPresencial sesion = new SesionPresencial();
 					if(!cohorteHorario.isEmpty()){
 						sesion.setCohorteHorario(cohorteHorario.get(0));
@@ -202,32 +192,6 @@ entre inicio y fin que corerspondan al dia, se genera una sesion.
 		return cohorteHorarioServiceApi.save(cohorteHorario);
 	}
 
-	public static DayOfWeek maskDay(String dia) {
-		switch (dia.toUpperCase()) {
-		case "LUNES":
-						return DayOfWeek.MONDAY;
-
-		case "MARTES":
-						return DayOfWeek.TUESDAY ;
-
-		case "MIERCOLES":
-						return DayOfWeek.WEDNESDAY ;
-
-		case "JUEVES":
-						return DayOfWeek.THURSDAY;
-
-		case "VIERNES":
-						return DayOfWeek.FRIDAY ;
-
-		case "SABADO":
-						return DayOfWeek.SATURDAY;
-
-		case "DOMINGO":
-						return DayOfWeek.SUNDAY;
-		default:
-						return null;
-		}
-}
 
 
 

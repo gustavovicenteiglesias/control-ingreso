@@ -122,6 +122,41 @@ public class ActividadController {
 		}
 
 	}
+	@GetMapping(value = "/find/por-propuesta-en-rango-actual/{id}")
+	public Map<String, Object> listPropsPorCohorte(@PathVariable("id") Integer id) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		Date sqlDate = new Date(new java.util.Date().getTime());
+		List<Actividad> actividadesPorPropuesta = (List<Actividad>) actividadServiceApi.findByPropuesta(id);
+
+		List<Cohorte> cohortesInRange = CohorteServiceApi.getCohortesByDate(cohorteServiceApi.findAll(), sqlDate);
+		actividadesPorPropuesta.removeIf( i -> !contieneAlguno(i.getCohortes(), cohortesInRange));
+		try {
+			if(actividadesPorPropuesta.isEmpty()){
+				response.put("message", "No hay actividades disponibles en esta fecha para la propuesta");
+				response.put("success", false);
+			}else{
+				response.put("message", "Success");
+				response.put("success", true);
+			}
+			response.put("data", actividadesPorPropuesta);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+
+	}
+	private boolean contieneAlguno(List<Cohorte> cohortes, List<Cohorte> cohortesInRange) {
+		for (Cohorte cohorte : cohortes) {
+			if(cohortesInRange.contains(cohorte)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
