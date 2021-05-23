@@ -148,9 +148,11 @@ public class ActividadController {
 		}
 	}
 
-	@PostMapping(value = "/create")
-	public ResponseEntity<String> create(@RequestBody Actividad data) {
+	@PostMapping(value = "/create-por-propuesta/{idPropuesta}")
+	public ResponseEntity<String> create(@RequestBody Actividad data, @PathVariable ("idPropuesta") int idPropuesta) {
+		Optional<Propuesta> propuesta = propuestaServiceApi.findById(idPropuesta);
 		try {
+			data.setPropuesta(propuesta.get());
 			actividadServiceApi.save(data);
 			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 		} catch (Exception e) {
