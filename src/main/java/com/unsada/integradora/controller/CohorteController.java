@@ -37,6 +37,26 @@ public class CohorteController {
 	@Autowired
 	ActividadServiceApi actividadServiceApi;
 
+	@GetMapping(value ="/por-actividad/{idActividad}")
+	public Map<String, Object> listCohortesPorActividad(@PathVariable("idActividad") int idActividad){
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		try {
+			List<Cohorte> claseData;
+			claseData = (List<Cohorte>) cohorteServiceApi.findAll();
+			claseData.removeIf(i -> i.getActividad().getIdActividad() != idActividad);
+			response.put("message", "Successful load");
+			response.put("data",claseData);
+			response.put("success", true);
+			return response;
+	
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+	
+	}
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
