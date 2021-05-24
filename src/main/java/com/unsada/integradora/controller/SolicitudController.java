@@ -121,21 +121,24 @@ public class SolicitudController {
 		Optional<CohorteHorario> cohorteHorario = Optional.empty();
 		List<Cohorte> cohortes = cohorteServiceApi.findByActividad(actividad);
 		if(aula.isPresent()){
-			if(aula.get().getCapacidadConAforo() > 0){
-				try {
-					Cohorte cohorte = getCohorte(cohortes, date);
-					System.out.println("Cohorte is : " + cohorte.getIdCohorte());
-					try{
-						cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
-						System.out.println("No hay cohortehorario definido para este horario");
-					}catch(NoSuchElementException e){
-						response.put("message", "Horario de cohorte no encontrado" + e.getMessage());
-						response.put("success", false);
-						return response;
-					
-					}
-					Optional<SesionPresencial> sesion = generarSesion(cohorteHorario, aula, date);
-					if (sesion.isPresent()){
+			int capacidadDeAula = aula.get().getCapacidadConAforo();
+			try {
+				Cohorte cohorte = getCohorte(cohortes, date);
+				System.out.println("Cohorte is : " + cohorte.getIdCohorte());
+				try{
+					cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
+					System.out.println("No hay cohortehorario definido para este horario");
+				}catch(NoSuchElementException e){
+					response.put("message", "Horario de cohorte no encontrado" + e.getMessage());
+					response.put("success", false);
+					return response;
+				
+				}
+				Optional<SesionPresencial> sesion = generarSesion(cohorteHorario, aula, date);
+				if (sesion.isPresent()){
+					int nroSolicitudes = solicitudServiceApi.countBySesionPresencialAndFechaCarga(sesion.get(), date);
+					int capacidadActual = capacidadDeAula - nroSolicitudes;
+					if(capacidadActual > 0){
 						data.setSesionPresencial(sesion.get());
 						data.setDdjj(declaracion.get());
 						data.setFechaCarga(date);
@@ -144,28 +147,32 @@ public class SolicitudController {
 						response.put("message", "Successful load");
 						response.put("data", qr);
 						response.put("success", true);
-						return response;
+						response.put("nroSolicitudes:", nroSolicitudes ++);
+						response.put("capacidadActual:", capacidadActual ++ );
 					}else{
-						response.put("message", "Sesion no encontrada");
+						response.put("message", "El aula solicitada no tiene más espacio ");
 						response.put("success", false);
+						response.put("nroSolicitudes:", nroSolicitudes);
+						response.put("capacidadActual:", capacidadActual  );
 						return response;
-						
 					}
-					
-				} catch (NullPointerException e) {
-					response.put("message", "Error creando solicitud " + e.getMessage());
+
+					return response;
+				}else{
+					response.put("message", "Sesion no encontrada");
 					response.put("success", false);
 					return response;
 					
 				}
-
-			}else{
-				response.put("message", "El aula solicitada no tiene más espacio ");
+				
+			} catch (NullPointerException e) {
+				response.put("message", "Error creando solicitud " + e.getMessage());
 				response.put("success", false);
 				return response;
 				
-
 			}
+
+			
 		}
 		response.put("message", "Successful load");
 		
