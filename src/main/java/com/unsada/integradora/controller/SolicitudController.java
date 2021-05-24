@@ -112,7 +112,8 @@ public class SolicitudController {
 	}
 
 	@PostMapping(value = "/create-ddjj-actividad-aula-horario/{idDdjj}/{idActividad}/{idAula}/{idHorario}/")
-	public ResponseEntity<String> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
+	public Map<String, Object> create(@RequestBody Solicitud data, @PathVariable("idActividad") int idActividad,@PathVariable("idDdjj") int idDdjj, @PathVariable("idAula") int idAula, @PathVariable("idHorario") int idHorario, @RequestParam("fecha") Date date) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
 		Optional<Ddjj> declaracion = ddjjServiceApi.findById(idDdjj);
 		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
@@ -128,7 +129,10 @@ public class SolicitudController {
 						cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
 						System.out.println("No hay cohortehorario definido para este horario");
 					}catch(NoSuchElementException e){
-						return new ResponseEntity<>("Horario de cohorte no encontrado", HttpStatus.NOT_FOUND);
+						response.put("message", "Horario de cohorte no encontrado" + e.getMessage());
+						response.put("success", false);
+						return response;
+					
 					}
 					Optional<SesionPresencial> sesion = generarSesion(cohorteHorario, aula, date);
 					if (sesion.isPresent()){
@@ -136,21 +140,37 @@ public class SolicitudController {
 						data.setDdjj(declaracion.get());
 						data.setFechaCarga(date);
 						data.setQrAcceso(QrCreatorService.generateQrId());
-						solicitudServiceApi.save(data);
+						int qr=solicitudServiceApi.save(data).getId_solicitud();
+						response.put("message", "Successful load");
+						response.put("data", qr);
+						response.put("success", true);
+						return response;
 					}else{
-						return new ResponseEntity<>("Sesion no encontrada" , HttpStatus.NOT_FOUND);
+						response.put("message", "Sesion no encontrada");
+						response.put("success", false);
+						return response;
+						
 					}
 					
 				} catch (NullPointerException e) {
-					return new ResponseEntity<>("Error creando solicitud ", HttpStatus.INTERNAL_SERVER_ERROR);
+					response.put("message", "Error creando solicitud " + e.getMessage());
+					response.put("success", false);
+					return response;
+					
 				}
 
 			}else{
-				return new ResponseEntity<>("El aula solicitada no tiene más espacio ", HttpStatus.UNAUTHORIZED);
+				response.put("message", "El aula solicitada no tiene más espacio ");
+				response.put("success", false);
+				return response;
+				
 
 			}
 		}
-		return new ResponseEntity<>("Success", HttpStatus.CREATED);
+		response.put("message", "Successful load");
+		
+		response.put("success", true);
+		return response;
 	}
 	private Optional<SesionPresencial> generarSesion(Optional<CohorteHorario> cohorteHorario, Optional<EntidadAula> aula, Date date){
 		try {
