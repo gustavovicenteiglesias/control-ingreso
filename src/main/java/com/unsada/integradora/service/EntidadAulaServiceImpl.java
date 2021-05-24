@@ -83,4 +83,10 @@ public class EntidadAulaServiceImpl implements EntidadAulaDao {
 		return entidadAulaDao.findByEdificio(idEdificio);
 	}
 
+	@Override
+	public Optional<EntidadAula> findAulaSesion(Integer sesion_presencial) {
+		// TODO Auto-generated method stub
+		return entidadAulaDao.findAulaSesion(sesion_presencial);
+	}
+
 }

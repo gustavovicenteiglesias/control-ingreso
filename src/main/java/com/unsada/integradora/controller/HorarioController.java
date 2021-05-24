@@ -109,6 +109,24 @@ public class HorarioController {
 		}
 		return null;
 	}
+	@GetMapping(value = "/find/sede_actrividad/{idActividad}/{idSede}")
+	public Map<String, Object> dataClase1(@PathVariable("idActividad") Integer idActividad,@PathVariable("idSede") Integer idSede ) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		try {
+			List<Horario> claseData;
+			claseData = (List<Horario>) horarioServiceApi.findBySedeActividad(idActividad, idSede);
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+}
+	
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();

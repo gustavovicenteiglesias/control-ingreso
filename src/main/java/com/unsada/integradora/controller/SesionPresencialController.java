@@ -48,7 +48,28 @@ public class SesionPresencialController {
 		}
 
 	}
+	@GetMapping(value = "/sesionhorario/{id_horario}")
+	public Map<String, Object> listclase1(@PathVariable("id_horario") Integer id_horario) {
 
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+			List<SesionPresencial> claseData;
+			claseData = (List<SesionPresencial>) sesionPresencialServiceApi.findSesionHoratio(id_horario);
+			response.put("message", "Successful load");
+			response.put("data", claseData);
+			response.put("success", true);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", e.getMessage());
+			response.put("success ", false);
+			return response;
+		}
+
+	}
+	
+	
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();

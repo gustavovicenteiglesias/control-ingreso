@@ -73,7 +73,35 @@ public class EntidadAulaController {
 		}
 
 	}
+	
+	@GetMapping(value = "/find/sesion/{id_sesion}")
+	public Map<String, Object> listclase2(@PathVariable("id_sesion") int id_sesion) {
 
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+
+			Optional<EntidadAula> clase = entidadAulaServiceApi.findAulaSesion(id_sesion);
+
+			if (clase.isPresent()) {
+				response.put("message", "Successful load");
+				response.put("data", clase);
+				response.put("success", true);
+				return response;
+			} else {
+				response.put("message", "Not found data");
+				response.put("data", null);
+				response.put("success", false);
+				return response;
+			}
+
+		} catch (Exception e) {
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+
+	}
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
