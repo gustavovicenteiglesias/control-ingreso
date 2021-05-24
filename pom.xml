@@ -54,7 +54,7 @@
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-maven-plugin</artifactId>
 			    <configuration>
-			        <mainClass>com.unsada.integradora</mainClass>
+			        <mainClass>com.unsada.integradora.IntegradoraApplication</mainClass>
 			    </configuration>
 			    <executions>
 			        <execution>

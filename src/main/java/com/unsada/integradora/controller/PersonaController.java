@@ -125,14 +125,19 @@ public class PersonaController {
 	}
 
 	@PostMapping(value = "/create")
-	public ResponseEntity<String> create(@RequestBody Persona data) {
-
+	public Map<String, Object> create(@RequestBody Persona data) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
 		try {
-			personaServiceApi.save(data);
-			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
+			int id_persona=personaServiceApi.save(data).getIdPersona();
+			response.put("message", "Successful load");
+			response.put("data", id_persona);
+			response.put("success", true);
+			return response;
 		} catch (Exception e) {
-
-			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+			
 		}
 
 	}

@@ -77,4 +77,10 @@ public class HorarioServiceImpl implements HorarioDao {
 
 	}
 
+	@Override
+	public Iterable<Horario> findBySedeActividad(Integer actividad, Integer sede) {
+		// TODO Auto-generated method stub
+		return  horarioDao.findBySedeActividad(actividad, sede);
+	}
+
 }

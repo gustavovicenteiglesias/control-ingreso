@@ -83,4 +83,10 @@ public class SesionPresencialServiceImpl implements SesionPresencialDao {
 		return sesionPresencialDao.session_persona(id_persona);
 	}
 
+	@Override
+	public Iterable<SesionPresencial> findSesionHoratio(Integer id_Horario) {
+		// TODO Auto-generated method stub
+		return sesionPresencialDao.findSesionHoratio(id_Horario);
+	}
+
 }
