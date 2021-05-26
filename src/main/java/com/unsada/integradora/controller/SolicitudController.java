@@ -138,7 +138,7 @@ public class SolicitudController {
 				if (sesion.isPresent()){
 					int nroSolicitudes = solicitudServiceApi.countBySesionPresencialAndFechaCarga(sesion.get(), date);
 					int capacidadActual = capacidadDeAula - nroSolicitudes;
-					if(capacidadActual > 0){
+					if(capacidadActual >= 0){
 						data.setSesionPresencial(sesion.get());
 						data.setDdjj(declaracion.get());
 						data.setFechaCarga(date);
@@ -148,12 +148,14 @@ public class SolicitudController {
 						response.put("data", qr);
 						response.put("success", true);
 						response.put("nroSolicitudes:", nroSolicitudes ++);
-						response.put("capacidadActual:", capacidadActual ++ );
+						response.put("capacidadMaxima:", capacidadDeAula );
+						response.put("disponible:", capacidadActual -- );
 					}else{
 						response.put("message", "El aula solicitada no tiene más espacio ");
 						response.put("success", false);
 						response.put("nroSolicitudes:", nroSolicitudes);
 						response.put("capacidadActual:", capacidadActual  );
+						response.put("capacidadMaxima:", capacidadDeAula );
 						return response;
 					}
 
@@ -184,10 +186,7 @@ public class SolicitudController {
 			System.out.println("La fecha para la busqueda es :" + date);
 			System.out.println("El cohorte horario es:" + cohorteHorario.get().getIdCohorteHorario());
 			System.out.println("El aula es:" + aula.get().getIdAula());
-			int capacidadConAforo = aula.get().getCapacidadConAforo();
-			aula.get().setCapacidadConAforo(capacidadConAforo - 1);
 			Optional<SesionPresencial>  sesionn= sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(),cohorteHorario.get(), date);
-			sesionn.get().setEntidadAula(aula.get());
 			return sesionn;
 		}
 		catch(NoSuchElementException e){
