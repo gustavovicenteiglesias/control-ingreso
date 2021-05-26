@@ -233,22 +233,16 @@ public class SolicitudController {
 		return null;
 	}
 
-	@PutMapping(value = "/update/{idsolicitud}/{idsesionpresencial}")
+	@PutMapping(value = "/update/{idsolicitud}")
 
-	public Map<String, Object> update(@PathVariable("idsolicitud") Integer idsolicitud,@PathVariable("idsesionpresencial") Integer idsesionpresencial,  @RequestBody Solicitud data) {
+	public Map<String, Object> update(@PathVariable("idsolicitud") Integer idsolicitud) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
-		Ddjj ddjjs=ddjjServiceApi.findById(1).get();
-		SesionPresencial sesionPresencial=sesionPresencialServiceApi.findById(idsesionpresencial).get();
-
+		Optional<Solicitud> solicitud = solicitudServiceApi.findById(idsolicitud);
 		try {
-			data.setId_solicitud(idsolicitud);
-			data.setDdjj(ddjjs);
-			data.setFechaCarga(solicitudServiceApi.findById(idsolicitud).get().getFechaCarga());
-			data.setQrAcceso(solicitudServiceApi.findById(idsolicitud).get().getQrAcceso());
-			data.setSesionPresencial(sesionPresencial);
-			
-			solicitudServiceApi.save(data);
+			solicitud.get().setPresente((byte) 1);
+			solicitud.get().setQrAcceso("presente");
+			solicitudServiceApi.save(solicitud.get());
 			response.put("message", "Successful update");
 			response.put("success", true);
 			return response;
@@ -263,7 +257,7 @@ public class SolicitudController {
 
 	@DeleteMapping(value = "/delete/{id}")
 
-	public Map<String, Object> update(@PathVariable("id") Integer id) {
+	public Map<String, Object> delete(@PathVariable("id") Integer id) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 

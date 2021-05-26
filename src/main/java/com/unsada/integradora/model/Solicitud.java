@@ -32,7 +32,7 @@ public class Solicitud implements Serializable {
 	private String qrAcceso;
 
 	//bi-directional many-to-one association to Ddjj
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.PERSIST})
 	@JoinColumn(name="id_ddjj")
 	//@JsonIgnore
 	//@JsonBackReference("solicitud-ddjj")

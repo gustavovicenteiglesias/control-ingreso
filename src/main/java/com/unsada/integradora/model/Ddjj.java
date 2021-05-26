@@ -51,7 +51,7 @@ public class Ddjj implements Serializable {
 	private List<Respuesta> respuestas;
 
 	//bi-directional many-to-one association to Solicitud
-	@OneToMany(mappedBy="ddjj",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="ddjj", cascade = {CascadeType.PERSIST})
 	
 	private List<Solicitud> solicituds;
 
