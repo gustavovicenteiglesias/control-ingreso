@@ -124,15 +124,8 @@ public class SolicitudController {
 			try {
 
 				Cohorte cohorte = getCohorte(cohortes, date);
-				try{
-					cohorte.getCohorteHorarios().removeIf(i -> !i.getHorario().equals(horario.get()) && !i.getCohorte().getActividad().equals(actividad.get()));
-					System.out.println("No hay cohortehorario definido para este horario");
-				}catch(NoSuchElementException e){
-					response.put("message", "Horario de cohorte no encontrado" + e.getMessage());
-					response.put("success", false);
-					return response;
+				cohorte.getCohorteHorarios().removeIf(i -> !i.getHorario().equals(horario.get()) && !i.getCohorte().getActividad().equals(actividad.get()));
 				
-				}
 				Optional<SesionPresencial> sesion = generarSesion(cohorte.getCohorteHorarios().get(0), aula, date);
 				if (sesion.isPresent()){
 					int nroSolicitudes = solicitudServiceApi.countBySesionPresencialAndFechaCarga(sesion.get(), date);
