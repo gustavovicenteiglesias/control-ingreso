@@ -118,15 +118,14 @@ public class SolicitudController {
 		Optional<Horario> horario= horarioServiceApi.findById(idHorario);
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
 		Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
-		Optional<CohorteHorario> cohorteHorario = Optional.empty();
 		List<Cohorte> cohortes = cohorteServiceApi.findByActividad(actividad);
 		if(aula.isPresent()){
 			int capacidadDeAula = aula.get().getCapacidadConAforo();
 			try {
+
 				Cohorte cohorte = getCohorte(cohortes, date);
-				System.out.println("Cohorte is : " + cohorte.getIdCohorte());
 				try{
-					cohorteHorario =cohorteHorarioServiceApi.findByCohorteAndHorario(cohorte, horario.get());
+					cohorte.getCohorteHorarios().removeIf(i -> !i.getHorario().equals(horario.get()) && !i.getCohorte().getActividad().equals(actividad.get()));
 					System.out.println("No hay cohortehorario definido para este horario");
 				}catch(NoSuchElementException e){
 					response.put("message", "Horario de cohorte no encontrado" + e.getMessage());
@@ -134,7 +133,7 @@ public class SolicitudController {
 					return response;
 				
 				}
-				Optional<SesionPresencial> sesion = generarSesion(cohorteHorario, aula, date);
+				Optional<SesionPresencial> sesion = generarSesion(cohorte.getCohorteHorarios().get(0), aula, date);
 				if (sesion.isPresent()){
 					int nroSolicitudes = solicitudServiceApi.countBySesionPresencialAndFechaCarga(sesion.get(), date);
 					int capacidadActual = capacidadDeAula - nroSolicitudes;
@@ -168,7 +167,7 @@ public class SolicitudController {
 				}
 				
 			} catch (NullPointerException e) {
-				response.put("message", "Error creando solicitud " + e.getMessage());
+				response.put("message", "failed");
 				response.put("success", false);
 				return response;
 				
@@ -181,12 +180,11 @@ public class SolicitudController {
 		response.put("success", true);
 		return response;
 	}
-	private Optional<SesionPresencial> generarSesion(Optional<CohorteHorario> cohorteHorario, Optional<EntidadAula> aula, Date date){
+	private Optional<SesionPresencial> generarSesion(CohorteHorario cohorteHorario, Optional<EntidadAula> aula, Date date){
 		try {
 			System.out.println("La fecha para la busqueda es :" + date);
-			System.out.println("El cohorte horario es:" + cohorteHorario.get().getIdCohorteHorario());
 			System.out.println("El aula es:" + aula.get().getIdAula());
-			Optional<SesionPresencial>  sesionn= sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(),cohorteHorario.get(), date);
+			Optional<SesionPresencial>  sesionn= sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(),cohorteHorario, date);
 			return sesionn;
 		}
 		catch(NoSuchElementException e){
@@ -227,6 +225,8 @@ public class SolicitudController {
 			Date fin = (Date) cohorte.getFechaFin();
 			List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
 			if(fechas.contains(date.toLocalDate())){
+				System.out.println("encontrado");
+
 				return cohorte;
 			}
 		}
