@@ -73,8 +73,8 @@ public class PersonaController {
 				System.out.println(solicitud.getId_solicitud());
 				enContacto.add(personaServiceApi.findPersonaPorSolicitud(solicitud.getId_solicitud()));
 			}
-			response.put("message", enContacto);
-			response.put("data", "");
+			response.put("message", "Success");
+			response.put("data", enContacto.stream().filter(i -> i.getIdPersona() != idPersona));
 			response.put("success", true);
 			return response;
 

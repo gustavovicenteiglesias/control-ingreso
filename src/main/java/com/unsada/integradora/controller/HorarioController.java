@@ -196,7 +196,6 @@ entre inicio y fin que corerspondan al dia, se genera una sesion.
 					}else{
 						sesion.setCohorteHorario(crearCohorteHorario(cohorte, data));
 					}
-					sesion.setEntidadAula(aula);
 					sesion.setFecha(Date.from(fecha.atStartOfDay(ZoneId.of("America/Argentina/Catamarca")).toInstant()));
 					sesionPresencialServiceApi.save(sesion);
 				}
