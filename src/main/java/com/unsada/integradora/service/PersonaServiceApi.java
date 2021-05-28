@@ -1,6 +1,7 @@
 package com.unsada.integradora.service;
 
 
+import java.sql.Date;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,8 +12,11 @@ import org.springframework.data.repository.query.Param;
 import com.unsada.integradora.model.Persona;
 
 public interface PersonaServiceApi extends CrudRepository<Persona, Integer> {
+	static final String FIND_PERSONA_POR_SOLICITUD= "SELECT p.* FROM persona p INNER JOIN ddjj d ON d.id_persona = p.id_persona INNER JOIN solicitud so ON so.id_ddjj = d.id_ddjj WHERE so.id_solicitud = :idsolicitud";
+
 	Optional<Persona> findByDni (String dni);
-	
+	@Query(value = FIND_PERSONA_POR_SOLICITUD , nativeQuery = true)
+	public Persona findPersonaPorSolicitud(@Param("idsolicitud") Integer idsolicitud);
 
 	@Query(value="SELECT p.* FROM persona p \r\n" + 
 			"INNER JOIN ddjj d ON d.id_persona=p.id_persona\r\n" + 
