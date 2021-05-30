@@ -226,18 +226,22 @@ public class SolicitudController {
 		return null;
 	}
 
-	@PutMapping(value = "/update/{idsolicitud}")
+	@PutMapping(value = "/update/{idsolicitud}/{idEdificio}")
 
-	public Map<String, Object> update(@PathVariable("idsolicitud") Integer idsolicitud) {
+	public Map<String, Object> update(@PathVariable("idsolicitud") Integer idsolicitud, @PathVariable("idEdificio") int idEdificio) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		Optional<Solicitud> solicitud = solicitudServiceApi.findById(idsolicitud);
 		try {
-			solicitud.get().setPresente((byte) 1);
-			solicitud.get().setQrAcceso("presente");
-			solicitudServiceApi.save(solicitud.get());
-			response.put("message", "Successful update");
-			response.put("success", true);
+			if(solicitud.get().getSesionPresencial().getEntidadAula().getEdificio().getIdEdificio() == idEdificio){
+				solicitud.get().setPresente((byte) 1);
+				solicitud.get().setQrAcceso("presente");
+				solicitudServiceApi.save(solicitud.get());
+				response.put("message", "Successful update");
+				response.put("success", true);
+			}else{
+				response.put("message", "El codigo de acceso no corresponde al edificio");
+			}
 			return response;
 		} catch (Exception e) {
 			response.put("message", e.getMessage());
