@@ -241,6 +241,8 @@ public class SolicitudController {
 				response.put("success", true);
 			}else{
 				response.put("message", "El codigo de acceso no corresponde al edificio");
+				response.put("success", false);
+
 			}
 			return response;
 		} catch (Exception e) {
