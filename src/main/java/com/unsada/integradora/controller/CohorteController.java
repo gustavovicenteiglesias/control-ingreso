@@ -129,11 +129,11 @@ public class CohorteController {
 		try {
 			data.setActividad(actividad.get());
 			data.setSede(sede.get());;
-			cohorteServiceApi.save(data);
-			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
+			int idCohorte = cohorteServiceApi.save(data).getIdCohorte();
+			return new ResponseEntity<>(String.valueOf(idCohorte), HttpStatus.OK);
 		} catch (Exception e) {
 			
-			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("failed" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
