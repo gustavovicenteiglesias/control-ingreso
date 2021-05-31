@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.Ddjj;
+import com.unsada.integradora.model.Horario;
 import com.unsada.integradora.model.Persona;
 import com.unsada.integradora.model.Pregunta;
 import com.unsada.integradora.model.Solicitud;
@@ -64,6 +65,7 @@ public class PersonaController {
 	public Map<String, Object> dataClase1 (@PathVariable("fechainicio") Date fechainicio,@PathVariable("fechafin") Date fechafin, @PathVariable("idPersona") int idPersona) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		List<Persona> enContacto = new ArrayList<Persona>();
+		HashMap<Persona, Horario> personaAndHorario = new HashMap<Persona, Horario>();
 
 		try {
 			List<Solicitud> solicitudes = new ArrayList<Solicitud>();
@@ -73,8 +75,9 @@ public class PersonaController {
 				System.out.println(solicitud.getId_solicitud());
 				enContacto.add(personaServiceApi.findPersonaPorSolicitud(solicitud.getId_solicitud()));
 			}
+			enContacto = enContacto.stream().distinct().filter(i -> i.getIdPersona() != idPersona).collect(Collectors.toList());
 			response.put("message", "Success");
-			response.put("data", enContacto.stream().filter(i -> i.getIdPersona() != idPersona));
+			response.put("data", enContacto);
 			response.put("success", true);
 			return response;
 

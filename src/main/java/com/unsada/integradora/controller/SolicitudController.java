@@ -235,7 +235,6 @@ public class SolicitudController {
 		try {
 			if(solicitud.get().getSesionPresencial().getEntidadAula().getEdificio().getIdEdificio() == idEdificio){
 				solicitud.get().setPresente((byte) 1);
-				solicitud.get().setQrAcceso("presente");
 				solicitudServiceApi.save(solicitud.get());
 				response.put("message", "Successful update");
 				response.put("success", true);
