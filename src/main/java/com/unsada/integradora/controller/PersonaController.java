@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import com.unsada.integradora.model.Horario;
 import com.unsada.integradora.model.Persona;
 import com.unsada.integradora.model.Pregunta;
 import com.unsada.integradora.model.Solicitud;
+import com.unsada.integradora.model.personaAndSolicitud;
 import com.unsada.integradora.service.PersonaServiceApi;
 import com.unsada.integradora.service.PreguntaServiceApi;
 import com.unsada.integradora.service.SolicitudServiceApi;
@@ -65,28 +67,40 @@ public class PersonaController {
 	public Map<String, Object> dataClase1 (@PathVariable("fechainicio") Date fechainicio,@PathVariable("fechafin") Date fechafin, @PathVariable("idPersona") int idPersona) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		List<Persona> enContacto = new ArrayList<Persona>();
-		HashMap<Persona, Horario> personaAndHorario = new HashMap<Persona, Horario>();
+		List<Solicitud> solicitudesContactos = new ArrayList<Solicitud>();
+		personaAndSolicitud personasAndSolicitudes = new personaAndSolicitud();
 
 		try {
 			List<Solicitud> solicitudes = new ArrayList<Solicitud>();
 			solicitudes = (List<Solicitud>) solicitudServiceApi.findSolicitudesInRange(fechainicio, fechafin);
 			solicitudes.removeIf(i -> !((i.getFechaCarga().compareTo(fechainicio) > 0 ) && i.getFechaCarga().compareTo(fechafin) <=0));
 			for (Solicitud solicitud : solicitudes) {
-				System.out.println(solicitud.getId_solicitud());
 				enContacto.add(personaServiceApi.findPersonaPorSolicitud(solicitud.getId_solicitud()));
+				solicitudesContactos.add(solicitud);
 			}
+			solicitudesContactos = solicitudesContactos.stream().distinct().filter(i -> (i.getDdjj().getPersona().getIdPersona() != idPersona)).collect(Collectors.toList());
 			enContacto = enContacto.stream().distinct().filter(i -> i.getIdPersona() != idPersona).collect(Collectors.toList());
+			System.out.println("size is" + solicitudesContactos.size());
+			personasAndSolicitudes.setPersonas(enContacto);
+			personasAndSolicitudes.setSolicitudes(solicitudesContactos);
 			response.put("message", "Success");
-			response.put("data", enContacto);
+			response.put("personas", personasAndSolicitudes.getPersonas());
+			response.put("solicitudes", personasAndSolicitudes.getSolicitudes());
+
 			response.put("success", true);
 			return response;
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("message", e.getMessage());
 			response.put("success ", false);
 			return response;
 		}
 	}
+	private Entry<Persona, Horario> newEntry(Persona persona, Solicitud solicitud) {
+		return null;
+	}
+
 	public boolean compararFechas(Date index, Date fechainicio, Date fechafin){
 		if(index.compareTo(fechainicio) > 0 && index.compareTo(fechafin) <= 0){
 			System.out.println("fecha entre este margen");
