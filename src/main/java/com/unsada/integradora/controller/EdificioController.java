@@ -84,6 +84,33 @@ public class EdificioController {
 			return response;
 		}
 	}
+	
+	@GetMapping(value = "/edificioByAula/{id}")
+	public Map<String, Object> dataClase2(@PathVariable("id") Integer id) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+
+		try {
+
+			Optional<Edificio> clase = edificioServiceApi.findEdificioByAula(id);
+
+			if (clase.isPresent()) {
+				response.put("message", "Successful load");
+				response.put("data", clase);
+				response.put("success", true);
+				return response;
+			} else {
+				response.put("message", "Not found data");
+				response.put("data", null);
+				response.put("success", false);
+				return response;
+			}
+
+		} catch (Exception e) {
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+	}
 	@GetMapping(value = "/sede/find/{id}")
 	public Map<String, Object> dataClase1(@PathVariable("id") int id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
