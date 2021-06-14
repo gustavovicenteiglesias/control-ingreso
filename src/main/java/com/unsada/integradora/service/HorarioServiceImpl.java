@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.HorarioDao;
-import com.unsada.integradora.model.Horario;
+import com.unsada.integradora.model.entity.Horario;
 @Service
 public class HorarioServiceImpl implements HorarioDao {
 	@Autowired

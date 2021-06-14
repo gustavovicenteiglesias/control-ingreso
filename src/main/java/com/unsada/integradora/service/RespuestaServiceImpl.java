@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.RespuestaDao;
-import com.unsada.integradora.model.Respuesta;
+import com.unsada.integradora.model.entity.Respuesta;
 @Service
 public class RespuestaServiceImpl implements RespuestaDao {
 	@Autowired

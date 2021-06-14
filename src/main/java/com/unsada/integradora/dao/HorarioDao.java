@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.Horario;
+import com.unsada.integradora.model.entity.Horario;
 @Transactional
 public interface HorarioDao extends CrudRepository<Horario, Integer> {
 	@Modifying

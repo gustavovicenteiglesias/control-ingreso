@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.DdjjFactorDeRiesgoDao;
-import com.unsada.integradora.model.DdjjFactorDeRiesgo;
+import com.unsada.integradora.model.entity.DdjjFactorDeRiesgo;
 @Service
 public class DdjjFactorDeRiesgoServiceImpl implements DdjjFactorDeRiesgoDao {
 	@Autowired

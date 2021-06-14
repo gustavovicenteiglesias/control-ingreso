@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.SolicitudDao;
-import com.unsada.integradora.model.Solicitud;
+import com.unsada.integradora.model.entity.Solicitud;
 @Service
 public class SolicitudServiceImpl implements SolicitudDao {
 	@Autowired
@@ -82,5 +82,6 @@ public class SolicitudServiceImpl implements SolicitudDao {
 		// TODO Auto-generated method stub
 		return solicitudDao.findByQr(qr_acceso);
 	}
+
 
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.EntidadAula;
+import com.unsada.integradora.model.entity.EntidadAula;
 @Transactional
 public interface EntidadAulaDao extends CrudRepository<EntidadAula, Integer> {
 	Iterable<EntidadAula> findByEdificio (int idEdificio);

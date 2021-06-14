@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.Propuesta;
+import com.unsada.integradora.model.entity.Propuesta;
 @Qualifier("propuestaServiceApi")
 public interface PropuestaServiceApi extends CrudRepository<Propuesta, Integer> {
 	@Transactional

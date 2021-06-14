@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.Actividad;
+import com.unsada.integradora.model.entity.Actividad;
 
 public interface ActividadServiceApi extends CrudRepository<Actividad, Integer> {
 	@Modifying

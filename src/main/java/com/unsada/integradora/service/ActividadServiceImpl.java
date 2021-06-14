@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.ActividadDao;
-import com.unsada.integradora.model.Actividad;
+import com.unsada.integradora.model.entity.Actividad;
 @Service
 public class ActividadServiceImpl implements ActividadServiceApi {
 	@Autowired

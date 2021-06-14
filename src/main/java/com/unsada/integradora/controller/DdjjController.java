@@ -1,16 +1,11 @@
 package com.unsada.integradora.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,11 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.model.Ddjj;
-import com.unsada.integradora.model.FactorDeRiesgo;
-import com.unsada.integradora.model.Persona;
-import com.unsada.integradora.model.Pregunta;
-import com.unsada.integradora.model.Respuesta;
+import com.unsada.integradora.model.entity.Ddjj;
+import com.unsada.integradora.model.entity.Persona;
+import com.unsada.integradora.model.entity.Respuesta;
 import com.unsada.integradora.service.DDjjServiceApi;
 import com.unsada.integradora.service.FactorDeRiesgoServiceApi;
 import com.unsada.integradora.service.PersonaServiceApi;

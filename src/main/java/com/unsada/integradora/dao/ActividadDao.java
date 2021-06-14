@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.Actividad;
+import com.unsada.integradora.model.entity.Actividad;
 @Transactional
 public interface ActividadDao extends CrudRepository<Actividad, Integer> {
 	Iterable<Actividad> findByPropuesta (int idpropuesta);

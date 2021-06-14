@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.SesionPresencialDao;
-import com.unsada.integradora.model.SesionPresencial;
+import com.unsada.integradora.model.entity.SesionPresencial;
 @Service
 public class SesionPresencialServiceImpl implements SesionPresencialDao {
 	@Autowired

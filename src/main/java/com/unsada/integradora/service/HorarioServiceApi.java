@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.unsada.integradora.model.Horario;
+import com.unsada.integradora.model.entity.Horario;
 
 public interface HorarioServiceApi extends CrudRepository<Horario, Integer> {
 

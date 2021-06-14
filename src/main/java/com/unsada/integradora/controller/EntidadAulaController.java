@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.model.Edificio;
-import com.unsada.integradora.model.EntidadAula;
+import com.unsada.integradora.model.entity.Edificio;
+import com.unsada.integradora.model.entity.EntidadAula;
 import com.unsada.integradora.service.EdificioServiceApi;
 import com.unsada.integradora.service.EntidadAulaServiceApi;
 

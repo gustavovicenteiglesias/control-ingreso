@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.SesionPresencial;
+import com.unsada.integradora.model.entity.SesionPresencial;
 @Transactional
 public interface SesionPresencialDao extends CrudRepository<SesionPresencial, Integer> {
 	@Modifying

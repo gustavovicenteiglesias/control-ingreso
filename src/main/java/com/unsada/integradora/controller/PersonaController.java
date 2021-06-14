@@ -9,9 +9,13 @@ import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.dto.SolicitudActividadDTO;
+import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.entity.Horario;
+import com.unsada.integradora.model.entity.Persona;
+import com.unsada.integradora.model.entity.Solicitud;
+import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.model.Ddjj;
-import com.unsada.integradora.model.Horario;
-import com.unsada.integradora.model.Persona;
-import com.unsada.integradora.model.Pregunta;
-import com.unsada.integradora.model.Solicitud;
-import com.unsada.integradora.model.personaAndSolicitud;
 import com.unsada.integradora.service.PersonaServiceApi;
-import com.unsada.integradora.service.PreguntaServiceApi;
 import com.unsada.integradora.service.SolicitudServiceApi;
 
 @RestController
@@ -41,6 +37,8 @@ public class PersonaController {
 	PersonaServiceApi personaServiceApi;
 	@Autowired
 	SolicitudServiceApi solicitudServiceApi;
+	@Autowired
+	SolicitudActividadMapper solicitudActividadMapper;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -68,25 +66,30 @@ public class PersonaController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		List<Persona> enContacto = new ArrayList<Persona>();
 		List<Solicitud> solicitudesContactos = new ArrayList<Solicitud>();
-		personaAndSolicitud personasAndSolicitudes = new personaAndSolicitud();
+		List<SolicitudActividadDTO> solicitudActividadDTOS = new ArrayList<>();
 
 		try {
 			List<Solicitud> solicitudes = new ArrayList<Solicitud>();
 			solicitudes = (List<Solicitud>) solicitudServiceApi.findSolicitudesInRange(fechainicio, fechafin);
+			List<Integer> sesionesEnSeguimiento = solicitudServiceApi.findSolicitudesPorPersona(idPersona);
 			solicitudes.removeIf(i -> !((i.getFechaCarga().compareTo(fechainicio) > 0 ) && i.getFechaCarga().compareTo(fechafin) <=0));
-			for (Solicitud solicitud : solicitudes) {
-				enContacto.add(personaServiceApi.findPersonaPorSolicitud(solicitud.getId_solicitud()));
-				solicitudesContactos.add(solicitud);
+			for (Solicitud s : solicitudes) {
+				if(sesionesEnSeguimiento.contains(s.getSesionPresencial().getIdSesionPresencial()) ) {
+					Optional<Persona> p = Optional.ofNullable(s.getDdjj().getPersona());
+					if(!solicitudesContactos.stream().anyMatch(i -> i.getDdjj().getPersona().getNombre().equals(p.get().getNombre()))){
+						solicitudesContactos.add(s);
+					};
+				}
 			}
-			solicitudesContactos = solicitudesContactos.stream().distinct().filter(i -> (i.getDdjj().getPersona().getIdPersona() != idPersona)).collect(Collectors.toList());
-			enContacto = enContacto.stream().distinct().filter(i -> i.getIdPersona() != idPersona).collect(Collectors.toList());
-			System.out.println("size is" + solicitudesContactos.size());
-			personasAndSolicitudes.setPersonas(enContacto);
-			personasAndSolicitudes.setSolicitudes(solicitudesContactos);
-			response.put("message", "Success");
-			response.put("personas", personasAndSolicitudes.getPersonas());
-			response.put("solicitudes", personasAndSolicitudes.getSolicitudes());
+			solicitudActividadDTOS = solicitudesContactos.stream().map(temp ->{
+				SolicitudActividadDTO obj = new SolicitudActividadDTO();
+				Optional<Actividad> act = Optional.ofNullable(temp.getSesionPresencial().getCohorteHorario().getCohorte().getActividad());
+				Optional<Persona> person = Optional.ofNullable(temp.getDdjj().getPersona());
+				return solicitudActividadMapper.toDTO(temp);
+			}).collect(Collectors.toList());
 
+			response.put("message", "Success");
+			response.put("personas", solicitudActividadDTOS);
 			response.put("success", true);
 			return response;
 

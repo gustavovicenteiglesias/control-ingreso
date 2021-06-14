@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.unsada.integradora.model.Actividad;
-import com.unsada.integradora.model.Cohorte;
+import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.entity.Cohorte;
 
 public interface CohorteServiceApi extends CrudRepository<Cohorte, Integer> {
 

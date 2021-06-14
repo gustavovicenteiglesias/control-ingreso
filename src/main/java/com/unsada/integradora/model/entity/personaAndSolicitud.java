@@ -1,6 +1,5 @@
-package com.unsada.integradora.model;
+package com.unsada.integradora.model.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class personaAndSolicitud {

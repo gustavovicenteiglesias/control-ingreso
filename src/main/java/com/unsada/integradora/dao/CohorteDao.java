@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.Cohorte;
+import com.unsada.integradora.model.entity.Cohorte;
 
 @Transactional
 public interface CohorteDao extends CrudRepository<Cohorte, Integer> {

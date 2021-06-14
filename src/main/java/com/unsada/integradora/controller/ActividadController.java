@@ -24,13 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.model.Actividad;
-import com.unsada.integradora.model.Cohorte;
-import com.unsada.integradora.model.CohorteHorario;
-import com.unsada.integradora.model.EntidadAula;
-import com.unsada.integradora.model.Horario;
-import com.unsada.integradora.model.Propuesta;
-import com.unsada.integradora.model.SesionPresencial;
+import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.entity.Cohorte;
+import com.unsada.integradora.model.entity.CohorteHorario;
+import com.unsada.integradora.model.entity.EntidadAula;
+import com.unsada.integradora.model.entity.Horario;
+import com.unsada.integradora.model.entity.Propuesta;
+import com.unsada.integradora.model.entity.SesionPresencial;
 import com.unsada.integradora.service.ActividadServiceApi;
 import com.unsada.integradora.service.CohorteHorarioServiceApi;
 import com.unsada.integradora.service.CohorteServiceApi;
@@ -186,6 +186,7 @@ public class ActividadController {
 	@PostMapping(value = "/create-por-propuesta/{idPropuesta}")
 	public ResponseEntity<String> create(@RequestBody Actividad data, @PathVariable ("idPropuesta") int idPropuesta) {
 		Optional<Propuesta> propuesta = propuestaServiceApi.findById(idPropuesta);
+		System.out.println(propuesta.get().getIdPropuesta());
 		try {
 			data.setPropuesta(propuesta.get());
 			actividadServiceApi.save(data);
@@ -263,9 +264,12 @@ public class ActividadController {
 	@PutMapping(value = "/update/{id}")
 	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Actividad data) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
+		Optional<Actividad> actividad = actividadServiceApi.findById(id);
 		try {
-			data.setIdActividad(id);
-			actividadServiceApi.save(data);
+			actividad.get().setNombre(data.getNombre());
+			actividadServiceApi.save((Actividad) actividad.get());
+			System.out.println("updated mafa");
+			System.out.println(actividad.get().toString());
 			response.put("message", "Successful update");
 			response.put("success", true);
 			return response;

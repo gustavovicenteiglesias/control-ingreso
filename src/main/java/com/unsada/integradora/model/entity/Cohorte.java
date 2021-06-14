@@ -1,13 +1,9 @@
-package com.unsada.integradora.model;
+package com.unsada.integradora.model.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
@@ -36,7 +32,7 @@ public class Cohorte implements Serializable {
 	private Date fechaInicio;
 
 	//bi-directional many-to-one association to Actividad
-	@ManyToOne(optional = true)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="id_actividad")
 	//@JsonIgnore
 	@JsonBackReference("actividad-cohorte")

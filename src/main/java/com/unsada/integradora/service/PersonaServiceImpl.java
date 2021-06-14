@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.PersonaDao;
-import com.unsada.integradora.model.Persona;
+import com.unsada.integradora.model.entity.Persona;
 @Service
 public class PersonaServiceImpl implements PersonaDao {
 	@Autowired

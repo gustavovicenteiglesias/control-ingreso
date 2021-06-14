@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.model.Dependencia;
-import com.unsada.integradora.model.Propuesta;
+import com.unsada.integradora.model.entity.Dependencia;
+import com.unsada.integradora.model.entity.Propuesta;
 import com.unsada.integradora.service.DependenciaServiceApi;
 import com.unsada.integradora.service.PropuestaServiceApi;
 

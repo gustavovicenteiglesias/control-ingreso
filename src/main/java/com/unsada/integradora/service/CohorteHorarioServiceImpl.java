@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.CohorteHorarioDao;
-import com.unsada.integradora.model.CohorteHorario;
+import com.unsada.integradora.model.entity.CohorteHorario;
 @Service
 public class CohorteHorarioServiceImpl implements CohorteHorarioDao {
 	@Autowired

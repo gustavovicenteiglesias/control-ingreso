@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.Solicitud;
+import com.unsada.integradora.model.entity.Solicitud;
 
 @Transactional
 public interface SolicitudDao extends CrudRepository<Solicitud, Integer> {

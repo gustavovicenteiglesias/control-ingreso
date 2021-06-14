@@ -8,9 +8,9 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.unsada.integradora.model.CohorteHorario;
-import com.unsada.integradora.model.EntidadAula;
-import com.unsada.integradora.model.SesionPresencial;
+import com.unsada.integradora.model.entity.CohorteHorario;
+import com.unsada.integradora.model.entity.EntidadAula;
+import com.unsada.integradora.model.entity.SesionPresencial;
 
 public interface SesionPresencialServiceApi extends CrudRepository<SesionPresencial, Integer>{
 

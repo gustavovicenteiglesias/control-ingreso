@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.CohorteDao;
-import com.unsada.integradora.model.Cohorte;
+import com.unsada.integradora.model.entity.Cohorte;
 @Service
 public class CohorteServiceImpl implements CohorteDao {
 	@Autowired

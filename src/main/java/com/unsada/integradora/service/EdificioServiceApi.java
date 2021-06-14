@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unsada.integradora.model.Edificio;
+import com.unsada.integradora.model.entity.Edificio;
 @Qualifier("EdificioServiceApi")
 public interface EdificioServiceApi extends CrudRepository<Edificio, Integer>{
 	@Modifying

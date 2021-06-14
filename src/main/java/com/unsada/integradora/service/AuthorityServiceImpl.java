@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.AuthorityDao;
-import com.unsada.integradora.model.Authority;
+import com.unsada.integradora.model.entity.Authority;
 @Service
 public class AuthorityServiceImpl implements AuthorityDao {
 	@Autowired

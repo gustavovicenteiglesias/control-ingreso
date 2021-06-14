@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.DependenciaDao;
-import com.unsada.integradora.model.Dependencia;
+import com.unsada.integradora.model.entity.Dependencia;
 @Service
 public class DependenciaServiceImpl implements DependenciaDao {
 	@Autowired

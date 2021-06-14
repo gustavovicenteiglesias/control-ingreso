@@ -1,14 +1,12 @@
-package com.unsada.integradora.model;
+package com.unsada.integradora.model.entity;
 
 import java.io.Serializable;
 import java.sql.Time;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.util.Date;
 import java.util.List;
 
 

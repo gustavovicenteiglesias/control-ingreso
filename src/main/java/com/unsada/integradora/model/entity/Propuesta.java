@@ -1,11 +1,10 @@
-package com.unsada.integradora.model;
+package com.unsada.integradora.model.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class Propuesta implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-one association to Actividad
-	@OneToMany(mappedBy="propuesta")
+	@OneToMany(mappedBy="propuesta", cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	//@JsonManagedReference("propuesta-actividad")
 	private List<Actividad> actividads;

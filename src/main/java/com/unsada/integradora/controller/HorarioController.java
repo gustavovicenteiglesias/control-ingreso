@@ -1,11 +1,9 @@
 package com.unsada.integradora.controller;
 
 import java.sql.Date;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.lang.StackWalker.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.model.Actividad;
-import com.unsada.integradora.model.Cohorte;
-import com.unsada.integradora.model.CohorteHorario;
-import com.unsada.integradora.model.EntidadAula;
-import com.unsada.integradora.model.Horario;
-import com.unsada.integradora.model.SesionPresencial;
+import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.entity.Cohorte;
+import com.unsada.integradora.model.entity.CohorteHorario;
+import com.unsada.integradora.model.entity.EntidadAula;
+import com.unsada.integradora.model.entity.Horario;
+import com.unsada.integradora.model.entity.SesionPresencial;
 import com.unsada.integradora.service.ActividadServiceApi;
 import com.unsada.integradora.service.CohorteHorarioServiceApi;
 import com.unsada.integradora.service.CohorteServiceApi;

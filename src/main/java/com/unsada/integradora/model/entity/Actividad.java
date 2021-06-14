@@ -1,11 +1,9 @@
-package com.unsada.integradora.model;
+package com.unsada.integradora.model.entity;
 
-import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Actividad.findAll", query="SELECT a FROM Actividad a")
-public class Actividad implements Serializable {
+public class Actividad {
 	private static final long serialVersionUID = 1L;
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
@@ -26,13 +24,14 @@ public class Actividad implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-one association to Propuesta
-	@ManyToOne
-	@JoinColumn(name="id_propuesta",nullable = true)
+	@ManyToOne(cascade = {CascadeType.PERSIST})
+	@JoinColumn(name="id_propuesta")
 	@JsonBackReference("propuesta-actividad")
 	private Propuesta propuesta;
 
 	//bi-directional many-to-one association to Cohorte
-	@OneToMany(mappedBy="actividad")
+
+	@OneToMany(mappedBy="actividad", cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	//@JsonManagedReference("actividad-cohorte")
 	private List<Cohorte> cohortes;
@@ -86,4 +85,13 @@ public class Actividad implements Serializable {
 		return cohorte;
 	}
 
+	@Override
+	public String toString() {
+		return "Actividad{" +
+				"idActividad=" + idActividad +
+				", nombre='" + nombre + '\'' +
+				", propuesta=" + propuesta +
+				", cohortes=" + cohortes +
+				'}';
+	}
 }

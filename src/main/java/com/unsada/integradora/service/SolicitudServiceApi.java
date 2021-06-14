@@ -8,9 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.unsada.integradora.model.Persona;
-import com.unsada.integradora.model.SesionPresencial;
-import com.unsada.integradora.model.Solicitud;
+import com.unsada.integradora.model.entity.SesionPresencial;
+import com.unsada.integradora.model.entity.Solicitud;
 
 public interface SolicitudServiceApi extends CrudRepository<Solicitud, Integer> {
 	static final String FIND_SOLICITUDES_IN_RANGE = "SELECT s.* FROM solicitud s INNER JOIN sesion_presencial sp ON sp.id_sesion_presencial=s.id_sesion_presencial";
