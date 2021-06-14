@@ -83,4 +83,10 @@ public class EdificioServiceImpl implements EdificioDao {
 		return edificioDao.findBysede(sede);
 	}
 
+	@Override
+	public Optional<Edificio> findEdificioByAula(Integer id_aula) {
+		// TODO Auto-generated method stub
+		return edificioDao.findEdificioByAula(id_aula);
+	}
+
 }
