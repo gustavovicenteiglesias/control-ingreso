@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.dto.ActividadDependenciasDTO;
+import com.unsada.integradora.model.mapper.interfaces.ActividadDependenciasMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,8 @@ public class ActividadController {
 	@Autowired EntidadAulaServiceApi aulaServiceApi;
 	@Autowired CohorteHorarioServiceApi cohorteHorarioServiceApi;
 	@Autowired SesionPresencialServiceApi sesionPresencialServiceApi;
+	@Autowired
+	ActividadDependenciasMapper actividadDependenciasMapper;
 
 
 
@@ -65,8 +69,9 @@ public class ActividadController {
 		try {
 			List<Actividad> claseData;
 			claseData = (List<Actividad>) actividadServiceApi.findAll();
+			List<ActividadDependenciasDTO> allActividades = claseData.stream().map(i -> actividadDependenciasMapper.toDTO(i)).collect(Collectors.toList());
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", allActividades);
 			response.put("success", true);
 			return response;
 

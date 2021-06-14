@@ -1,4 +1,4 @@
-package com.unsada.integradora.business.bean;
+package com.unsada.integradora.core.business.bean;
 
 import java.io.Serializable;
 

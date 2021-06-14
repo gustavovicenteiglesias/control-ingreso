@@ -1,4 +1,4 @@
-package com.unsada.integradora.business.interfaces;
+package com.unsada.integradora.core.business.interfaces;
 
 public interface ControlIngresoMapper<E, T> {
 

@@ -1,7 +1,7 @@
 package com.unsada.integradora.model.dto;
 
 
-import com.unsada.integradora.business.bean.ControlIngresoDTO;
+import com.unsada.integradora.core.business.bean.ControlIngresoDTO;
 
 import java.util.Date;
 
