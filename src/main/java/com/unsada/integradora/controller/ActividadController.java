@@ -66,6 +66,7 @@ public class ActividadController {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
+		//Convierto las actividades a DTO, los dto tienen los datos extra
 		try {
 			List<Actividad> claseData;
 			claseData = (List<Actividad>) actividadServiceApi.findAll();
