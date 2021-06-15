@@ -33,7 +33,7 @@ public class LoginController {
 
         }
     }
-    @GetMapping("/ingreso")
+    @PostMapping("/ingreso")
     public ResponseEntity login(@RequestBody Usuario usuario){
         try{
             Usuario user = usuarioServiceApi.findByUsername(usuario.getUsername()).get();
