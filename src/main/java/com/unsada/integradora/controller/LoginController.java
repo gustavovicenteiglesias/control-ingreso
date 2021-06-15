@@ -27,26 +27,24 @@ public class LoginController {
     public ResponseEntity register(@RequestBody Usuario usuario){
         try{
             usuarioServiceApi.saveUsuario(usuario);
-            return new ResponseEntity("Acceso permitido", HttpStatus.OK);
+            return new ResponseEntity("Usuario registrado", HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity("Acceso denegado", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Error usuario no guardado", HttpStatus.BAD_REQUEST);
 
         }
     }
     @GetMapping("/ingreso")
-    public Map<String, String> login(@RequestBody Usuario usuario){
-        HashMap<String, String> response = new HashMap<>();
+    public ResponseEntity login(@RequestBody Usuario usuario){
         try{
             Usuario user = usuarioServiceApi.findByUsername(usuario.getUsername()).get();
             if(loginService.decode(user.getPassword()).equals(usuario.getPassword())){
-                response.put("Success", "Acceso permitido");
+                return new ResponseEntity("Acceso permitido", HttpStatus.OK);
             }else{
-                response.put("Failed", "Contraseña erronea");
+                return new ResponseEntity("Acceso denegado", HttpStatus.BAD_REQUEST);
             }
 
         }catch (NoSuchElementException e){
-            response.put("Failed:", "Usuario no encontrado");
+            return new ResponseEntity("Error en los datos ingresados", HttpStatus.BAD_REQUEST);
         }
-        return response;
     }
 }
