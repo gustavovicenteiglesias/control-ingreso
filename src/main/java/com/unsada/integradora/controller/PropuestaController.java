@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.Dependencia;
 import com.unsada.integradora.model.entity.Propuesta;
-import com.unsada.integradora.service.DependenciaServiceApi;
-import com.unsada.integradora.service.PropuestaServiceApi;
+import com.unsada.integradora.service.interfaces.DependenciaServiceApi;
+import com.unsada.integradora.service.interfaces.PropuestaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/propuesta")

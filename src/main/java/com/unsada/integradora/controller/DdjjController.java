@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unsada.integradora.model.entity.Ddjj;
 import com.unsada.integradora.model.entity.Persona;
 import com.unsada.integradora.model.entity.Respuesta;
-import com.unsada.integradora.service.DDjjServiceApi;
-import com.unsada.integradora.service.FactorDeRiesgoServiceApi;
-import com.unsada.integradora.service.PersonaServiceApi;
-import com.unsada.integradora.service.PreguntaServiceApi;
-import com.unsada.integradora.service.RespuestaServiceApi;
+import com.unsada.integradora.service.interfaces.DDjjServiceApi;
+import com.unsada.integradora.service.interfaces.FactorDeRiesgoServiceApi;
+import com.unsada.integradora.service.interfaces.PersonaServiceApi;
+import com.unsada.integradora.service.interfaces.PreguntaServiceApi;
+import com.unsada.integradora.service.interfaces.RespuestaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/ddjj")

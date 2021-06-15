@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unsada.integradora.model.entity.Actividad;
 import com.unsada.integradora.model.entity.Cohorte;
 import com.unsada.integradora.model.entity.Sede;
-import com.unsada.integradora.service.ActividadServiceApi;
-import com.unsada.integradora.service.CohorteServiceApi;
-import com.unsada.integradora.service.SedeServiceApi;
+import com.unsada.integradora.service.interfaces.ActividadServiceApi;
+import com.unsada.integradora.service.interfaces.CohorteServiceApi;
+import com.unsada.integradora.service.interfaces.SedeServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/cohorte")

@@ -1,20 +1,18 @@
 package com.unsada.integradora.controller;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
-import com.unsada.integradora.model.dto.SolicitudActividadDTO;
-import com.unsada.integradora.model.entity.Actividad;
 import com.unsada.integradora.model.entity.Horario;
 import com.unsada.integradora.model.entity.Persona;
 import com.unsada.integradora.model.entity.Solicitud;
 import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
+import com.unsada.integradora.service.impl.PersonaServiceImpl;
+import com.unsada.integradora.service.interfaces.SolicitudesDTOServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,19 +24,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unsada.integradora.service.PersonaServiceApi;
-import com.unsada.integradora.service.SolicitudServiceApi;
+import com.unsada.integradora.service.interfaces.PersonaServiceApi;
+import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/persona")
 @CrossOrigin("*")
 public class PersonaController {
 	@Autowired
-	PersonaServiceApi personaServiceApi;
+	PersonaServiceImpl personaServiceApi;
 	@Autowired
 	SolicitudServiceApi solicitudServiceApi;
 	@Autowired
 	SolicitudActividadMapper solicitudActividadMapper;
+
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -64,32 +63,10 @@ public class PersonaController {
 	@GetMapping(value = "/find/persona_sesion/{fechainicio}/{fechafin}/{idPersona}")
 	public Map<String, Object> dataClase1 (@PathVariable("fechainicio") Date fechainicio,@PathVariable("fechafin") Date fechafin, @PathVariable("idPersona") int idPersona) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
-		List<Persona> enContacto = new ArrayList<Persona>();
-		List<Solicitud> solicitudesContactos = new ArrayList<Solicitud>();
-		List<SolicitudActividadDTO> solicitudActividadDTOS = new ArrayList<>();
 
 		try {
-			List<Solicitud> solicitudes = new ArrayList<Solicitud>();
-			solicitudes = (List<Solicitud>) solicitudServiceApi.findSolicitudesInRange(fechainicio, fechafin);
-			List<Integer> sesionesEnSeguimiento = solicitudServiceApi.findSolicitudesPorPersona(idPersona);
-			solicitudes.removeIf(i -> !((i.getFechaCarga().compareTo(fechainicio) > 0 ) && i.getFechaCarga().compareTo(fechafin) <=0));
-			for (Solicitud s : solicitudes) {
-				if(sesionesEnSeguimiento.contains(s.getSesionPresencial().getIdSesionPresencial()) ) {
-					Optional<Persona> p = Optional.ofNullable(s.getDdjj().getPersona());
-					if(!solicitudesContactos.stream().anyMatch(i -> i.getDdjj().getPersona().getNombre().equals(p.get().getNombre()))){
-						solicitudesContactos.add(s);
-					};
-				}
-			}
-			solicitudActividadDTOS = solicitudesContactos.stream().map(temp ->{
-				SolicitudActividadDTO obj = new SolicitudActividadDTO();
-				Optional<Actividad> act = Optional.ofNullable(temp.getSesionPresencial().getCohorteHorario().getCohorte().getActividad());
-				Optional<Persona> person = Optional.ofNullable(temp.getDdjj().getPersona());
-				return solicitudActividadMapper.toDTO(temp);
-			}).collect(Collectors.toList());
-
 			response.put("message", "Success");
-			response.put("personas", solicitudActividadDTOS);
+			response.put("personas", personaServiceApi.solicitudesContactos(fechainicio,fechafin,idPersona));
 			response.put("success", true);
 			return response;
 
@@ -141,9 +118,7 @@ public class PersonaController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-
 			Optional<Persona> clase = personaServiceApi.findByDni(id);
-
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
 				response.put("data", clase);

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.FactorDeRiesgo;
-import com.unsada.integradora.service.FactorDeRiesgoServiceApi;
+import com.unsada.integradora.service.interfaces.FactorDeRiesgoServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/FactorDeRiesgo")

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.Respuesta;
-import com.unsada.integradora.service.RespuestaServiceApi;
+import com.unsada.integradora.service.interfaces.RespuestaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/respuesta")

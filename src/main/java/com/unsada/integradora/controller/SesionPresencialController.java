@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.SesionPresencial;
-import com.unsada.integradora.service.SesionPresencialServiceApi;
+import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/sesionpresencial")

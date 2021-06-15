@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.Edificio;
 import com.unsada.integradora.model.entity.EntidadAula;
-import com.unsada.integradora.service.EdificioServiceApi;
-import com.unsada.integradora.service.EntidadAulaServiceApi;
+import com.unsada.integradora.service.interfaces.EdificioServiceApi;
+import com.unsada.integradora.service.interfaces.EntidadAulaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/aula")

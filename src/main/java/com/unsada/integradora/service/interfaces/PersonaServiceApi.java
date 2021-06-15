@@ -1,4 +1,4 @@
-package com.unsada.integradora.dao;
+package com.unsada.integradora.service.interfaces;
 
 
 import java.sql.Date;
@@ -6,19 +6,18 @@ import java.util.List;
 import java.util.Optional;
 
 import com.unsada.integradora.model.dto.SolicitudActividadDTO;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.unsada.integradora.model.entity.Persona;
 
-@Transactional
-public interface PersonaDao extends CrudRepository<Persona, Integer> {
-	Optional<Persona> findByDni (String dni);
+public interface PersonaServiceApi extends CrudRepository<Persona, Integer> {
+	static final String FIND_PERSONA_POR_SOLICITUD= "SELECT p.* FROM persona p INNER JOIN ddjj d ON d.id_persona = p.id_persona INNER JOIN solicitud so ON so.id_ddjj = d.id_ddjj WHERE so.id_solicitud = :idsolicitud";
 
-    @Modifying
+	Optional<Persona> findByDni (String dni);
+	@Query(value = FIND_PERSONA_POR_SOLICITUD , nativeQuery = true)
+	public Persona findPersonaPorSolicitud(@Param("idsolicitud") Integer idsolicitud);
 
 	@Query(value="SELECT p.* FROM persona p \r\n" + 
 			"INNER JOIN ddjj d ON d.id_persona=p.id_persona\r\n" + 
@@ -30,4 +29,3 @@ public interface PersonaDao extends CrudRepository<Persona, Integer> {
 	public Iterable<Persona> PersonaSesion(@Param("fechainicio") String fechainicio, @Param("fechafin")  String fechafin);
 
 }
-

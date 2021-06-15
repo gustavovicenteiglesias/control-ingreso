@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.CohorteHorario;
-import com.unsada.integradora.service.CohorteHorarioServiceApi;
+import com.unsada.integradora.service.interfaces.CohorteHorarioServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/cohortehorario")

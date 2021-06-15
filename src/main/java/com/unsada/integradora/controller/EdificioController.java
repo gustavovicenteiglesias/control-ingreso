@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unsada.integradora.model.entity.Edificio;
 
 import com.unsada.integradora.model.entity.Sede;
-import com.unsada.integradora.service.EdificioServiceApi;
-import com.unsada.integradora.service.SedeServiceApi;
+import com.unsada.integradora.service.interfaces.EdificioServiceApi;
+import com.unsada.integradora.service.interfaces.SedeServiceApi;
 
 
 @RestController

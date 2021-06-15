@@ -30,12 +30,12 @@ import com.unsada.integradora.model.entity.CohorteHorario;
 import com.unsada.integradora.model.entity.EntidadAula;
 import com.unsada.integradora.model.entity.Horario;
 import com.unsada.integradora.model.entity.SesionPresencial;
-import com.unsada.integradora.service.ActividadServiceApi;
-import com.unsada.integradora.service.CohorteHorarioServiceApi;
-import com.unsada.integradora.service.CohorteServiceApi;
-import com.unsada.integradora.service.EntidadAulaServiceApi;
-import com.unsada.integradora.service.HorarioServiceApi;
-import com.unsada.integradora.service.SesionPresencialServiceApi;
+import com.unsada.integradora.service.interfaces.ActividadServiceApi;
+import com.unsada.integradora.service.interfaces.CohorteHorarioServiceApi;
+import com.unsada.integradora.service.interfaces.CohorteServiceApi;
+import com.unsada.integradora.service.interfaces.EntidadAulaServiceApi;
+import com.unsada.integradora.service.interfaces.HorarioServiceApi;
+import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/horario")

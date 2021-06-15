@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.Dependencia;
-import com.unsada.integradora.service.DependenciaServiceApi;
+import com.unsada.integradora.service.interfaces.DependenciaServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/dependencia")
