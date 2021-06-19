@@ -70,7 +70,9 @@ public class ActividadController {
 		try {
 			List<Actividad> claseData;
 			claseData = (List<Actividad>) actividadServiceApi.findAll();
-			List<ActividadDependenciasDTO> allActividades = claseData.stream().map(i -> actividadDependenciasMapper.toDTO(i)).collect(Collectors.toList());
+			List<ActividadDependenciasDTO> allActividades = claseData.stream()
+					.map(i -> actividadDependenciasMapper.toDTO(i))
+					.collect(Collectors.toList());
 			response.put("message", "Successful load");
 			response.put("data", allActividades);
 			response.put("success", true);
@@ -172,7 +174,7 @@ public class ActividadController {
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", actividadDependenciasMapper.toDTO(clase.get()));
 				response.put("success", true);
 				return response;
 			} else {

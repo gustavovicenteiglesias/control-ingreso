@@ -1,23 +1,14 @@
 package com.unsada.integradora.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+import com.unsada.integradora.service.interfaces.AsignarAulaInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.unsada.integradora.model.entity.Edificio;
 import com.unsada.integradora.model.entity.EntidadAula;
@@ -28,6 +19,8 @@ import com.unsada.integradora.service.interfaces.EntidadAulaServiceApi;
 @RequestMapping(value = "/api/aula")
 @CrossOrigin("*")
 public class EntidadAulaController {
+	@Autowired
+	AsignarAulaInterface asignarAulaService;
 	@Autowired
 	EntidadAulaServiceApi entidadAulaServiceApi;
 	@Autowired
@@ -199,6 +192,12 @@ public class EntidadAulaController {
 			response.put("success", false);
 			return response;
 		}
+	}
+
+	@PutMapping(value = "/asignar-actividad/{idAula}/{idActividad}/")
+	public ResponseEntity asignarAula(@PathVariable("idAula") int idAula, @PathVariable("idActividad") int idActividad, @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date fecha){
+		ResponseEntity<String> response = asignarAulaService.asignarAula(idAula,idActividad,fecha);
+		return response;
 	}
 
 }

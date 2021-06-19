@@ -1,92 +1,97 @@
 package com.unsada.integradora.service.impl;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.entity.Cohorte;
+import com.unsada.integradora.model.entity.SesionPresencial;
+import com.unsada.integradora.service.interfaces.ActividadServiceApi;
+import com.unsada.integradora.service.interfaces.AsignarAulaInterface;
+import com.unsada.integradora.service.interfaces.EntidadAulaServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.EntidadAulaDao;
 import com.unsada.integradora.model.entity.EntidadAula;
+
+import javax.swing.text.html.Option;
+
 @Service
-public class EntidadAulaServiceImpl implements EntidadAulaDao {
+public class EntidadAulaServiceImpl implements EntidadAulaServiceApi {
+
+
 	@Autowired
-	EntidadAulaDao entidadAulaDao;
+	ActividadServiceApi actividadService;
+	@Override
+	public Iterable<EntidadAula> findByEdificio(int idEdificio) {
+		return null;
+	}
+
+
+	@Override
+	public Optional<EntidadAula> findAulaSesion(Integer sesion_presencial) {
+		return Optional.empty();
+	}
+
 	@Override
 	public <S extends EntidadAula> S save(S entity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <S extends EntidadAula> Iterable<S> saveAll(Iterable<S> entities) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Optional<EntidadAula> findById(Integer id) {
-		// TODO Auto-generated method stub
-		return entidadAulaDao.findById(id);
+	public Optional<EntidadAula> findById(Integer integer) {
+		return Optional.empty();
 	}
 
 	@Override
-	public boolean existsById(Integer id) {
-		// TODO Auto-generated method stub
-		return entidadAulaDao.existsById(id);
+	public boolean existsById(Integer integer) {
+		return false;
 	}
 
 	@Override
 	public Iterable<EntidadAula> findAll() {
-		// TODO Auto-generated method stub
-		return entidadAulaDao.findAll();
+		return null;
 	}
 
 	@Override
-	public Iterable<EntidadAula> findAllById(Iterable<Integer> ids) {
-		// TODO Auto-generated method stub
-		return entidadAulaDao.findAllById(ids);
+	public Iterable<EntidadAula> findAllById(Iterable<Integer> integers) {
+		return null;
 	}
 
 	@Override
 	public long count() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+	public void deleteById(Integer integer) {
 
 	}
 
 	@Override
 	public void delete(EntidadAula entity) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void deleteAll(Iterable<? extends EntidadAula> entities) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void deleteAll() {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public Iterable<EntidadAula> findByEdificio(int idEdificio) {
-		// TODO Auto-generated method stub
-		return entidadAulaDao.findByEdificio(idEdificio);
-	}
-
-	@Override
-	public Optional<EntidadAula> findAulaSesion(Integer sesion_presencial) {
-		// TODO Auto-generated method stub
-		return entidadAulaDao.findAulaSesion(sesion_presencial);
-	}
 
 }

@@ -31,6 +31,9 @@ public class Cohorte implements Serializable {
 	@Column(name="fecha_inicio")
 	private Date fechaInicio;
 
+	@Column(name = "nombre_cohorte")
+	public String nombreCohorte;
+
 	//bi-directional many-to-one association to Actividad
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="id_actividad")
@@ -53,6 +56,7 @@ public class Cohorte implements Serializable {
 
 	public Cohorte() {
 	}
+
 
 	public int getIdCohorte() {
 		return this.idCohorte;
@@ -116,4 +120,24 @@ public class Cohorte implements Serializable {
 		return cohorteHorario;
 	}
 
+	public String getNombreCohorte() {
+		return nombreCohorte;
+	}
+
+	public void setNombreCohorte(String nombreCohorte) {
+		this.nombreCohorte = nombreCohorte;
+	}
+
+	@Override
+	public String toString() {
+		return "Cohorte{" +
+				"idCohorte=" + idCohorte +
+				", fechaFin=" + fechaFin +
+				", fechaInicio=" + fechaInicio +
+				", nombreCohorte='" + nombreCohorte + '\'' +
+				", actividad=" + actividad +
+				", sede=" + sede +
+				", cohorteHorarios=" + cohorteHorarios.size() +
+				'}';
+	}
 }

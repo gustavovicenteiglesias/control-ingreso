@@ -2,6 +2,9 @@ package com.unsada.integradora.model.dto;
 
 
 import com.unsada.integradora.core.business.bean.ControlIngresoDTO;
+import com.unsada.integradora.model.entity.Edificio;
+
+import java.util.List;
 
 public class ActividadDependenciasDTO extends ControlIngresoDTO {
     private int idActividad;
@@ -9,13 +12,15 @@ public class ActividadDependenciasDTO extends ControlIngresoDTO {
     private String nombreActividad;
     private String nombreDependencia;
     private String nombrePropuesta;
+    private List<Edificio> edificios;
 
-    public ActividadDependenciasDTO(int idActividad, int idPropuesta, String nombreActividad, String nombreDependencia, String nombrePropuesta) {
+    public ActividadDependenciasDTO(int idActividad, int idPropuesta, String nombreActividad, String nombreDependencia, String nombrePropuesta, List<Edificio> edificios) {
         this.idActividad = idActividad;
         this.idPropuesta = idPropuesta;
         this.nombreActividad = nombreActividad;
         this.nombreDependencia = nombreDependencia;
         this.nombrePropuesta = nombrePropuesta;
+        this.edificios = edificios;
     }
 
     public ActividadDependenciasDTO() {
@@ -60,6 +65,15 @@ public class ActividadDependenciasDTO extends ControlIngresoDTO {
     public void setNombrePropuesta(String nombrePropuesta) {
         this.nombrePropuesta = nombrePropuesta;
     }
+
+    public List<Edificio> getEdificios() {
+        return edificios;
+    }
+
+    public void setEdificios(List<Edificio> edificios) {
+        this.edificios = edificios;
+    }
+
 
     @Override
     public String toString() {
