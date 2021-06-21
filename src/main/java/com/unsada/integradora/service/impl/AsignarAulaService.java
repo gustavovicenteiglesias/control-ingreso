@@ -25,7 +25,7 @@ public class AsignarAulaService implements AsignarAulaInterface {
     @Autowired
     SesionPresencialServiceApi sesionPresencialServiceApi;
     @Override
-    public ResponseEntity<String> asignarAula(int idAula, int idActividad, Date fecha) {
+    public ResponseEntity<String> asignarAulaEnFecha(int idAula, int idActividad, Date fecha) {
 
         Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
         Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
@@ -46,6 +46,27 @@ public class AsignarAulaService implements AsignarAulaInterface {
 		    return  new ResponseEntity<String>("Success", HttpStatus.OK);
         }catch (Exception e){
 		    return new ResponseEntity<String>("Error asignando aula", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> asignarAulaEnTodasLasSesiones(int idAula, int idActividad) {
+        Optional<EntidadAula> aula = aulaServiceApi.findById(idAula);
+        Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+        List<SesionPresencial> sesiones = actividad.get().getCohortes().stream()
+                .flatMap( cohorte -> cohorte.getCohorteHorarios().stream())
+                .flatMap( cohorteHorario -> cohorteHorario.getSesionPresencials().stream())
+                .collect(Collectors.toList());
+
+        try{
+            EntidadAula au = aula.get();
+            sesiones.forEach( sesion -> {
+                sesion.setEntidadAula(au);
+                sesionPresencialServiceApi.save(sesion);
+            });
+            return  new ResponseEntity<String>("Success", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<String>("Error asignando aula", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.unsada.integradora.controller;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.dto.AulaEdificioDto;
+import com.unsada.integradora.model.mapper.interfaces.AulaEdificioMapper;
 import com.unsada.integradora.service.interfaces.AsignarAulaInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,16 +29,21 @@ public class EntidadAulaController {
 	@Autowired
 	@Qualifier("EdificioServiceApi")
 	EdificioServiceApi edificioServiceApi;
+	@Autowired
+	AulaEdificioMapper aulaEdificioMapper;
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-			List<EntidadAula> claseData;
-			claseData = (List<EntidadAula>) entidadAulaServiceApi.findAll();
+			List<EntidadAula> aulas;
+			List<AulaEdificioDto> allAulas;
+			aulas = (List<EntidadAula>) entidadAulaServiceApi.findAll();
+			allAulas = aulas.stream().map(aula -> aulaEdificioMapper.toDTO(aula)).collect(Collectors.toList());
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", allAulas);
 			response.put("success", true);
 			return response;
 
@@ -101,11 +109,11 @@ public class EntidadAulaController {
 
 		try {
 
-			Optional<EntidadAula> clase = entidadAulaServiceApi.findById(id);
+			Optional<EntidadAula> aula = entidadAulaServiceApi.findById(id);
 
-			if (clase.isPresent()) {
+			if (aula.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", aulaEdificioMapper.toDTO(aula.get()));
 				response.put("success", true);
 				return response;
 			} else {
@@ -194,9 +202,15 @@ public class EntidadAulaController {
 		}
 	}
 
-	@PutMapping(value = "/asignar-actividad/{idAula}/{idActividad}/")
+	@PutMapping(value = "/asignar-actividad-en-fecha/{idAula}/{idActividad}/")
 	public ResponseEntity asignarAula(@PathVariable("idAula") int idAula, @PathVariable("idActividad") int idActividad, @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date fecha){
-		ResponseEntity<String> response = asignarAulaService.asignarAula(idAula,idActividad,fecha);
+		ResponseEntity<String> response = asignarAulaService.asignarAulaEnFecha(idAula,idActividad,fecha);
+		return response;
+	}
+
+	@PutMapping(value = "/asignar-actividad-todo-cohorte/{idAula}/{idActividad}")
+	public ResponseEntity asignarAulaTodo(@PathVariable("idAula") int idAula, @PathVariable("idActividad") int idActividad){
+		ResponseEntity<String> response = asignarAulaService.asignarAulaEnTodasLasSesiones(idAula,idActividad);
 		return response;
 	}
 

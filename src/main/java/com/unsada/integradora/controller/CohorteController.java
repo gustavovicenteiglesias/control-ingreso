@@ -26,6 +26,8 @@ import com.unsada.integradora.service.interfaces.ActividadServiceApi;
 import com.unsada.integradora.service.interfaces.CohorteServiceApi;
 import com.unsada.integradora.service.interfaces.SedeServiceApi;
 
+import javax.swing.text.html.Option;
+
 @RestController
 @RequestMapping(value = "/api/cohorte")
 @CrossOrigin("*")
@@ -129,10 +131,10 @@ public class CohorteController {
 		try {
 			data.setActividad(actividad.get());
 			data.setSede(sede.get());;
-			int idCohorte = cohorteServiceApi.save(data).getIdCohorte();
-			return new ResponseEntity<>(String.valueOf(idCohorte), HttpStatus.OK);
+			Cohorte cohorte = cohorteServiceApi.save(data);
+			return new ResponseEntity<>(String.valueOf(cohorte.getIdCohorte()), HttpStatus.OK);
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			return new ResponseEntity<>("failed" + e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 

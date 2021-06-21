@@ -142,7 +142,22 @@ public class HorarioController {
 		}
 	}
 
-	
+	@PostMapping(value = "/create-sesiones-vacias/{idActividad}/{idCohorte}")
+	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad, @PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
+		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+		Optional<Cohorte> cohorte = cohorteServiceApi.findById(idCohorte);
+		try {
+			if(cohorte.isPresent()){
+				crearSesiones(cohorte.get(), horarioServiceApi.save(data), null);
+			}
+			return new ResponseEntity<>("Save successful: Se encontraron "  + " cohortes", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 	@PostMapping(value = "/create-por-cohorte/{idActividad}/{idAula}/{idCohorte}")
 	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad,  @PathVariable("idAula") int idAula,@PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
@@ -159,10 +174,10 @@ public class HorarioController {
 		}
 
 	}
-/* 
-En base a la fecha fin y de inicio, evalua los dias del horario a registrar. Para las fechas
-entre inicio y fin que corerspondan al dia, se genera una sesion.
-*/
+    /*
+    En base a la fecha fin y de inicio, evalua los dias del horario a registrar. Para las fechas
+    entre inicio y fin que corerspondan al dia, se genera una sesion.
+    */
 	private void crearSesiones(Cohorte cohorte, Horario data, EntidadAula aula) {
 			List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
 			Date inicio = (Date) cohorte.getFechaInicio();
@@ -184,7 +199,7 @@ entre inicio y fin que corerspondan al dia, se genera una sesion.
 						sesion.setCohorteHorario(crearCohorteHorario(cohorte, data));
 					}
 					sesion.setFecha(Date.from(fecha.atStartOfDay(ZoneId.of("America/Argentina/Catamarca")).toInstant()));
-					sesion.setEntidadAula(aula);
+					if(aula != null){	sesion.setEntidadAula(aula);}
 					sesionPresencialServiceApi.save(sesion);
 				}
 			}			
