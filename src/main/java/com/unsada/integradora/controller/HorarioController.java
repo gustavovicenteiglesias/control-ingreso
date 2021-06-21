@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.unsada.integradora.core.business.interfaces.ControlIngresoMapper;
+import com.unsada.integradora.model.dto.HorarioCohorteDTO;
+import com.unsada.integradora.model.mapper.interfaces.HorarioCohorteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +56,8 @@ public class HorarioController {
 	SesionPresencialServiceApi sesionPresencialServiceApi;
 	@Autowired
 	EntidadAulaServiceApi aulaServiceApi;
+	@Autowired
+	HorarioCohorteMapper horarioMapper;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -61,8 +66,9 @@ public class HorarioController {
 		try {
 			List<Horario> claseData;
 			claseData = (List<Horario>) horarioServiceApi.findAll();
+			List<HorarioCohorteDTO> horariosCohorte = claseData.stream().map(i -> horarioMapper.toDTO(i)).collect(Collectors.toList());
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", horariosCohorte);
 			response.put("success", true);
 			return response;
 

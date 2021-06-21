@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.service.interfaces.ActividadServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,8 @@ public class SesionPresencialController {
 	@Autowired
 	SesionPresencialServiceApi sesionPresencialServiceApi;
 
+	@Autowired
+	ActividadServiceApi actividadServiceApi;
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
@@ -47,6 +52,26 @@ public class SesionPresencialController {
 			return response;
 		}
 
+	}
+	//Sesiones por actividad:
+	@GetMapping(value = "/por-actividad/{idActividad}")
+	public Map<String, Object> listarPorActividad(@PathVariable("idActividad") int idActividad){
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);
+		try{
+			List<SesionPresencial> sesiones = actividad.stream()
+					.flatMap(i -> i.getCohortes().stream())
+					.flatMap(i -> i.getCohorteHorarios().stream())
+					.flatMap(i -> i.getSesionPresencials().stream())
+					.collect(Collectors.toList());
+
+			response.put("data", sesiones);
+			response.put("Sucess", true);
+			return response;
+		}catch (Exception e){
+			e.printStackTrace();
+			return response;
+		}
 	}
 	@GetMapping(value = "/sesionhorario/{id_horario}")
 	public Map<String, Object> listclase1(@PathVariable("id_horario") Integer id_horario) {
