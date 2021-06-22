@@ -85,7 +85,7 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 
 	@Override
 	public Optional<Persona> findByDni(String dni) {
-		return Optional.empty();
+		return personaDao.findByDni(dni);
 	}
 
 	@Override
