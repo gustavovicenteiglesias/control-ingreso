@@ -77,9 +77,6 @@ public class PersonaController {
 			return response;
 		}
 	}
-	private Entry<Persona, Horario> newEntry(Persona persona, Solicitud solicitud) {
-		return null;
-	}
 
 	public boolean compararFechas(Date index, Date fechainicio, Date fechafin){
 		if(index.compareTo(fechainicio) > 0 && index.compareTo(fechafin) <= 0){

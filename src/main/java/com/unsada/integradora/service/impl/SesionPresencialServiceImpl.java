@@ -14,7 +14,7 @@ public class SesionPresencialServiceImpl implements SesionPresencialDao {
 	@Override
 	public <S extends SesionPresencial> S save(S entity) {
 		// TODO Auto-generated method stub
-		return null;
+		return sesionPresencialDao.save(entity);
 	}
 
 	@Override
@@ -55,13 +55,13 @@ public class SesionPresencialServiceImpl implements SesionPresencialDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		sesionPresencialDao.deleteById(id);
 
 	}
 
 	@Override
 	public void delete(SesionPresencial entity) {
-		// TODO Auto-generated method stub
+		sesionPresencialDao.delete(entity);
 
 	}
 

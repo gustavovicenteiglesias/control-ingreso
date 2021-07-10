@@ -40,7 +40,7 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 
 	@Override
 	public Optional<Persona> findById(Integer integer) {
-		return Optional.empty();
+		return personaDao.findById(integer);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 
 	@Override
 	public Persona findPersonaPorSolicitud(Integer idsolicitud) {
-		return null;
+		return new Persona();
 	}
 
 

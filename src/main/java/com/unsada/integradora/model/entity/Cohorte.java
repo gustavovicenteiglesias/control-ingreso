@@ -6,7 +6,9 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.List;
 
 
@@ -23,11 +25,9 @@ public class Cohorte implements Serializable {
 	@Column(name="id_cohorte")
 	private int idCohorte;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_fin")
 	private Date fechaFin;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_inicio")
 	private Date fechaInicio;
 
@@ -130,14 +130,12 @@ public class Cohorte implements Serializable {
 
 	@Override
 	public String toString() {
+		String pattern = "yyyy-MM-dd";
+		DateFormat df = new SimpleDateFormat(pattern);
 		return "Cohorte{" +
-				"idCohorte=" + idCohorte +
-				", fechaFin=" + fechaFin +
-				", fechaInicio=" + fechaInicio +
-				", nombreCohorte='" + nombreCohorte + '\'' +
-				", actividad=" + actividad +
-				", sede=" + sede +
-				", cohorteHorarios=" + cohorteHorarios.size() +
+				"idCohorte=" + this.idCohorte +
+				", fechaFin=" + df.format(this.fechaFin) +
+				", fechaInicio=" +df.format(this.fechaInicio) +
 				'}';
 	}
 }
