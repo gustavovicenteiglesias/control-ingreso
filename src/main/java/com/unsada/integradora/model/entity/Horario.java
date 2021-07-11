@@ -99,5 +99,14 @@ public class Horario implements Serializable {
 		return serialVersionUID;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Horario{" +
+				"idHorario=" + idHorario +
+				", dia='" + dia + '\'' +
+				", horaInicio=" + horaInicio +
+				", horaFin=" + horaFin +
+				", nombre='" + nombre + '\'' +
+				'}';
+	}
 }

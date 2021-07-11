@@ -15,6 +15,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
@@ -23,23 +24,17 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
     @Autowired
     CohorteHorarioServiceApi cohorteHorarioServiceApi;
 
+    @Override
     public void crearSesiones(Cohorte cohorte, Horario data, EntidadAula aula) {
-        List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
         Date inicio = (Date) cohorte.getFechaInicio();
         Date fin = (Date) cohorte.getFechaFin();
-        List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
-        for(LocalDate fecha : fechas){
+        List<LocalDate> fechasEntreIniciofin = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
+        for(LocalDate fecha : fechasEntreIniciofin){
             if(fecha.getDayOfWeek().equals(CohorteServiceApi.maskDay(data.getDia()))){
                 SesionPresencial sesion = new SesionPresencial();
-                if(!cohorteHorario.isEmpty()){
-                    try{
-                        cohorteHorario.stream().filter(i -> i.getCohorte().equals(cohorte));
-                        sesion.setCohorteHorario(cohorteHorario.get(0));
-
-                    }catch(Exception e){
-                        System.out.println("no encontrado el cohorte horario");
-                    }
-                    System.out.println("Cohorte existe");
+                CohorteHorario cohorteHorario = findCohorteHorario(cohorte, data);
+                if(cohorteHorario != null){
+                    sesion.setCohorteHorario(cohorteHorario);
                 }else{
                     sesion.setCohorteHorario(crearCohorteHorario(cohorte, data));
                 }
@@ -50,40 +45,89 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
         }
 
     }
+
+
+    @Override
+    public void actualizarSesiones(Cohorte cohorteOriginal, Cohorte cohorteActualizado) {
+        Date ogFin = (Date) cohorteOriginal.getFechaFin();
+        Date nuevoInicio= (Date) cohorteActualizado.getFechaInicio();
+        Date nuevoFin = (Date) cohorteActualizado.getFechaFin();
+        List<LocalDate> fechas = nuevoInicio.toLocalDate().datesUntil(nuevoFin.toLocalDate()).collect(Collectors.toList());
+        List<LocalDate> nuevasFechas = getNuevasFechas(ogFin
+                ,nuevoFin
+                , filterFechasPorDiasHorarios(cohorteOriginal, fechas)
+                ,cohorteOriginal);
+
+        nuevasFechas.forEach(System.out::println);
+        cohorteOriginal.getCohorteHorarios().stream().forEach(i ->{
+            Horario horario = i.getHorario();
+            nuevasFechas.forEach(fecha ->{
+                if(fecha.getDayOfWeek().equals(CohorteServiceApi.maskDay(horario.getDia()))){
+                   SesionPresencial sesion = new SesionPresencial();
+                   sesion.setFecha(Date.valueOf(fecha));
+                   sesion.setCohorteHorario(findCohorteHorario(cohorteOriginal, horario));
+                   sesionPresencialServiceApi.save(sesion);
+                }
+            });
+        });
+
+    }
+    //Trae todas las fechas sin sesion existentes
+    public List<LocalDate> getNuevasFechas(Date originalFin, Date nuevoFin, List<LocalDate> nuevasFechas, Cohorte cohorteOriginal) {
+        if (originalFin != nuevoFin) {
+            List<SesionPresencial> sesiones = cohorteOriginal.getCohorteHorarios()
+                    .stream()
+                    .distinct()
+                    .flatMap(i -> i.getSesionPresencials().stream())
+                    .collect(Collectors.toList());
+
+            sesiones.stream().forEach(sesion -> {
+                LocalDate sesionToLocal = sesion.getFecha().toInstant().atZone(ZoneId.of("America/Argentina/Catamarca")).toLocalDate();
+                System.out.println(sesionToLocal);
+                if (nuevasFechas.contains(sesionToLocal)) {
+                    System.out.println("no hace falta sesion para la fecha: " + sesion.getFecha() + " id " + sesion.getIdSesionPresencial());
+                    nuevasFechas.remove(sesionToLocal);
+                }
+            });
+            return nuevasFechas;
+        }
+        return null;
+
+    }
+    //Dado una lista de dias y un cohorte devuelve los dias que correspondan al dia asignado para los horarios
+    public List<LocalDate> filterFechasPorDiasHorarios(Cohorte cohorteOriginal, List<LocalDate> fechas){
+        List<String> dias = cohorteOriginal.getCohorteHorarios().stream().distinct().map(i -> i.getHorario().getDia()).collect(Collectors.toList());
+        List<DayOfWeek> diasDeLaSemana = dias.stream().map(CohorteServiceApi::maskDay).collect(Collectors.toList());
+        fechas = fechas.stream().filter(fecha -> diasDeLaSemana.contains(fecha.getDayOfWeek())).collect(Collectors.toList());
+        return fechas;
+    }
+
+   public void crearSesionesInRange(List<LocalDate> fechas, CohorteHorario cohorteHorario) {
+        fechas.forEach(fecha -> {
+            SesionPresencial sesionPresencial = new SesionPresencial();
+            sesionPresencial.setFecha(Date.valueOf(fecha));
+            sesionPresencial.setCohorteHorario(cohorteHorario);
+        });
+    }
+
+
+    public CohorteHorario findCohorteHorario(Cohorte cohorte, Horario horario){
+        List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
+        if(!cohorteHorario.isEmpty()){
+            cohorteHorario = cohorteHorario.stream()
+                    .filter(i -> i.getCohorte().equals(cohorte))
+                    .filter(h -> h.getHorario().equals(horario))
+                    .collect(Collectors.toList());
+            return cohorteHorario.get(0);
+        }
+        System.out.println("no encontrado el cohorte horario");
+        return null;
+    }
+
     public CohorteHorario crearCohorteHorario(Cohorte cohorte, Horario data){
         CohorteHorario cohorteHorario = new CohorteHorario();
         cohorteHorario.setCohorte(cohorte);
         cohorteHorario.setHorario(data);
         return cohorteHorarioServiceApi.save(cohorteHorario);
-    }
-
-    @Override
-    public void actualizarSesiones(Cohorte cohorteOriginal, Cohorte cohorteActualizado) {
-        System.out.println(cohorteOriginal);
-        System.out.println(cohorteActualizado);
-        Date ogFin = (Date) cohorteOriginal.getFechaFin();
-        Date ogInicio = (Date) cohorteOriginal.getFechaInicio();
-        Date nuevoInicio= (Date) cohorteActualizado.getFechaInicio();
-        Date nuevoFin = (Date) cohorteActualizado.getFechaFin();
-        List<LocalDate> fechas = nuevoInicio.toLocalDate().datesUntil(nuevoFin.toLocalDate()).collect(Collectors.toList());
-        List<LocalDate> nuevasFechas = filterFechasPorDiasHorarios(cohorteOriginal, fechas);
-        System.out.println("nuevas fechas");
-        nuevasFechas.stream().forEach(i -> System.out.println(i));
-       /* if(ogFin != nuevoFin){
-            List<SesionPresencial> sesiones =cohorteOriginal.getCohorteHorarios().stream().distinct().flatMap(i -> i.getSesionPresencials().stream()).collect(Collectors.toList());
-            sesiones.stream().forEach(sesion -> {
-                System.out.println(sesion.getFecha());
-                if(!nuevasFechas.contains((LocalDate) sesion.getFecha())){
-                    System.out.println("hace falta sesion para la fecha: " + sesion.getFecha() + " id " + sesion.getIdSesionPresencial());
-                }
-            });
-        }*/
-
-    }
-    public List<LocalDate> filterFechasPorDiasHorarios(Cohorte cohorte, List<LocalDate> fechas){
-        List<String> dias = cohorte.getCohorteHorarios().stream().distinct().map(i -> i.getHorario().getDia()).collect(Collectors.toList());
-        List<DayOfWeek> diasDeLaSemana = dias.stream().map(i -> CohorteServiceApi.maskDay(i)).collect(Collectors.toList());
-        fechas = fechas.stream().filter(fecha -> diasDeLaSemana.contains(fecha.getDayOfWeek())).collect(Collectors.toList());
-        return fechas;
     }
 }

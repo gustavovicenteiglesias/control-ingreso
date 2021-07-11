@@ -92,4 +92,12 @@ public class CohorteHorario implements Serializable {
 		return sesionPresencial;
 	}
 
+	@Override
+	public String toString() {
+		return "CohorteHorario{" +
+				"idCohorteHorario=" + idCohorteHorario +
+				", cohorte=" + cohorte +
+				", horario=" + horario +
+				'}';
+	}
 }

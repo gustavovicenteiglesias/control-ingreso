@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.unsada.integradora.service.interfaces.SesionesGeneratorInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import com.unsada.integradora.service.interfaces.CohorteServiceApi;
 import com.unsada.integradora.service.interfaces.SedeServiceApi;
 
 import javax.swing.text.html.Option;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/cohorte")
@@ -38,6 +40,8 @@ public class CohorteController {
 	SedeServiceApi sedeServiceApi;
 	@Autowired
 	ActividadServiceApi actividadServiceApi;
+	@Autowired
+	SesionesGeneratorInterface sesionesGenerator;
 
 	@GetMapping(value ="/por-actividad/{idActividad}")
 	public Map<String, Object> listCohortesPorActividad(@PathVariable("idActividad") int idActividad){
@@ -52,6 +56,7 @@ public class CohorteController {
 			return response;
 	
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("message", e.getMessage());
 			response.put("success ", false);
 			return response;
@@ -142,17 +147,25 @@ public class CohorteController {
 	
 	@PutMapping(value = "/update/{id}")
 
-	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody Cohorte data) {
+	public Map<String, Object> update(@PathVariable("id") Integer id, @Valid @RequestBody  Cohorte data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
+		Optional<Cohorte> cohorteOriginal = cohorteServiceApi.findById(id);
 
 		try {
-			data.setIdCohorte(id);;
-			cohorteServiceApi.save(data);
+			if((data.getFechaFin() != null) && data.getFechaInicio() != null){
+				sesionesGenerator.actualizarSesiones(cohorteOriginal.get(), data);
+			}
+			Cohorte cohorteActualizado= cohorteOriginal.get();
+			cohorteActualizado.setFechaInicio(data.getFechaInicio());
+			cohorteActualizado.setFechaFin(data.getFechaFin());
+			cohorteServiceApi.save(cohorteActualizado);
+
 			response.put("message", "Successful update");
 			response.put("success", true);
 			return response;
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("message", e.getMessage());
 			response.put("success", false);
 			return response;
@@ -168,7 +181,6 @@ public class CohorteController {
 
 		try {
 			cohorteServiceApi.deleteById(id);
-			;
 			response.put("message", "Successful delete");
 			response.put("success", true);
 			return response;

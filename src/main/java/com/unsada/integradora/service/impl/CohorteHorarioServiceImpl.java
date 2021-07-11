@@ -14,7 +14,7 @@ public class CohorteHorarioServiceImpl implements CohorteHorarioDao {
 	@Override
 	public <S extends CohorteHorario> S save(S entity) {
 		// TODO Auto-generated method stub
-		return null;
+		return cohorteHorarioDao.save(entity);
 	}
 
 	@Override
@@ -55,13 +55,13 @@ public class CohorteHorarioServiceImpl implements CohorteHorarioDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		cohorteHorarioDao.deleteById(id);
 
 	}
 
 	@Override
 	public void delete(CohorteHorario entity) {
-		// TODO Auto-generated method stub
+		cohorteHorarioDao.delete(entity);
 
 	}
 

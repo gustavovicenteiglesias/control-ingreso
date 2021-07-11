@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.unsada.integradora.core.business.interfaces.ControlIngresoMapper;
 import com.unsada.integradora.model.dto.HorarioCohorteDTO;
 import com.unsada.integradora.model.mapper.interfaces.HorarioCohorteMapper;
+import com.unsada.integradora.service.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +34,6 @@ import com.unsada.integradora.model.entity.CohorteHorario;
 import com.unsada.integradora.model.entity.EntidadAula;
 import com.unsada.integradora.model.entity.Horario;
 import com.unsada.integradora.model.entity.SesionPresencial;
-import com.unsada.integradora.service.interfaces.ActividadServiceApi;
-import com.unsada.integradora.service.interfaces.CohorteHorarioServiceApi;
-import com.unsada.integradora.service.interfaces.CohorteServiceApi;
-import com.unsada.integradora.service.interfaces.EntidadAulaServiceApi;
-import com.unsada.integradora.service.interfaces.HorarioServiceApi;
-import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/horario")
@@ -50,10 +45,10 @@ public class HorarioController {
 	ActividadServiceApi actividadServiceApi;
 	@Autowired 
 	CohorteServiceApi cohorteServiceApi;
+	@Autowired
+	SesionesGeneratorInterface sesionesGenerator;
 	@Autowired 
 	CohorteHorarioServiceApi cohorteHorarioServiceApi;
-	@Autowired
-	SesionPresencialServiceApi sesionPresencialServiceApi;
 	@Autowired
 	EntidadAulaServiceApi aulaServiceApi;
 	@Autowired
@@ -154,7 +149,7 @@ public class HorarioController {
 		Optional<Cohorte> cohorte = cohorteServiceApi.findById(idCohorte);
 		try {
 			if(cohorte.isPresent()){
-				crearSesiones(cohorte.get(), horarioServiceApi.save(data), null);
+				sesionesGenerator.crearSesiones(cohorte.get(), horarioServiceApi.save(data), null);
 			}
 			return new ResponseEntity<>("Save successful: Se encontraron "  + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
@@ -171,7 +166,7 @@ public class HorarioController {
 		Optional<Cohorte> cohorte = cohorteServiceApi.findById(idCohorte);
 		try {
 			if(cohorte.isPresent()){
-				crearSesiones(cohorte.get(), horarioServiceApi.save(data), aula.get());
+				sesionesGenerator.crearSesiones(cohorte.get(), horarioServiceApi.save(data), aula.get());
 			}
 			return new ResponseEntity<>("Save successful: Se encontraron "  + " cohortes", HttpStatus.OK);
 		} catch (Exception e) {
@@ -184,41 +179,6 @@ public class HorarioController {
     En base a la fecha fin y de inicio, evalua los dias del horario a registrar. Para las fechas
     entre inicio y fin que corerspondan al dia, se genera una sesion.
     */
-	private void crearSesiones(Cohorte cohorte, Horario data, EntidadAula aula) {
-			List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
-			Date inicio = (Date) cohorte.getFechaInicio();
-			Date fin = (Date) cohorte.getFechaFin();
-			List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
-			for(LocalDate fecha : fechas){
-				if(fecha.getDayOfWeek().equals(CohorteServiceApi.maskDay(data.getDia()))){
-					SesionPresencial sesion = new SesionPresencial();
-					if(!cohorteHorario.isEmpty()){
-						try{
-							cohorteHorario.stream().filter(i -> i.getCohorte().equals(cohorte));
-							sesion.setCohorteHorario(cohorteHorario.get(0));
-							
-						}catch(Exception e){
-							System.out.println("no encontrado el cohorte horario");
-						}
-						System.out.println("Cohorte existe");
-					}else{
-						sesion.setCohorteHorario(crearCohorteHorario(cohorte, data));
-					}
-					sesion.setFecha(Date.from(fecha.atStartOfDay(ZoneId.of("America/Argentina/Catamarca")).toInstant()));
-					if(aula != null){	sesion.setEntidadAula(aula);}
-					sesionPresencialServiceApi.save(sesion);
-				}
-			}			
-		
-	}
-	private CohorteHorario crearCohorteHorario(Cohorte cohorte, Horario data){
-		CohorteHorario cohorteHorario = new CohorteHorario();
-		cohorteHorario.setCohorte(cohorte);
-		cohorteHorario.setHorario(data);
-		return cohorteHorarioServiceApi.save(cohorteHorario);
-	}
-
-
 
 
 	@PutMapping(value = "/update/{id}")
