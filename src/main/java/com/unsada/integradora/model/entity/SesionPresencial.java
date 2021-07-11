@@ -42,7 +42,7 @@ public class SesionPresencial implements Serializable {
 	private EntidadAula entidadAula;
 
 	//bi-directional many-to-one association to Solicitud
-	@OneToMany(mappedBy="sesionPresencial")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="sesionPresencial")
 	@JsonIgnore
 	//@JsonManagedReference("solicitud-sessionpresencial")
 	private List<Solicitud> solicituds;
