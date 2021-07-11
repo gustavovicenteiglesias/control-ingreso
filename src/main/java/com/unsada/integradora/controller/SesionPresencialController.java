@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.dto.SesionPresencialDTO;
 import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.mapper.interfaces.SesionMapper;
 import com.unsada.integradora.service.interfaces.ActividadServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,16 +35,21 @@ public class SesionPresencialController {
 
 	@Autowired
 	ActividadServiceApi actividadServiceApi;
+
+	@Autowired
+	SesionMapper sesionMapper;
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-			List<SesionPresencial> claseData;
-			claseData = (List<SesionPresencial>) sesionPresencialServiceApi.findAll();
+			List<SesionPresencial> sesiones;
+			sesiones = (List<SesionPresencial>) sesionPresencialServiceApi.findAll();
+			List<SesionPresencialDTO> sesionDto = sesiones.stream().map(i -> sesionMapper.toDTO(i)).collect(Collectors.toList());
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", sesionDto);
 			response.put("success", true);
 			return response;
 

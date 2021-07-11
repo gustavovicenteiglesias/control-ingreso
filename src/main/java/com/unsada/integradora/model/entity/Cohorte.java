@@ -35,7 +35,7 @@ public class Cohorte implements Serializable {
 	public String nombreCohorte;
 
 	//bi-directional many-to-one association to Actividad
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_actividad")
 	//@JsonIgnore
 	@JsonBackReference("actividad-cohorte")
@@ -49,7 +49,7 @@ public class Cohorte implements Serializable {
 	private Sede sede;
 
 	//bi-directional many-to-one association to CohorteHorario
-	@OneToMany(mappedBy="cohorte")
+	@OneToMany(mappedBy="cohorte", cascade = CascadeType.ALL)
 	
 	@JsonManagedReference("cohorte-horario")
 	private List<CohorteHorario> cohorteHorarios;

@@ -31,7 +31,7 @@ public class Actividad {
 
 	//bi-directional many-to-one association to Cohorte
 
-	@OneToMany(mappedBy="actividad", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy="actividad", cascade = CascadeType.ALL)
 	@JsonIgnore
 	//@JsonManagedReference("actividad-cohorte")
 	private List<Cohorte> cohortes;
