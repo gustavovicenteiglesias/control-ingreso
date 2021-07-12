@@ -10,6 +10,6 @@ import java.util.stream.Collectors;
 
 public interface SesionesGeneratorInterface {
     public void crearSesiones(Cohorte cohorte, Horario data, EntidadAula aula) ;
-    public CohorteHorario crearCohorteHorario(Cohorte cohorte, Horario data);
+    public void crearCohorteHorario(Cohorte cohorte, Horario data);
     public void actualizarSesiones(Cohorte cohorteOriginal, Cohorte cohorteActualizado);
 }

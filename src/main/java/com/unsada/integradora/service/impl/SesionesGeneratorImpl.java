@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.SQLOutput;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -23,21 +24,27 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
     SesionPresencialServiceApi sesionPresencialServiceApi;
     @Autowired
     CohorteHorarioServiceApi cohorteHorarioServiceApi;
+    @Autowired
+    CohorteServiceApi cohorteServiceApi;
 
     @Override
     public void crearSesiones(Cohorte cohorte, Horario data, EntidadAula aula) {
         Date inicio = (Date) cohorte.getFechaInicio();
         Date fin = (Date) cohorte.getFechaFin();
+        System.out.println(cohorte);
+        System.out.println(data);
         List<LocalDate> fechasEntreIniciofin = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
         for(LocalDate fecha : fechasEntreIniciofin){
+            System.out.println(data.getDia());
             if(fecha.getDayOfWeek().equals(CohorteServiceApi.maskDay(data.getDia()))){
                 SesionPresencial sesion = new SesionPresencial();
                 CohorteHorario cohorteHorario = findCohorteHorario(cohorte, data);
-                if(cohorteHorario != null){
-                    sesion.setCohorteHorario(cohorteHorario);
-                }else{
-                    sesion.setCohorteHorario(crearCohorteHorario(cohorte, data));
+                if(cohorteHorario == null){
+                    crearCohorteHorario(cohorte, data);
+                    cohorteHorario = cohorte.getCohorteHorarios().get(0);
+
                 }
+                sesion.setCohorteHorario(cohorteHorario);
                 sesion.setFecha(Date.from(fecha.atStartOfDay(ZoneId.of("America/Argentina/Catamarca")).toInstant()));
                 if(aula != null){	sesion.setEntidadAula(aula);}
                 sesionPresencialServiceApi.save(sesion);
@@ -60,6 +67,7 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
         if(ogFin.toLocalDate().isAfter(nuevoFin.toLocalDate())){
             List<LocalDate> fechasSesionesParaEliminar = nuevoFin.toLocalDate().datesUntil(ogFin.toLocalDate()).collect(Collectors.toList());
             borrarSesionesPresencialNuevoFin(cohorteOriginal, fechasSesionesParaEliminar);
+            fechasSesionesParaEliminar.stream().forEach(i-> System.out.println(i));
 
         }
 
@@ -73,8 +81,9 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
             nuevasFechas.forEach(fecha ->{
                 if(fecha.getDayOfWeek().equals(CohorteServiceApi.maskDay(horario.getDia()))){
                    SesionPresencial sesion = new SesionPresencial();
+                   CohorteHorario ch = findCohorteHorario(cohorteOriginal, horario);
                    sesion.setFecha(Date.valueOf(fecha));
-                   sesion.setCohorteHorario(findCohorteHorario(cohorteOriginal, horario));
+                   sesion.setCohorteHorario(ch);
                    sesionPresencialServiceApi.save(sesion);
                 }
             });
@@ -108,7 +117,7 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
     //Dado una lista de dias y un cohorte devuelve los dias que correspondan al dia asignado para los horarios
     public List<LocalDate> filterFechasPorDiasHorarios(Cohorte cohorteOriginal, List<LocalDate> fechas){
         List<String> dias = cohorteOriginal.getCohorteHorarios().stream().distinct().map(i -> i.getHorario().getDia()).collect(Collectors.toList());
-        List<DayOfWeek> diasDeLaSemana = dias.stream().map(CohorteServiceApi::maskDay).collect(Collectors.toList());
+        List<DayOfWeek> diasDeLaSemana = dias.stream().map(i -> CohorteServiceApi.maskDay(i)).collect(Collectors.toList());
         fechas = fechas.stream().filter(fecha -> diasDeLaSemana.contains(fecha.getDayOfWeek())).collect(Collectors.toList());
         return fechas;
     }
@@ -117,21 +126,27 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
     //Encuentra el cohorte horario para un horario especifico
     public CohorteHorario findCohorteHorario(Cohorte cohorte, Horario horario){
         List<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios();
-        if(!cohorteHorario.isEmpty()){
-            cohorteHorario = cohorteHorario.stream()
-                    .filter(i -> i.getCohorte().equals(cohorte))
-                    .filter(h -> h.getHorario().equals(horario))
-                    .collect(Collectors.toList());
+
+        cohorteHorario = cohorteHorario.stream()
+                .filter(i -> i.getCohorte().equals(cohorte))
+                .filter(h -> h.getHorario().equals(horario))
+                .collect(Collectors.toList());
+        try{
             return cohorteHorario.get(0);
+
+        }catch (Exception e){
+            return null;
         }
-        return null;
+
+
     }
 
-    public CohorteHorario crearCohorteHorario(Cohorte cohorte, Horario data){
+    public void crearCohorteHorario(Cohorte cohorte, Horario data){
         CohorteHorario cohorteHorario = new CohorteHorario();
         cohorteHorario.setCohorte(cohorte);
         cohorteHorario.setHorario(data);
-        return cohorteHorarioServiceApi.save(cohorteHorario);
+        cohorte.getCohorteHorarios().add(cohorteHorario);
+        cohorteServiceApi.save(cohorte);
     }
 
     public List<SesionPresencial> findSesiones(Cohorte cohorte){

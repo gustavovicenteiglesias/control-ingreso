@@ -5,8 +5,11 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -39,6 +42,7 @@ public class CohorteHorario implements Serializable {
 
 	//bi-directional many-to-one association to SesionPresencial
 	@OneToMany(mappedBy="cohorteHorario")
+	@NotFound(action= NotFoundAction.IGNORE)
 	@JsonIgnore
 	//@JsonManagedReference("SesionPresencial-cohorteHorario")
 	private List<SesionPresencial> sesionPresencials;
@@ -99,5 +103,18 @@ public class CohorteHorario implements Serializable {
 				", cohorte=" + cohorte +
 				", horario=" + horario +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CohorteHorario that = (CohorteHorario) o;
+		return idCohorteHorario == that.idCohorteHorario && Objects.equals(cohorte, that.cohorte) && Objects.equals(horario, that.horario) && Objects.equals(sesionPresencials, that.sesionPresencials);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(idCohorteHorario, cohorte, horario, sesionPresencials);
 	}
 }
