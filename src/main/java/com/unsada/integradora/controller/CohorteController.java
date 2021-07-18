@@ -157,9 +157,9 @@ public class CohorteController {
 				sesionesGenerator.actualizarSesiones(cohorteOriginal.get(), data);
 			}
 			Cohorte cohorteActualizado= cohorteOriginal.get();
-			/*cohorteActualizado.setFechaInicio(data.getFechaInicio());
-			cohorteActualizado.setFechaFin(data.getFechaFin());*/
-			//cohorteServiceApi.save(cohorteActualizado);
+			cohorteActualizado.setFechaInicio(data.getFechaInicio());
+			cohorteActualizado.setFechaFin(data.getFechaFin());
+			cohorteServiceApi.save(cohorteActualizado);
 
 			response.put("message", "Successful update");
 			response.put("success", true);

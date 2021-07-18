@@ -24,7 +24,7 @@ public class Actividad {
 	private String nombre;
 
 	//bi-directional many-to-one association to Propuesta
-	@ManyToOne(cascade = {CascadeType.PERSIST})
+	@ManyToOne()
 	@JoinColumn(name="id_propuesta")
 	@JsonBackReference("propuesta-actividad")
 	private Propuesta propuesta;
