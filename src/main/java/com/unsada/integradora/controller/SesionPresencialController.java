@@ -100,8 +100,8 @@ public class SesionPresencialController {
 		}
 
 	}
-	
-	
+
+
 	@GetMapping(value = "/find/{id}")
 	public Map<String, Object> dataClase(@PathVariable("id") Integer id) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
@@ -128,15 +128,16 @@ public class SesionPresencialController {
 			return response;
 		}
 	}
-	@GetMapping(value = "/find/persona/{id_persona}")//trae sesion por persona 
+	@GetMapping(value = "/sesiones-por-persona/{id_persona}")//trae sesion por persona
 	public Map<String, Object> dataClase2(@PathVariable("id_persona") Integer id_persona) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-			List<SesionPresencial> claseData;
-			claseData = (List<SesionPresencial>) sesionPresencialServiceApi.session_persona(id_persona);
+			List<SesionPresencial> sesiones = (List<SesionPresencial>) sesionPresencialServiceApi.session_persona(id_persona);;
+			List<SesionPresencialDTO> sesionDto = sesiones.stream().map(i -> sesionMapper.toDTO(i)).collect(Collectors.toList());
+
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", sesionDto);
 			response.put("success", true);
 			return response;
 
