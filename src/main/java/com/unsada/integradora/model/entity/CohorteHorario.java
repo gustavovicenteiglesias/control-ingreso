@@ -27,21 +27,21 @@ public class CohorteHorario implements Serializable {
 	private int idCohorteHorario;
 
 	//bi-directional many-to-one association to Cohorte
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_cohorte")
 	
 	@JsonBackReference("cohorte-horario")
 	private Cohorte cohorte;
 
 	//bi-directional many-to-one association to Horario
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	//@JsonIgnore
 	@JsonBackReference("horario-cohortehorario")
 	@JoinColumn(name="id_horario")
 	private Horario horario;
 
 	//bi-directional many-to-one association to SesionPresencial
-	@OneToMany(mappedBy="cohorteHorario")
+	@OneToMany(mappedBy="cohorteHorario", cascade = CascadeType.ALL)
 	@NotFound(action= NotFoundAction.IGNORE)
 	@JsonIgnore
 	//@JsonManagedReference("SesionPresencial-cohorteHorario")
