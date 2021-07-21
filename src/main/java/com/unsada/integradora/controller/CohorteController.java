@@ -159,8 +159,10 @@ public class CohorteController {
 			Cohorte cohorteActualizado= cohorteOriginal.get();
 			cohorteActualizado.setFechaInicio(data.getFechaInicio());
 			cohorteActualizado.setFechaFin(data.getFechaFin());
+			if(data.getSede() == null){
+				cohorteActualizado.setSede(cohorteOriginal.get().getSede());
+			}
 			cohorteServiceApi.save(cohorteActualizado);
-
 			response.put("message", "Successful update");
 			response.put("success", true);
 			return response;

@@ -1,5 +1,7 @@
 package com.unsada.integradora.model.dto;
 
+import com.unsada.integradora.model.entity.Actividad;
+
 import java.sql.Time;
 import java.util.Set;
 
@@ -10,14 +12,24 @@ public class HorarioCohorteDTO {
     private Time horaFin;
     private String nombre;
     private Set nombreCohorte;
+    private String nombreActividad;
 
-    public HorarioCohorteDTO(int idHorario, String dia, Time horaInicio, Time horaFin, String nombre, Set nombreCohorte) {
+    public String getNombreActividad() {
+        return nombreActividad;
+    }
+
+    public void setNombreActividad(String nombreActividad) {
+        this.nombreActividad = nombreActividad;
+    }
+
+    public HorarioCohorteDTO(int idHorario, String dia, Time horaInicio, Time horaFin, String nombre, Set nombreCohorte, String nombreActividad) {
         this.idHorario = idHorario;
         this.dia = dia;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.nombre = nombre;
         this.nombreCohorte = nombreCohorte;
+        this.nombreActividad = nombreActividad;
     }
 
     public HorarioCohorteDTO() {

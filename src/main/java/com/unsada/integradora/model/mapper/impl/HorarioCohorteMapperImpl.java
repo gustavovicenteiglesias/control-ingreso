@@ -21,13 +21,16 @@ public class HorarioCohorteMapperImpl implements HorarioCohorteMapper {
     @Override
     public HorarioCohorteDTO toDTO(Horario horario) {
         Set<String> nombreCohorte = horario.getCohorteHorarios().stream().map(i -> i.getCohorte().getNombreCohorte()).collect(Collectors.toSet());
+        String nombreActividades = horario.getCohorteHorarios().stream().map(i -> i.getCohorte().getActividad().getNombre()).findFirst().get();
         return new HorarioCohorteDTO(
                 horario.getIdHorario(),
                 horario.getDia(),
                 horario.getHoraInicio(),
                 horario.getHoraFin(),
                 horario.getNombre(),
-                nombreCohorte
+                nombreCohorte,
+                nombreActividades
+
 
 
         );
