@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.dto.CohorteDTO;
+import com.unsada.integradora.model.mapper.interfaces.CohorteMapper;
 import com.unsada.integradora.service.interfaces.SesionesGeneratorInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +45,8 @@ public class CohorteController {
 	ActividadServiceApi actividadServiceApi;
 	@Autowired
 	SesionesGeneratorInterface sesionesGenerator;
+	@Autowired
+	CohorteMapper cohorteMapper;
 
 	@GetMapping(value ="/por-actividad/{idActividad}")
 	public Map<String, Object> listCohortesPorActividad(@PathVariable("idActividad") int idActividad){
@@ -72,8 +77,9 @@ public class CohorteController {
 	try {
 		List<Cohorte> claseData;
 		claseData = (List<Cohorte>) cohorteServiceApi.findAll();
+		List<CohorteDTO> cohortes = claseData.stream().map(i ->cohorteMapper.toDTO(i)).collect(Collectors.toList());
 		response.put("message", "Successful load");
-		response.put("data",claseData);
+		response.put("data",cohortes);
 		response.put("success", true);
 		return response;
 
@@ -112,7 +118,7 @@ public class CohorteController {
 			Optional<Cohorte> clase = cohorteServiceApi.findById(id);
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", cohorteMapper.toDTO(clase.get()));
 				response.put("success", true);
 				return response;
 			} else {
