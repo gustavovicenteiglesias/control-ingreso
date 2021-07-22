@@ -72,7 +72,8 @@ public class SesionPresencialController {
 					.flatMap(i -> i.getSesionPresencials().stream())
 					.collect(Collectors.toList());
 
-			response.put("data", sesiones);
+			List<SesionPresencialDTO> sesionPresencialDTOS = sesiones.stream().map(i -> sesionMapper.toDTO(i)).collect(Collectors.toList());
+			response.put("data", sesionPresencialDTOS);
 			response.put("Sucess", true);
 			return response;
 		}catch (Exception e){
@@ -88,8 +89,9 @@ public class SesionPresencialController {
 		try {
 			List<SesionPresencial> claseData;
 			claseData = (List<SesionPresencial>) sesionPresencialServiceApi.findSesionHoratio(id_horario);
+			List<SesionPresencialDTO> sesionPresencialDTOS = claseData.stream().map(i -> sesionMapper.toDTO(i)).collect(Collectors.toList());
+			response.put("data", sesionPresencialDTOS);
 			response.put("message", "Successful load");
-			response.put("data", claseData);
 			response.put("success", true);
 			return response;
 
@@ -112,7 +114,7 @@ public class SesionPresencialController {
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", sesionMapper.toDTO(clase.get()));
 				response.put("success", true);
 				return response;
 			} else {
