@@ -148,10 +148,11 @@ public class EntidadAulaController {
 	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody EntidadAula data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
-
+		Optional<EntidadAula> aula = entidadAulaServiceApi.findById(id);
 		try {
-			data.setIdAula(id);
-			entidadAulaServiceApi.save(data);
+			aula.get().setCapacidadConAforo(data.getCapacidadConAforo());
+			aula.get().setNombre(data.getNombre());
+			entidadAulaServiceApi.save(aula.get());
 			response.put("message", "Successful update");
 			response.put("success", true);
 			return response;
