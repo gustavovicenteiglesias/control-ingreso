@@ -30,7 +30,7 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 	@Override
 	public <S extends Persona> S save(S entity) {
 		// TODO Auto-generated method stub
-		return null;
+		return personaDao.save(entity);
 	}
 
 	@Override

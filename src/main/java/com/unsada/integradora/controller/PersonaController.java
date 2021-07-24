@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unsada.integradora.service.interfaces.PersonaServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/api/persona")
 @CrossOrigin("*")
@@ -136,7 +138,7 @@ public class PersonaController {
 	}
 
 	@PostMapping(value = "/create")
-	public Map<String, Object> create(@RequestBody Persona data) {
+	public Map<String, Object> create(@Valid @RequestBody Persona data) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		try {
 			int id_persona=personaServiceApi.save(data).getIdPersona();
@@ -146,6 +148,7 @@ public class PersonaController {
 			return response;
 		} catch (Exception e) {
 			response.put("message", "" + e.getMessage());
+			System.out.println(e);
 			response.put("success", false);
 			return response;
 			
