@@ -45,7 +45,7 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 
 	@Override
 	public boolean existsById(Integer integer) {
-		return false;
+		return personaDao.existsById(integer);
 	}
 
 	@Override
@@ -60,17 +60,17 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 
 	@Override
 	public long count() {
-		return 0;
+		return personaDao.count();
 	}
 
 	@Override
 	public void deleteById(Integer integer) {
-
+		personaDao.deleteById(integer);
 	}
 
 	@Override
 	public void delete(Persona entity) {
-
+		personaDao.delete(entity);
 	}
 
 	@Override
