@@ -15,7 +15,7 @@ public class RespuestaPK implements Serializable {
 	@Column(name="id_respuesta")
 	private int idRespuesta;
 
-	@Column(name="id_ddjj", insertable=false, updatable=false)
+	@Column(name="id_ddjj")
 	private int idDdjj;
 
 	public RespuestaPK() {

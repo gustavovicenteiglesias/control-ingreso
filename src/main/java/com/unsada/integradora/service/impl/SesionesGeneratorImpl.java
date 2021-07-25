@@ -45,7 +45,7 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
 
                 }
                 sesion.setCohorteHorario(cohorteHorario);
-                sesion.setFecha(Date.from(fecha.atStartOfDay(ZoneId.of("America/Argentina/Catamarca")).toInstant()));
+                sesion.setFecha(Date.valueOf(fecha));
                 if(aula != null){	sesion.setEntidadAula(aula);}
                 sesionPresencialServiceApi.save(sesion);
             }

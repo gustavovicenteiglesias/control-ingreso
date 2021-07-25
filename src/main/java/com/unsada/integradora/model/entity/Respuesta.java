@@ -21,9 +21,9 @@ public class Respuesta implements Serializable {
 	private Boolean afirmativo;
 
 	//bi-directional many-to-one association to Ddjj
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name="id_ddjj" )
-	
+
 	private Ddjj ddjj;
 
 	//bi-directional many-to-one association to Pregunta

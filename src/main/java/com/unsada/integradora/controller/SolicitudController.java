@@ -172,8 +172,8 @@ public class SolicitudController {
 	private Optional<SesionPresencial> generarSesion(CohorteHorario cohorteHorario, Optional<EntidadAula> aula, Date date){
 		try {
 			System.out.println("La fecha para la busqueda es :" + date);
-			System.out.println("El aula es:" + aula.get().getIdAula());
-			Optional<SesionPresencial>  sesionn= sesionPresencialServiceApi.findByEntidadAulaAndCohorteHorarioAndFecha(aula.get(),cohorteHorario, date);
+			List<SesionPresencial> sesiones = sesionPresencialServiceApi.findByCohorteHorario(cohorteHorario);
+			Optional<SesionPresencial>  sesionn = sesiones.stream().filter(i -> !i.getFecha().equals(date)).findFirst();
 			return sesionn;
 		}
 		catch(NoSuchElementException e){

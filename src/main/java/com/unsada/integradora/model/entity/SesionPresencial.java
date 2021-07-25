@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 
@@ -26,7 +26,6 @@ public class SesionPresencial implements Serializable {
 	@Column(name="id_sesion_presencial")
 	private int idSesionPresencial;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
 
 	//bi-directional many-to-one association to CohorteHorario

@@ -10,6 +10,7 @@ import com.unsada.integradora.model.dto.SesionPresencialDTO;
 import com.unsada.integradora.model.entity.Actividad;
 import com.unsada.integradora.model.mapper.interfaces.SesionMapper;
 import com.unsada.integradora.service.interfaces.ActividadServiceApi;
+import com.unsada.integradora.util.SesionesFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,9 @@ public class SesionPresencialController {
 
 	@Autowired
 	SesionMapper sesionMapper;
+
+	@Autowired
+	SesionesFilter sesionesFilter;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -135,7 +139,7 @@ public class SesionPresencialController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 
 		try {
-			List<SesionPresencial> sesiones = (List<SesionPresencial>) sesionPresencialServiceApi.session_persona(id_persona);;
+			List<SesionPresencial> sesiones = (List<SesionPresencial>) sesionPresencialServiceApi.session_persona(id_persona);
 			List<SesionPresencialDTO> sesionDto = sesiones.stream().map(i -> sesionMapper.toDTO(i)).collect(Collectors.toList());
 
 			response.put("message", "Successful load");
