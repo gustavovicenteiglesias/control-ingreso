@@ -113,11 +113,11 @@ public class DdjjController {
 
 		try {
 			data.setPersona(persona.get());
-			int dj=ddjjServiceApi.save(data).getIdDdjj();
-			//updateFactordeRiesgo(data.getFactorDeRiesgo(), ddjjss);
+			Ddjj dj=ddjjServiceApi.save(data);
+			dj.setRespuestas(updateRespuesta(data.getRespuestas(), dj));
 			ddjjServiceApi.save(data);
 			response.put("message", "Successful load");
-			response.put("data",dj);
+			response.put("data",dj.getIdDdjj());
 			response.put("success", true);
 			return response;
 			
