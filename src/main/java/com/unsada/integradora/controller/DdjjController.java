@@ -109,25 +109,13 @@ public class DdjjController {
 	@PostMapping(value = "/crear/{idpersona}")
 	public Map<String, Object> crear(@PathVariable("idpersona") Integer id,@RequestBody Ddjj data) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
-		Persona persona=personaServiceApi.findById(id).get();
-		
-		Ddjj ddjjss=new Ddjj();
-		
-		
-		
+		Optional<Persona> persona=personaServiceApi.findById(id);
+
 		try {
-			
-			int dj=ddjjServiceApi.save(ddjjss).getIdDdjj();
-			
-			ddjjss.setIdDdjj(dj);
-			ddjjss.setFecha(data.getFecha());
-			ddjjss.setPersona(persona);
-			
-			ddjjss.setRespuestas(updateRespuesta(data.getRespuestas(),ddjjss));
-			//ddjjss.setFactorDeRiesgo(data.getFactorDeRiesgo());
-			ddjjss.setFactorDeRiesgo(data.getFactorDeRiesgo());
+			data.setPersona(persona.get());
+			int dj=ddjjServiceApi.save(data).getIdDdjj();
 			//updateFactordeRiesgo(data.getFactorDeRiesgo(), ddjjss);
-			ddjjServiceApi.save(ddjjss);
+			ddjjServiceApi.save(data);
 			response.put("message", "Successful load");
 			response.put("data",dj);
 			response.put("success", true);

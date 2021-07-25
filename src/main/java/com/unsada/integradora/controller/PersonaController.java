@@ -1,6 +1,7 @@
 package com.unsada.integradora.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,9 @@ import com.unsada.integradora.model.entity.Solicitud;
 import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
 import com.unsada.integradora.service.impl.PersonaServiceImpl;
 import com.unsada.integradora.service.interfaces.SolicitudesDTOServiceApi;
+import com.unsada.integradora.util.EvalTieneDDJJ;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +42,10 @@ public class PersonaController {
 	SolicitudServiceApi solicitudServiceApi;
 	@Autowired
 	SolicitudActividadMapper solicitudActividadMapper;
-
+	@Value("${vars.duracion-ddjj}")
+	private int duracion;
+	@Autowired
+	EvalTieneDDJJ eval;
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -93,10 +99,13 @@ public class PersonaController {
 		try {
 
 			Optional<Persona> clase = personaServiceApi.findById(id);
+			LocalDate date = LocalDate.now();
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
 				response.put("data", clase);
+				response.put("ddjj", eval.getDdjj(clase.get(), Date.valueOf(date)));
+				System.out.println(eval.getDdjj(clase.get(), Date.valueOf(date)));
 				response.put("success", true);
 				return response;
 			} else {
@@ -108,6 +117,7 @@ public class PersonaController {
 
 		} catch (Exception e) {
 			response.put("message", "" + e.getMessage());
+			System.out.println(e);
 			response.put("success", false);
 			return response;
 		}
@@ -118,6 +128,7 @@ public class PersonaController {
 
 		try {
 			Optional<Persona> clase = personaServiceApi.findByDni(id);
+			//todo agregar numero de ddjj y boolean para ver si existe una disponible
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
 				response.put("data", clase);

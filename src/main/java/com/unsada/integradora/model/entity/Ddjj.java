@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,13 +23,11 @@ public class Ddjj implements Serializable {
 	@Column(name="id_ddjj")
 	private int idDdjj;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
 
 	//bi-directional many-to-one association to Persona
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="id_persona")
-	
 	private Persona persona;
 
 	//bi-directional  to DdjjFactorDeRiesgo

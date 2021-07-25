@@ -1,20 +1,24 @@
 package com.unsada.integradora.service.impl;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import com.unsada.integradora.model.entity.Persona;
+import com.unsada.integradora.service.interfaces.DDjjServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.DdjjDao;
 import com.unsada.integradora.model.entity.Ddjj;
 @Service
-public class DDjjServiceImpl implements DdjjDao {
+public class DDjjServiceImpl implements DDjjServiceApi {
 	@Autowired
 	DdjjDao ddjjDao;
 	@Override
 	public <S extends Ddjj> S save(S entity) {
 		// TODO Auto-generated method stub
-		return null;
+		return ddjjDao.save(entity);
 	}
 
 	@Override
@@ -77,4 +81,13 @@ public class DDjjServiceImpl implements DdjjDao {
 
 	}
 
+	@Override
+	public List<Ddjj> findByFechaAndPersona(Date fecha, Persona persona) {
+		return null;
+	}
+
+	@Override
+	public List<Ddjj> findByPersona(Persona persona) {
+		return null;
+	}
 }
