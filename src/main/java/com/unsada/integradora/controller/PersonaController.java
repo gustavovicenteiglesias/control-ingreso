@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Map.Entry;
 
+import com.unsada.integradora.model.entity.Ddjj;
 import com.unsada.integradora.model.entity.Horario;
 import com.unsada.integradora.model.entity.Persona;
 import com.unsada.integradora.model.entity.Solicitud;
@@ -100,12 +101,16 @@ public class PersonaController {
 
 			Optional<Persona> clase = personaServiceApi.findById(id);
 			LocalDate date = LocalDate.now();
-
+			Ddjj ddjj = eval.getDdjj(clase.get(), Date.valueOf(date));
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
 				response.put("data", clase);
-				response.put("ddjj", eval.getDdjj(clase.get(), Date.valueOf(date)));
-				System.out.println(eval.getDdjj(clase.get(), Date.valueOf(date)));
+				if(ddjj != null){
+					response.put("ddjj", ddjj);
+					response.put("tieneDdjj", true);
+				}else{
+					response.put("tieneDdjj", false);
+				}
 				response.put("success", true);
 				return response;
 			} else {
@@ -128,10 +133,18 @@ public class PersonaController {
 
 		try {
 			Optional<Persona> clase = personaServiceApi.findByDni(id);
-			//todo agregar numero de ddjj y boolean para ver si existe una disponible
+			LocalDate date = LocalDate.now();
+			Ddjj ddjj = eval.getDdjj(clase.get(), Date.valueOf(date));
+
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
 				response.put("data", clase);
+				if(ddjj != null){
+					response.put("ddjj", ddjj);
+					response.put("tieneDdjj", true);
+				}else{
+					response.put("tieneDdjj", false);
+				}
 				response.put("success", true);
 				return response;
 			} else {
@@ -143,6 +156,7 @@ public class PersonaController {
 
 		} catch (Exception e) {
 			response.put("message", "" + e.getMessage());
+			System.out.println(e);
 			response.put("success", false);
 			return response;
 		}

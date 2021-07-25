@@ -14,6 +14,4 @@ import java.util.Optional;
 public interface DDjjServiceApi extends CrudRepository<Ddjj, Integer> {
     public List<Ddjj> findByFechaAndPersona(Date fecha, Persona persona);
     public List<Ddjj> findByPersona(Persona persona);
-
-
 }

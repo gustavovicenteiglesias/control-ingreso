@@ -105,9 +105,13 @@ public class Ddjj implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
-	
-	
 
+	@Override
+	public String toString() {
+		return "Ddjj{" +
+				"idDdjj=" + idDdjj +
+				", fecha=" + fecha +
+				", persona=" + persona.getIdPersona() + " - " + persona.getNombre() +
+				'}';
+	}
 }

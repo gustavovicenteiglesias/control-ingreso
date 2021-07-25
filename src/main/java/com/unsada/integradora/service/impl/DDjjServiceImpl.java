@@ -54,7 +54,7 @@ public class DDjjServiceImpl implements DDjjServiceApi {
 	@Override
 	public long count() {
 		// TODO Auto-generated method stub
-		return 0;
+		return count();
 	}
 
 	@Override
@@ -83,11 +83,11 @@ public class DDjjServiceImpl implements DDjjServiceApi {
 
 	@Override
 	public List<Ddjj> findByFechaAndPersona(Date fecha, Persona persona) {
-		return null;
+		return findByFechaAndPersona(fecha, persona);
 	}
 
 	@Override
 	public List<Ddjj> findByPersona(Persona persona) {
-		return null;
+		return findByPersona(persona);
 	}
 }
