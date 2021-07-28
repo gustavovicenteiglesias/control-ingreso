@@ -21,7 +21,7 @@ public class CohorteMapperImpl implements CohorteMapper {
                 cohorte.getFechaFin(),
                 cohorte.getNombreCohorte(),
                 cohorte.getActividad().getNombre(),
-                cohorte.getSede().getNombre()
+                cohorte.getSede()
         );
     }
 }

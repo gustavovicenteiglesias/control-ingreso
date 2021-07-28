@@ -1,6 +1,7 @@
 package com.unsada.integradora.model.dto;
 
 import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.entity.Sede;
 
 import java.sql.Date;
 
@@ -10,9 +11,9 @@ public class CohorteDTO {
     private Date fechaFin;
     private String nombreCohorte;
     private String actividad;
-    private String sede;
+    private Sede sede;
 
-    public CohorteDTO(int idCohorte, Date fechaInicio, Date fechaFin, String nombreCohorte, String actividad, String sede) {
+    public CohorteDTO(int idCohorte, Date fechaInicio, Date fechaFin, String nombreCohorte, String actividad, Sede sede) {
         this.idCohorte = idCohorte;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -64,11 +65,11 @@ public class CohorteDTO {
         this.actividad = actividad;
     }
 
-    public String getSede() {
+    public Sede getSede() {
         return sede;
     }
 
-    public void setSede(String sede) {
+    public void setSede(Sede sede) {
         this.sede = sede;
     }
 }
