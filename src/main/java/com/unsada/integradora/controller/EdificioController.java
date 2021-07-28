@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.dto.EdificioDTO;
+import com.unsada.integradora.model.mapper.interfaces.EdificioDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -37,6 +40,9 @@ public class EdificioController {
 	@Qualifier(" SedeServiceApi")
 	SedeServiceApi sedeServiceApi;
 
+	@Autowired
+	EdificioDTOMapper mapper;
+
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
 
@@ -45,8 +51,9 @@ public class EdificioController {
 		try {
 			List<Edificio> claseData;
 			claseData = (List<Edificio>) edificioServiceApi.findAll();
+			List<EdificioDTO> edificioDTOS = claseData.stream().map(i -> mapper.toDTO(i)).collect(Collectors.toList());
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", edificioDTOS);
 			response.put("success", true);
 			return response;
 
@@ -68,7 +75,7 @@ public class EdificioController {
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", mapper.toDTO(clase.get()));
 				response.put("success", true);
 				return response;
 			} else {
@@ -95,7 +102,7 @@ public class EdificioController {
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", mapper.toDTO(clase.get()));
 				response.put("success", true);
 				return response;
 			} else {
@@ -118,8 +125,9 @@ public class EdificioController {
 		try {
 			List<Edificio> claseData;
 			claseData = (List<Edificio>) edificioServiceApi.findBysede(id);
+			List<EdificioDTO> edificioDTOS = claseData.stream().map(i -> mapper.toDTO(i)).collect(Collectors.toList());
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", edificioDTOS);
 			response.put("success", true);
 			return response;
 

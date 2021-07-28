@@ -100,4 +100,15 @@ public class Solicitud implements Serializable {
 		this.sesionPresencial = sesionPresencial;
 	}
 
+	@Override
+	public String toString() {
+		return "Solicitud{" +
+				"id_solicitud=" + id_solicitud +
+				", fechaCarga=" + fechaCarga +
+				", presente=" + presente +
+				", qrAcceso='" + qrAcceso + '\'' +
+				", ddjj=" + ddjj +
+				", sesionPresencial=" + sesionPresencial +
+				'}';
+	}
 }
