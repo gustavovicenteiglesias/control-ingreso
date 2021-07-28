@@ -2,36 +2,27 @@ package com.unsada.integradora.model.dto;
 
 
 import com.unsada.integradora.core.business.bean.ControlIngresoDTO;
+import com.unsada.integradora.model.entity.Actividad;
 import com.unsada.integradora.model.entity.Edificio;
 
 import java.util.List;
 
 public class ActividadDependenciasDTO extends ControlIngresoDTO {
-    private int idActividad;
     private int idPropuesta;
-    private String nombreActividad;
+    private Actividad actividad;
     private String nombreDependencia;
     private String nombrePropuesta;
     private List<Edificio> edificios;
 
-    public ActividadDependenciasDTO(int idActividad, int idPropuesta, String nombreActividad, String nombreDependencia, String nombrePropuesta, List<Edificio> edificios) {
-        this.idActividad = idActividad;
+    public ActividadDependenciasDTO(int idPropuesta, Actividad actividad, String nombreDependencia, String nombrePropuesta, List<Edificio> edificios) {
         this.idPropuesta = idPropuesta;
-        this.nombreActividad = nombreActividad;
+        this.actividad = actividad;
         this.nombreDependencia = nombreDependencia;
         this.nombrePropuesta = nombrePropuesta;
         this.edificios = edificios;
     }
 
     public ActividadDependenciasDTO() {
-    }
-
-    public int getIdActividad() {
-        return idActividad;
-    }
-
-    public void setIdActividad(int idActividad) {
-        this.idActividad = idActividad;
     }
 
     public int getIdPropuesta() {
@@ -42,12 +33,12 @@ public class ActividadDependenciasDTO extends ControlIngresoDTO {
         this.idPropuesta = idPropuesta;
     }
 
-    public String getNombreActividad() {
-        return nombreActividad;
+    public Actividad getNombreActividad() {
+        return actividad;
     }
 
-    public void setNombreActividad(String nombreActividad) {
-        this.nombreActividad = nombreActividad;
+    public void setNombreActividad(Actividad nombreActividad) {
+        this.actividad = nombreActividad;
     }
 
     public String getNombreDependencia() {
@@ -78,9 +69,8 @@ public class ActividadDependenciasDTO extends ControlIngresoDTO {
     @Override
     public String toString() {
         return "ActividadDependenciasDTO{" +
-                "idActividad=" + idActividad +
                 ", idPropuesta=" + idPropuesta +
-                ", nombreActividad='" + nombreActividad + '\'' +
+                ", nombreActividad='" + actividad.getNombre() + '\'' +
                 ", nombreDependencia='" + nombreDependencia + '\'' +
                 ", nombrePropuesta='" + nombrePropuesta + '\'' +
                 '}';
