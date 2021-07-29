@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.unsada.integradora.model.mapper.impl.SolicitudDependenciasMapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,6 +61,8 @@ public class SolicitudController {
 	SesionPresencialServiceApi sesionPresencialServiceApi;
 	@Autowired
 	EntidadAulaServiceApi aulaServiceApi;
+	@Autowired
+	SolicitudDependenciasMapperImpl solicitudMapper;
   
 
 	@GetMapping(value = "/all")
@@ -192,7 +195,7 @@ public class SolicitudController {
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", solicitudMapper.toDTO(clase.get()));
 				response.put("success", true);
 				return response;
 			} else {

@@ -15,6 +15,8 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
     private String nombreActividad;
     private String nombreDependencia;
     private String nombrePropuesta;
+    private String nombreEdificio;
+    private String nombreSede;
 
     public String getNombrePropuesta() {
         return nombrePropuesta;
@@ -27,7 +29,7 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
     public SolicitudActividadDTO() {
     }
 
-    public SolicitudActividadDTO(Date fechaCarga, Boolean presente, String nombre, String telefono, String mail, String nombreActividad, String nombreDependencia, String nombrePropuesta) {
+    public SolicitudActividadDTO(Date fechaCarga, Boolean presente, String nombre, String telefono, String mail, String nombreActividad, String nombreDependencia, String nombrePropuesta, String nombreEdificio, String nombreSede) {
         this.fechaCarga = fechaCarga;
         this.presente = presente;
         this.nombre = nombre;
@@ -36,6 +38,8 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
         this.nombreActividad = nombreActividad;
         this.nombreDependencia = nombreDependencia;
         this.nombrePropuesta = nombrePropuesta;
+        this.nombreEdificio = nombreEdificio;
+        this.nombreSede = nombreSede;
     }
 
     public Date getFechaCarga() {
@@ -92,6 +96,14 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
 
     public void setNombreDependencia(String nombreDependencia) {
         this.nombreDependencia = nombreDependencia;
+    }
+
+    public String getNombreEdificio() {
+        return nombreEdificio;
+    }
+
+    public void setNombreEdificio(String nombreEdificio) {
+        this.nombreEdificio = nombreEdificio;
     }
 
     @Override

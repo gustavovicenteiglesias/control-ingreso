@@ -23,7 +23,9 @@ public class SolicitudDependenciasMapperImpl implements SolicitudActividadMapper
                 solicitud.getDdjj().getPersona().getCorreoElectronico(),
                 solicitud.getSesionPresencial().getCohorteHorario().getCohorte().getActividad().getNombre(),
                 solicitud.getSesionPresencial().getCohorteHorario().getCohorte().getActividad().getPropuesta().getDependencia().getNombre(),
-                solicitud.getSesionPresencial().getCohorteHorario().getCohorte().getActividad().getPropuesta().getNombre()
+                solicitud.getSesionPresencial().getCohorteHorario().getCohorte().getActividad().getPropuesta().getNombre(),
+                solicitud.getSesionPresencial().getEntidadAula().getEdificio().getNombre(),
+                solicitud.getSesionPresencial().getEntidadAula().getEdificio().getSede().getNombre()
 
         );
     }
