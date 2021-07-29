@@ -10,10 +10,10 @@ public class CohorteDTO {
     private Date fechaInicio;
     private Date fechaFin;
     private String nombreCohorte;
-    private String actividad;
+    private Actividad actividad;
     private Sede sede;
 
-    public CohorteDTO(int idCohorte, Date fechaInicio, Date fechaFin, String nombreCohorte, String actividad, Sede sede) {
+    public CohorteDTO(int idCohorte, Date fechaInicio, Date fechaFin, String nombreCohorte, Actividad actividad, Sede sede) {
         this.idCohorte = idCohorte;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -57,11 +57,11 @@ public class CohorteDTO {
         this.nombreCohorte = nombreCohorte;
     }
 
-    public String getActividad() {
+    public Actividad getActividad() {
         return actividad;
     }
 
-    public void setActividad(String actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 

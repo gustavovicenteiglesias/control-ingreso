@@ -26,8 +26,9 @@ public class ActividadDependenciasMapperImpl implements ActividadDependenciasMap
                 .collect(Collectors.toSet());
 
         return new ActividadDependenciasDTO(
+                actividad.getIdActividad(),
                 actividad.getPropuesta().getIdPropuesta(),
-                actividad,
+                actividad.getNombre(),
                 actividad.getPropuesta().getDependencia().getNombre(),
                 actividad.getPropuesta().getNombre(),
                 new ArrayList<>(edificios)
