@@ -46,7 +46,14 @@ public class Solicitud implements Serializable {
 	public Solicitud() {
 	}
 
-	
+	public Solicitud(Integer id_solicitud, Date fechaCarga, byte presente, String qrAcceso, Ddjj ddjj, SesionPresencial sesionPresencial) {
+		this.id_solicitud = id_solicitud;
+		this.fechaCarga = fechaCarga;
+		this.presente = presente;
+		this.qrAcceso = qrAcceso;
+		this.ddjj = ddjj;
+		this.sesionPresencial = sesionPresencial;
+	}
 
 	public Integer getId_solicitud() {
 		return id_solicitud;
