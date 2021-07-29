@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/login")
+@CrossOrigin("*")
 public class LoginController {
 
     @Autowired
