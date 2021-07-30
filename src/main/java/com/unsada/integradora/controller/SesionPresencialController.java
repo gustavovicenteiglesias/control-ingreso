@@ -93,6 +93,7 @@ public class SesionPresencialController {
 		try {
 			List<SesionPresencial> claseData;
 			claseData = (List<SesionPresencial>) sesionPresencialServiceApi.findSesionHoratio(id_horario);
+			claseData = sesionesFilter.filterSesionesFechaActual(claseData);
 			List<SesionPresencialDTO> sesionPresencialDTOS = claseData.stream().map(i -> sesionMapper.toDTO(i)).collect(Collectors.toList());
 			response.put("data", sesionPresencialDTOS);
 			response.put("message", "Successful load");
