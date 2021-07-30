@@ -69,6 +69,33 @@ public interface CohorteServiceApi extends CrudRepository<Cohorte, Integer> {
 						return null;
 		}
   }
+
+	public static String maskDayOfweek(DayOfWeek dayOfWeek) {
+		switch (dayOfWeek) {
+			case MONDAY:
+				return "LUNES";
+
+			case TUESDAY:
+				return "MARTES" ;
+
+			case WEDNESDAY:
+				return "MIERCOLES";
+
+			case THURSDAY:
+				return "JUEVES";
+
+			case FRIDAY:
+				return "VIERNES";
+
+			case SATURDAY:
+				return "SABADO";
+
+			case SUNDAY:
+				return "DOMINGO";
+			default:
+				return null;
+		}
+	}
   
 
   @Query(value= "SELECT * FROM cohorte WHERE id_actividad=?", nativeQuery = true)

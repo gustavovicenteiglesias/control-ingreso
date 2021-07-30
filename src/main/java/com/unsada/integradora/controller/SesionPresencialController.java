@@ -1,5 +1,6 @@
 package com.unsada.integradora.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,23 +10,15 @@ import java.util.stream.Collectors;
 import com.unsada.integradora.model.dto.SesionPresencialDTO;
 import com.unsada.integradora.model.entity.Actividad;
 import com.unsada.integradora.model.mapper.interfaces.SesionMapper;
-import com.unsada.integradora.service.interfaces.ActividadServiceApi;
+import com.unsada.integradora.service.interfaces.*;
+import com.unsada.integradora.util.SesionCreator;
 import com.unsada.integradora.util.SesionesFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.unsada.integradora.model.entity.SesionPresencial;
-import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 
 @RestController
 @RequestMapping(value = "/api/sesionpresencial")
@@ -38,10 +31,20 @@ public class SesionPresencialController {
 	ActividadServiceApi actividadServiceApi;
 
 	@Autowired
+	HorarioServiceApi horarioServiceApi;
+
+	@Autowired
 	SesionMapper sesionMapper;
 
 	@Autowired
+	SolicitudServiceApi solicitudServiceApi;
+
+	@Autowired
 	SesionesFilter sesionesFilter;
+
+	@Autowired
+	SesionCreator sesionCreator;
+
 
 	@GetMapping(value = "/all")
 	public Map<String, Object> listclase() {
@@ -51,7 +54,9 @@ public class SesionPresencialController {
 		try {
 			List<SesionPresencial> sesiones;
 			sesiones = (List<SesionPresencial>) sesionPresencialServiceApi.findAll();
-			List<SesionPresencialDTO> sesionDto = sesiones.stream().map(i -> sesionMapper.toDTO(i)).collect(Collectors.toList());
+			List<SesionPresencialDTO> sesionDto = sesiones.stream().map(i ->{
+				return sesionMapper.toDTO(i);
+			} ).collect(Collectors.toList());
 			response.put("message", "Successful load");
 			response.put("data", sesionDto);
 			response.put("success", true);
@@ -60,6 +65,7 @@ public class SesionPresencialController {
 		} catch (Exception e) {
 			response.put("message", e.getMessage());
 			response.put("success ", false);
+			e.printStackTrace();
 			return response;
 		}
 
@@ -175,7 +181,6 @@ public class SesionPresencialController {
 	public Map<String, Object> update(@PathVariable("id") Integer id, @RequestBody SesionPresencial data) {
 
 		HashMap<String, Object> response = new HashMap<String, Object>();
-
 		try {
 			data.setIdSesionPresencial(id);
 			sesionPresencialServiceApi.save(data);
@@ -207,5 +212,29 @@ public class SesionPresencialController {
 			return response;
 		}
 	}
+
+	@PutMapping(value = "/update-fecha/{idsesion}")
+	public Map<String, Object> updateFecha(@RequestBody SesionPresencial ses, @PathVariable("idsesion") Integer idsesion) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		Date date = ses.getFecha();
+		Optional<SesionPresencial> sesion = sesionPresencialServiceApi.findById(idsesion);
+
+		try{
+			SesionPresencial s = sesionCreator.createSesion(sesion.get(), ses.getFecha());
+			System.out.println(s);
+			response.put("success", true);
+			response.put("message", "fecha cambiada");
+			sesionPresencialServiceApi.save(s);
+
+		}catch (Exception e){
+			e.printStackTrace();
+			response.put("success", false);
+			response.put("message", "error en el cambio de fecha para la sesion");
+		}
+
+		return response;
+
+	}
+
 
 }

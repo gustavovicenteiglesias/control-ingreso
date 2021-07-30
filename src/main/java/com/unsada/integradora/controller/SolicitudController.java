@@ -1,15 +1,13 @@
 package com.unsada.integradora.controller;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.unsada.integradora.model.mapper.impl.SolicitudDependenciasMapperImpl;
+import com.unsada.integradora.util.SesionCreator;
 import com.unsada.integradora.util.SolicitudCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unsada.integradora.model.entity.Actividad;
-import com.unsada.integradora.model.entity.Cohorte;
-import com.unsada.integradora.model.entity.CohorteHorario;
 import com.unsada.integradora.model.entity.Ddjj;
 import com.unsada.integradora.model.entity.EntidadAula;
 import com.unsada.integradora.model.entity.Horario;
@@ -39,7 +35,6 @@ import com.unsada.integradora.service.interfaces.EntidadAulaServiceApi;
 import com.unsada.integradora.service.interfaces.HorarioServiceApi;
 import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
-import com.unsada.integradora.util.QrCreatorService;
 
 
 @RestController
@@ -66,6 +61,8 @@ public class SolicitudController {
 	SolicitudDependenciasMapperImpl solicitudMapper;
 	@Autowired
 	SolicitudCreator solicitudCreator;
+	@Autowired
+	SesionCreator sesionCreator;
   
 
 	@GetMapping(value = "/all")
@@ -218,5 +215,7 @@ public class SolicitudController {
 			return response;
 		}
 	}
+
+
 
 }
