@@ -10,6 +10,15 @@ public class SesionPresencialDTO {
     private String dia;
     private Time horaInicio;
     private Time horaFin;
+    private boolean tieneSolicitudes;
+
+    public boolean isTieneSolicitudes() {
+        return tieneSolicitudes;
+    }
+
+    public void setTieneSolicitudes(boolean tieneSolicitudes) {
+        this.tieneSolicitudes = tieneSolicitudes;
+    }
 
     public Date getFecha() {
         return fecha;
@@ -59,13 +68,14 @@ public class SesionPresencialDTO {
         this.horaFin = horaFin;
     }
 
-    public SesionPresencialDTO(Date fecha, int idSesionPresencial, String nombreActividad, String dia, Time horaInicio, Time horaFin) {
+    public SesionPresencialDTO(Date fecha, int idSesionPresencial, String nombreActividad, String dia, Time horaInicio, Time horaFin, boolean tieneSolicitudes) {
         this.fecha = fecha;
         this.idSesionPresencial = idSesionPresencial;
         this.nombreActividad = nombreActividad;
         this.dia = dia;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.tieneSolicitudes = tieneSolicitudes;
     }
 
     @Override
@@ -77,6 +87,7 @@ public class SesionPresencialDTO {
                 ", dia='" + dia + '\'' +
                 ", horaInicio=" + horaInicio +
                 ", horaFin=" + horaFin +
+
                 '}';
     }
 }

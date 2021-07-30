@@ -17,14 +17,15 @@ public class SesionPresencialMapperImpl implements SesionMapper {
 
     @Override
     public SesionPresencialDTO toDTO(SesionPresencial sesion) {
-
+        boolean tieneSolicitudes = !sesion.getSolicituds().isEmpty();
         return new SesionPresencialDTO(
                 sesion.getFecha(),
                 sesion.getIdSesionPresencial(),
                 sesion.getCohorteHorario().getCohorte().getNombreCohorte(),
                 CohorteServiceApi.maskDayOfweek(sesion.getFecha().toLocalDate().getDayOfWeek()),
                 sesion.getCohorteHorario().getHorario().getHoraInicio(),
-                sesion.getCohorteHorario().getHorario().getHoraFin()
+                sesion.getCohorteHorario().getHorario().getHoraFin(),
+                tieneSolicitudes
                 );
     }
 }
