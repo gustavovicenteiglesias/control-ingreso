@@ -58,7 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests().antMatchers("/api/edificio/all",
-					"/api/solicitud/find/uuid/**","/api/solicitud/update/**","/api/login/**","/api/auth/**").permitAll()
+					"/api/solicitud/find/uuid/**","/api/solicitud/update/**","/api/login/**","/api/auth/**",
+					"/api/persona/find/dni/**","/api/persona/create","/api/ddjj/crear/**","http://areco.gob.ar:9528/api/pregunta/all",
+					"/api/FactorDeRiesgo/all","/api/sede/all","/api/sede/find/","/api/dependencia/all",
+					"/api/propuesta/find/dependencia/**","/api/actividad/find/propuesta/**","/api/actividad/find/**",
+					"/api/horario/find/sede_actrividad/**","/api/sesionpresencial/sesionhorario/**","/api/sesionpresencial/find/**",
+					"/api/aula/find/sesion/**","/api/edificio/edificioByAula/**","/api/solicitud/create-ddjj-actividad-aula-horario/**",
+					"/api/solicitud/find/**").permitAll()
 			.antMatchers("/api/test/**").permitAll()
 			.anyRequest().authenticated();
 
