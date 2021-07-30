@@ -22,7 +22,6 @@ public class EvalTieneDDJJ {
     private int duracionDdjj;
 
     public Ddjj getDdjj(Persona persona, Date fechaDeBusqueda){
-        date.minusDays(1);
         List<Ddjj> ddjj = ddjjService.findByPersona(persona);
 
         return compararFechas(ddjj);

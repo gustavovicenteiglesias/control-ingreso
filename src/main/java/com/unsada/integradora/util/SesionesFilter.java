@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +18,12 @@ public class SesionesFilter {
     private int duracionDdjj;
 
     public List<SesionPresencial> filterSesionesFechaActual(List<SesionPresencial> sesiones){
-        date.minusDays(1);
-       sesiones.stream().filter(i -> i.getFecha().toLocalDate().datesUntil(date).count() == duracionDdjj).collect(Collectors.toList());
+
+        sesiones = sesiones.stream().filter(i -> (i.getFecha().compareTo(Date.valueOf(date)) == duracionDdjj)).collect(Collectors.toList());
+        System.out.println("el numero de sesiones que aplican son:" + sesiones.size());
        return sesiones;
     }
+
 
 
 }
