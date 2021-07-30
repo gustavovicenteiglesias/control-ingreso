@@ -27,7 +27,8 @@ public class SolicitudCreatorImpl implements  SolicitudCreator{
         try {
             System.out.println("La fecha para la busqueda es :" + date);
             List<SesionPresencial> sesiones = sesionPresencialApi.findByCohorteHorario(cohorteHorario);
-            Optional<SesionPresencial> sesionn = sesiones.stream().filter(i -> !i.getFecha().equals(date) && i.getEntidadAula() != aula).findFirst();
+            Optional<SesionPresencial> sesionn = sesiones.stream().filter(i -> i.getFecha().compareTo(date) == 0).findFirst();
+            System.out.println(sesionn.get().getFecha());
             return sesionn;
         } catch (NoSuchElementException e) {
             return Optional.empty();
@@ -78,15 +79,14 @@ public class SolicitudCreatorImpl implements  SolicitudCreator{
         Optional<SesionPresencial> sesionPresencial = this.generarSesion(cohorteHorario.get(), aula, date);
 
         if (!sesionPresencial.isPresent()) throw new Exception("La sesion no existe");
-        if (evalCapacidad(sesionPresencial.get(), date, aula) >= 0) {
-            Solicitud solicitud = new Solicitud();
-            solicitud.setDdjj(ddjj);
-            solicitud.setFechaCarga(date);
-            solicitud.setQrAcceso(QrCreatorService.generateQrId());
-            solicitud.setSesionPresencial(sesionPresencial.get());
-            return solicitud;
-        }
-        return null;
+        if (evalCapacidad(sesionPresencial.get(), date, aula) <= 0) throw new Exception( "El aula solicitada no tiene más espacio");
+        Solicitud solicitud = new Solicitud();
+        solicitud.setDdjj(ddjj);
+        solicitud.setFechaCarga(date);
+        solicitud.setQrAcceso(QrCreatorService.generateQrId());
+        solicitud.setSesionPresencial(sesionPresencial.get());
+        return solicitud;
+
 
     }
 }
