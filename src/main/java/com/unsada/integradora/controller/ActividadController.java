@@ -198,7 +198,6 @@ public class ActividadController {
 			data.setPropuesta(propuesta.get());
 			try{
 				Actividad actividad = this.crearActividad(data);
-				System.out.println(actividad);
 				return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 
 			}catch (Exception e) {
