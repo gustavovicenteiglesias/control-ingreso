@@ -93,7 +93,7 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
     public void borrarSesionesPresencialNuevoFin(Cohorte cohorte, List<LocalDate> fechas){
         List<SesionPresencial> sesiones = findSesiones(cohorte);
        sesiones.forEach(sesion ->{
-            if(fechas.contains(sesion.getFecha().toInstant().atZone(ZoneId.of("America/Argentina/Catamarca")).toLocalDate())){
+            if(fechas.contains(sesion.getFecha().toLocalDate())){
                sesionPresencialServiceApi.deleteById(sesion.getIdSesionPresencial());
             }
         });
@@ -104,7 +104,7 @@ public class SesionesGeneratorImpl implements SesionesGeneratorInterface {
             List<SesionPresencial> sesiones = findSesiones(cohorteOriginal);
 
             sesiones.stream().forEach(sesion -> {
-                LocalDate sesionToLocal = sesion.getFecha().toInstant().atZone(ZoneId.of("America/Argentina/Catamarca")).toLocalDate();
+                LocalDate sesionToLocal = sesion.getFecha().toLocalDate();
                 if (nuevasFechas.contains(sesionToLocal)) {
                     nuevasFechas.remove(sesionToLocal);
                 }

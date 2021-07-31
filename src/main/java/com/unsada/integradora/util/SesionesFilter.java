@@ -19,7 +19,10 @@ public class SesionesFilter {
 
     public List<SesionPresencial> filterSesionesFechaActual(List<SesionPresencial> sesiones){
 
-        sesiones = sesiones.stream().filter(i -> (i.getFecha().compareTo(Date.valueOf(date)) == duracionDdjj)).collect(Collectors.toList());
+        sesiones.forEach(i ->{
+            System.out.println(i.getFecha());
+        });
+
         System.out.println("el numero de sesiones que aplican son:" + sesiones.size());
        return sesiones;
     }
