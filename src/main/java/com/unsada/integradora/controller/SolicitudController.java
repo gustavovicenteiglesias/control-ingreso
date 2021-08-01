@@ -153,8 +153,9 @@ public class SolicitudController {
 			Optional<Solicitud> clase = solicitudServiceApi.findByQr(id);
 
 			if (clase.isPresent()) {
+				Solicitud sol = clase.get();
 				response.put("message", "Successful load");
-				response.put("data", solicitudMapper.toDTO(clase.get()));
+				response.put("data", solicitudMapper.toDTO(sol));
 				response.put("success", true);
 				return response;
 			} else {

@@ -17,7 +17,8 @@ public class SolicitudDependenciasMapperImpl implements SolicitudActividadMapper
     public SolicitudActividadDTO toDTO(Solicitud solicitud) {
         return new SolicitudActividadDTO(
                 solicitud.getFechaCarga(),
-                true,
+                solicitud.getPresente(),
+                solicitud.getId_solicitud(),
                 solicitud.getDdjj().getPersona().getNombre(),
                 solicitud.getDdjj().getPersona().getTelefono(),
                 solicitud.getDdjj().getPersona().getCorreoElectronico(),
@@ -27,6 +28,6 @@ public class SolicitudDependenciasMapperImpl implements SolicitudActividadMapper
                 solicitud.getSesionPresencial().getEntidadAula().getEdificio().getNombre(),
                 solicitud.getSesionPresencial().getEntidadAula().getEdificio().getSede().getNombre()
 
-        );
+                );
     }
 }

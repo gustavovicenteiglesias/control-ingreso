@@ -8,15 +8,24 @@ import java.util.Date;
 public class SolicitudActividadDTO extends ControlIngresoDTO {
 
     private Date fechaCarga;
-    private Boolean presente;
+    private Byte presente;
     private String nombre;
     private String telefono;
     private String mail;
+    private int idSolicitud;
     private String nombreActividad;
     private String nombreDependencia;
     private String nombrePropuesta;
     private String nombreEdificio;
     private String nombreSede;
+
+    public int getIdSolicitud() {
+        return idSolicitud;
+    }
+
+    public void setIdSolicitud(int idSolicitud) {
+        this.idSolicitud = idSolicitud;
+    }
 
     public String getNombrePropuesta() {
         return nombrePropuesta;
@@ -29,9 +38,10 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
     public SolicitudActividadDTO() {
     }
 
-    public SolicitudActividadDTO(Date fechaCarga, Boolean presente, String nombre, String telefono, String mail, String nombreActividad, String nombreDependencia, String nombrePropuesta, String nombreEdificio, String nombreSede) {
+    public SolicitudActividadDTO(Date fechaCarga, Byte presente, int idSolicitud, String nombre, String telefono, String mail, String nombreActividad, String nombreDependencia, String nombrePropuesta, String nombreEdificio, String nombreSede) {
         this.fechaCarga = fechaCarga;
         this.presente = presente;
+        this.idSolicitud = idSolicitud;
         this.nombre = nombre;
         this.telefono = telefono;
         this.mail = mail;
@@ -50,11 +60,11 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
         this.fechaCarga = fechaCarga;
     }
 
-    public Boolean getPresente() {
+    public Byte getPresente() {
         return presente;
     }
 
-    public void setPresente(Boolean presente) {
+    public void setPresente(Byte presente) {
         this.presente = presente;
     }
 
