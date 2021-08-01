@@ -36,15 +36,20 @@ public class SolicitudCreatorImpl implements  SolicitudCreator{
     }
 
 
-    public Cohorte getCohorte(List<Cohorte> cohortes, Date date){
+    public Cohorte getCohorte(List<Cohorte> cohortes, Date date, Horario horario){
         for(Cohorte cohorte : cohortes){
             Date inicio = (Date) cohorte.getFechaInicio();
             Date fin = (Date) cohorte.getFechaFin();
             List<LocalDate> fechas = inicio.toLocalDate().datesUntil(fin.toLocalDate()).collect(Collectors.toList());
-            if(fechas.contains(date.toLocalDate())){
-                System.out.println("encontrado");
 
-                return cohorte;
+            for (CohorteHorario cohorteHorario: cohorte.getCohorteHorarios()) {
+                if(fechas.contains(date.toLocalDate()) && cohorteHorario.getHorario().getIdHorario() == horario.getIdHorario() ){
+                    for (SesionPresencial sesion: cohorteHorario.getSesionPresencials()) {
+                        if(sesion.getFecha().compareTo(date) == 0){
+                            return cohorte;
+                        }
+                    }
+                }
             }
         }
         return null;
@@ -68,7 +73,7 @@ public class SolicitudCreatorImpl implements  SolicitudCreator{
     @Override
     public Solicitud crearSolicitud(Ddjj ddjj, Horario horario, Actividad actividad, EntidadAula aula, Date date) throws Exception {
 
-        Cohorte cohorte = getCohorte(actividad.getCohortes(), date);
+        Cohorte cohorte = getCohorte(actividad.getCohortes(), date, horario);
         if (cohorte == null) throw new Exception("Cohorte no encontrado");
 
         Optional<CohorteHorario> cohorteHorario = cohorte.getCohorteHorarios()

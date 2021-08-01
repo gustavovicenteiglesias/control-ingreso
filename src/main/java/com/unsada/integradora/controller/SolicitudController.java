@@ -120,6 +120,10 @@ public class SolicitudController {
 		Solicitud solicitud;
 		SesionPresencial sesion = null;
 		try{
+			Ddjj ddjj1 = ddjj.get();
+			Horario hor = horario.get();
+			Actividad act = actividad.get();
+			EntidadAula au = aula.get();
 			solicitud = solicitudCreator.crearSolicitud(ddjj.get(),horario.get(),actividad.get(),aula.get(),date);
 			sesion = solicitud.getSesionPresencial();
 			int idSolicitud = solicitudServiceApi.save(solicitud).getId_solicitud();
@@ -139,6 +143,7 @@ public class SolicitudController {
 				response.put("disponible:", (solicitudCreator.evalCapacidad(sesion, date, aula.get()) -1) );
 				response.put("capacidadMaxima:", aula.get().getCapacidadConAforo() );
 			}
+			e.printStackTrace();
 			return response;
 		}
 
