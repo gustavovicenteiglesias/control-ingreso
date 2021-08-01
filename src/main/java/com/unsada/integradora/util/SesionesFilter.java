@@ -22,7 +22,7 @@ public class SesionesFilter {
         sesiones.forEach(i ->{
             System.out.println(i.getFecha());
         });
-
+        sesiones = sesiones.stream().filter(i -> i.getFecha().compareTo(Date.valueOf(date)) == duracionDdjj).collect(Collectors.toList());
         System.out.println("el numero de sesiones que aplican son:" + sesiones.size());
        return sesiones;
     }
