@@ -15,6 +15,7 @@ public class SolicitudDependenciasMapperImpl implements SolicitudActividadMapper
 
     @Override
     public SolicitudActividadDTO toDTO(Solicitud solicitud) {
+        String nombreCompleto =  solicitud.getSesionPresencial().getEntidadAula().getEdificio().getSede().getNombre()+ " - " +solicitud.getSesionPresencial().getEntidadAula().getEdificio().getNombre();
         return new SolicitudActividadDTO(
                 solicitud.getFechaCarga(),
                 solicitud.getPresente(),
@@ -26,8 +27,8 @@ public class SolicitudDependenciasMapperImpl implements SolicitudActividadMapper
                 solicitud.getSesionPresencial().getCohorteHorario().getCohorte().getActividad().getPropuesta().getDependencia().getNombre(),
                 solicitud.getSesionPresencial().getCohorteHorario().getCohorte().getActividad().getPropuesta().getNombre(),
                 solicitud.getSesionPresencial().getEntidadAula().getEdificio().getNombre(),
-                solicitud.getSesionPresencial().getEntidadAula().getEdificio().getSede().getNombre()
-
+                solicitud.getSesionPresencial().getEntidadAula().getEdificio().getSede().getNombre(),
+                nombreCompleto
                 );
     }
 }

@@ -18,6 +18,23 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
     private String nombrePropuesta;
     private String nombreEdificio;
     private String nombreSede;
+    private String nombreCompleto;
+
+    public String getNombreSede() {
+        return nombreSede;
+    }
+
+    public void setNombreSede(String nombreSede) {
+        this.nombreSede = nombreSede;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
 
     public int getIdSolicitud() {
         return idSolicitud;
@@ -38,7 +55,7 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
     public SolicitudActividadDTO() {
     }
 
-    public SolicitudActividadDTO(Date fechaCarga, Byte presente, int idSolicitud, String nombre, String telefono, String mail, String nombreActividad, String nombreDependencia, String nombrePropuesta, String nombreEdificio, String nombreSede) {
+    public SolicitudActividadDTO(Date fechaCarga, Byte presente, int idSolicitud, String nombre, String telefono, String mail, String nombreActividad, String nombreDependencia, String nombrePropuesta, String nombreEdificio, String nombreSede, String nombreCompleto) {
         this.fechaCarga = fechaCarga;
         this.presente = presente;
         this.idSolicitud = idSolicitud;
@@ -50,6 +67,7 @@ public class SolicitudActividadDTO extends ControlIngresoDTO {
         this.nombrePropuesta = nombrePropuesta;
         this.nombreEdificio = nombreEdificio;
         this.nombreSede = nombreSede;
+        this.nombreCompleto = nombreCompleto;
     }
 
     public Date getFechaCarga() {
