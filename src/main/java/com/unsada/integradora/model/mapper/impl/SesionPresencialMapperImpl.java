@@ -18,6 +18,10 @@ public class SesionPresencialMapperImpl implements SesionMapper {
     @Override
     public SesionPresencialDTO toDTO(SesionPresencial sesion) {
         boolean tieneSolicitudes = !sesion.getSolicituds().isEmpty();
+        int idEdificio = 0;
+        if(sesion.getEntidadAula().getEdificio() != null){
+            idEdificio = sesion.getEntidadAula().getEdificio().getIdEdificio();
+        }
         return new SesionPresencialDTO(
                 sesion.getFecha(),
                 sesion.getIdSesionPresencial(),
@@ -27,7 +31,7 @@ public class SesionPresencialMapperImpl implements SesionMapper {
                 sesion.getCohorteHorario().getHorario().getHoraFin(),
                 tieneSolicitudes,
                 sesion.getEntidadAula(),
-                sesion.getEntidadAula().getEdificio().getIdEdificio()
+                idEdificio
                 );
     }
 }
