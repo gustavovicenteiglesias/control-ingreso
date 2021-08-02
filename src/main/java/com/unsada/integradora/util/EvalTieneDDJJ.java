@@ -48,6 +48,7 @@ public class EvalTieneDDJJ {
             long count = ddjj.getFecha().toLocalDate().datesUntil(date).count();
             if(count == duracionDdjj){
                 System.out.println("este es el mismo dia ");
+                System.out.println(ddjj.getFecha() + "==" + date);
                 return 1;
             }else{
                 return 0;
