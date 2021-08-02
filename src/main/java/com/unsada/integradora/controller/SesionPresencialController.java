@@ -218,8 +218,8 @@ public class SesionPresencialController {
 		}
 	}
 
-	@PutMapping(value = "/update-fecha/{idsesion}")
-	public Map<String, Object> updateFecha(@RequestBody SesionPresencial ses, @PathVariable("idsesion") Integer idsesion, @PathVariable ("idAula") int idAula) {
+	@PutMapping(value = "/update-fecha/{idsesion}/{idAula}")
+	public Map<String, Object> updateFecha(@RequestBody SesionPresencial ses, @PathVariable("idsesion") Integer idsesion, @PathVariable ("idAula") Integer idAula) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		Date date = ses.getFecha();
 		Optional<SesionPresencial> sesion = sesionPresencialServiceApi.findById(idsesion);
