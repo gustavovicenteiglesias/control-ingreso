@@ -19,9 +19,12 @@ public class SesionPresencialMapperImpl implements SesionMapper {
     public SesionPresencialDTO toDTO(SesionPresencial sesion) {
         boolean tieneSolicitudes = !sesion.getSolicituds().isEmpty();
         int idEdificio = 0;
-        if(sesion.getEntidadAula().getEdificio() != null){
+        try{
             idEdificio = sesion.getEntidadAula().getEdificio().getIdEdificio();
+        }catch (Exception e){
+            idEdificio = 0;
         }
+
         return new SesionPresencialDTO(
                 sesion.getFecha(),
                 sesion.getIdSesionPresencial(),
