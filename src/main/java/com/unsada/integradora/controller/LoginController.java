@@ -48,4 +48,11 @@ public class LoginController {
             return new ResponseEntity("Error en los datos ingresados", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value ="/test-con")
+    public Map<String, String> test(){
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "success");
+        return response;
+    }
 }
