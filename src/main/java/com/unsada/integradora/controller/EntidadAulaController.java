@@ -61,7 +61,11 @@ public class EntidadAulaController {
 
 		try {
 			List<EntidadAula> claseData;
-			claseData = (List<EntidadAula>) entidadAulaServiceApi.findByEdificio(id);
+			if(id == 0){
+				claseData = (List<EntidadAula>) entidadAulaServiceApi.findAll();
+			}else{
+				claseData = (List<EntidadAula>) entidadAulaServiceApi.findByEdificio(id);
+			}
 			response.put("message", "Successful load");
 			response.put("data", claseData);
 			response.put("success", true);
