@@ -219,16 +219,15 @@ public class SesionPresencialController {
 	}
 
 	@PutMapping(value = "/update-fecha/{idsesion}")
-	public Map<String, Object> updateFecha(@RequestBody SesionPresencial ses, @PathVariable("idsesion") Integer idsesion) {
+	public Map<String, Object> updateFecha(@RequestBody SesionPresencial ses, @PathVariable("idsesion") Integer idsesion, @PathVariable ("idAula") int idAula) {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		Date date = ses.getFecha();
 		Optional<SesionPresencial> sesion = sesionPresencialServiceApi.findById(idsesion);
+		Optional<EntidadAula> au = aulaServiceApi.findById(idAula);
+
 		try{
 			SesionPresencial s = sesionCreator.createSesion(sesion.get(), ses.getFecha());
-			if(ses.getEntidadAula() != null){
-				EntidadAula au = aulaServiceApi.findById(ses.getEntidadAula().getIdAula()).get();
-				s.setEntidadAula(au);
-			}
+			s.setEntidadAula(au.get());
 			response.put("success", true);
 			response.put("message", "fecha cambiada");
 			sesionPresencialServiceApi.save(s);
