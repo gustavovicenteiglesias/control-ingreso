@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.unsada</groupId>
 	<artifactId>integradora</artifactId>
-	<version>1.0.0-RELEASE</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>integradora</name>
 	<description>Control de acceso</description>
 		<dependencies>
