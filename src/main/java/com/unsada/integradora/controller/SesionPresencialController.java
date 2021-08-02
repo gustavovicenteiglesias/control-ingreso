@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.unsada.integradora.model.dto.SesionPresencialDTO;
 import com.unsada.integradora.model.entity.Actividad;
+import com.unsada.integradora.model.entity.EntidadAula;
 import com.unsada.integradora.model.mapper.interfaces.SesionMapper;
 import com.unsada.integradora.service.interfaces.*;
 import com.unsada.integradora.util.SesionCreator;
@@ -44,6 +45,9 @@ public class SesionPresencialController {
 
 	@Autowired
 	SesionCreator sesionCreator;
+
+	@Autowired
+	EntidadAulaServiceApi aulaServiceApi;
 
 
 	@GetMapping(value = "/all")
@@ -222,7 +226,8 @@ public class SesionPresencialController {
 		try{
 			SesionPresencial s = sesionCreator.createSesion(sesion.get(), ses.getFecha());
 			if(ses.getEntidadAula() != null){
-				s.setEntidadAula(ses.getEntidadAula());
+				EntidadAula au = aulaServiceApi.findById(ses.getEntidadAula().getIdAula()).get();
+				s.setEntidadAula(au);
 			}
 			response.put("success", true);
 			response.put("message", "fecha cambiada");
