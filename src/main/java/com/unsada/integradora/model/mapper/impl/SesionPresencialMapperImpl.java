@@ -28,13 +28,15 @@ public class SesionPresencialMapperImpl implements SesionMapper {
         return new SesionPresencialDTO(
                 sesion.getFecha(),
                 sesion.getIdSesionPresencial(),
-                sesion.getCohorteHorario().getCohorte().getNombreCohorte(),
+                sesion.getCohorteHorario().getCohorte().getActividad().getNombre(),
                 CohorteServiceApi.maskDayOfweek(sesion.getFecha().toLocalDate().getDayOfWeek()),
                 sesion.getCohorteHorario().getHorario().getHoraInicio(),
                 sesion.getCohorteHorario().getHorario().getHoraFin(),
                 tieneSolicitudes,
                 sesion.getEntidadAula(),
-                idEdificio
+                idEdificio,
+                sesion.getCohorteHorario().getCohorte().getNombreCohorte()
+
                 );
     }
 }

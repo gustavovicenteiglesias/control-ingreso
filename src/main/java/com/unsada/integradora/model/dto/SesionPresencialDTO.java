@@ -9,12 +9,21 @@ public class SesionPresencialDTO {
     private Date fecha;
     private int idSesionPresencial;
     private String nombreActividad;
+    private String nombreCohorte;
     private String dia;
     private Time horaInicio;
     private Time horaFin;
     private boolean tieneSolicitudes;
     private EntidadAula aula;
     private int idEdificio;
+
+    public String getNombreCohorte() {
+        return nombreCohorte;
+    }
+
+    public void setNombreCohorte(String nombreCohorte) {
+        this.nombreCohorte = nombreCohorte;
+    }
 
     public EntidadAula getAula() {
         return aula;
@@ -88,7 +97,7 @@ public class SesionPresencialDTO {
         this.horaFin = horaFin;
     }
 
-    public SesionPresencialDTO(Date fecha, int idSesionPresencial, String nombreActividad, String dia, Time horaInicio, Time horaFin, boolean tieneSolicitudes, EntidadAula aula, int idEdificio) {
+    public SesionPresencialDTO(Date fecha, int idSesionPresencial, String nombreActividad, String dia, Time horaInicio, Time horaFin, boolean tieneSolicitudes, EntidadAula aula, int idEdificio, String nombreCohorte) {
         this.fecha = fecha;
         this.idSesionPresencial = idSesionPresencial;
         this.nombreActividad = nombreActividad;
@@ -98,6 +107,7 @@ public class SesionPresencialDTO {
         this.tieneSolicitudes = tieneSolicitudes;
         this.aula = aula;
         this.idEdificio = idEdificio;
+        this.nombreCohorte = nombreCohorte;
     }
 
     @Override
