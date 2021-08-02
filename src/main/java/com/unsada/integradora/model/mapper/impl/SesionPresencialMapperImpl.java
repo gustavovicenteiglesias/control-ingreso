@@ -25,7 +25,8 @@ public class SesionPresencialMapperImpl implements SesionMapper {
                 CohorteServiceApi.maskDayOfweek(sesion.getFecha().toLocalDate().getDayOfWeek()),
                 sesion.getCohorteHorario().getHorario().getHoraInicio(),
                 sesion.getCohorteHorario().getHorario().getHoraFin(),
-                tieneSolicitudes
+                tieneSolicitudes,
+                sesion.getEntidadAula()
                 );
     }
 }
