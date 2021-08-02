@@ -26,7 +26,8 @@ public class SesionPresencialMapperImpl implements SesionMapper {
                 sesion.getCohorteHorario().getHorario().getHoraInicio(),
                 sesion.getCohorteHorario().getHorario().getHoraFin(),
                 tieneSolicitudes,
-                sesion.getEntidadAula()
+                sesion.getEntidadAula(),
+                sesion.getEntidadAula().getEdificio().getIdEdificio()
                 );
     }
 }
