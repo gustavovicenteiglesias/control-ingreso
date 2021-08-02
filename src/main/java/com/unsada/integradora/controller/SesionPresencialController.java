@@ -219,10 +219,11 @@ public class SesionPresencialController {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		Date date = ses.getFecha();
 		Optional<SesionPresencial> sesion = sesionPresencialServiceApi.findById(idsesion);
-
 		try{
 			SesionPresencial s = sesionCreator.createSesion(sesion.get(), ses.getFecha());
-			System.out.println(s);
+			if(ses.getEntidadAula() != null){
+				s.setEntidadAula(ses.getEntidadAula());
+			}
 			response.put("success", true);
 			response.put("message", "fecha cambiada");
 			sesionPresencialServiceApi.save(s);
