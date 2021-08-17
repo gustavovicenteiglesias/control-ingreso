@@ -5,6 +5,7 @@ import com.unsada.integradora.model.entity.Horario;
 import com.unsada.integradora.model.mapper.interfaces.HorarioCohorteMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collector;
@@ -20,8 +21,15 @@ public class HorarioCohorteMapperImpl implements HorarioCohorteMapper {
 
     @Override
     public HorarioCohorteDTO toDTO(Horario horario) {
-        Set<String> nombreCohorte = horario.getCohorteHorarios().stream().map(i -> i.getCohorte().getNombreCohorte()).collect(Collectors.toSet());
+        Set<String> nombreCohorte = new HashSet<>();
+        nombreCohorte = horario.getCohorteHorarios().stream().map(i -> i.getCohorte().getNombreCohorte()).collect(Collectors.toSet());
         String nombreActividades = horario.getCohorteHorarios().stream().map(i -> i.getCohorte().getActividad().getNombre()).findFirst().get();
+        boolean tieneSolicitudes = horario.getCohorteHorarios().stream()
+                .anyMatch(i -> i.getSesionPresencials().stream()
+                .noneMatch(j -> j.getSolicituds().isEmpty()));
+        if(nombreActividades.isEmpty()){
+            nombreActividades = "";
+        }
         return new HorarioCohorteDTO(
                 horario.getIdHorario(),
                 horario.getDia(),
@@ -29,7 +37,8 @@ public class HorarioCohorteMapperImpl implements HorarioCohorteMapper {
                 horario.getHoraFin(),
                 horario.getNombre(),
                 nombreCohorte,
-                nombreActividades
+                nombreActividades,
+                tieneSolicitudes
 
 
 

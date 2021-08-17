@@ -1,5 +1,6 @@
 package com.unsada.integradora.core.reportes.model;
 
+import com.unsada.integradora.core.business.bean.ControlIngresoDTO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -7,12 +8,12 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public abstract class ReporteGenerico<Object> {
+public abstract class ReporteGenerico<T extends ControlIngresoDTO> {
 
     public SXSSFWorkbook workbook = new SXSSFWorkbook();
     private int rowCount;
 
-    public SXSSFWorkbook populateFromList(List<Object> list, String sheetName) throws IllegalAccessException {
+    public SXSSFWorkbook populateFromList(List<T> list, String sheetName) throws IllegalAccessException {
         Sheet sheet = workbook.createSheet(sheetName);
         rowCount = 0;
         sheet = generateTitles(list.get(0), sheet);

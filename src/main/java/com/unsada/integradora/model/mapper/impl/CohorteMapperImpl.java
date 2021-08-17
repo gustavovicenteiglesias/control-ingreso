@@ -15,13 +15,17 @@ public class CohorteMapperImpl implements CohorteMapper {
 
     @Override
     public CohorteDTO toDTO(Cohorte cohorte) {
+        boolean tieneSolicitudes = cohorte.getCohorteHorarios().stream()
+                .anyMatch(i -> i.getSesionPresencials().stream()
+                .noneMatch(j -> j.getSolicituds().isEmpty()));
         return new CohorteDTO(
                 cohorte.getIdCohorte(),
                 cohorte.getFechaInicio(),
                 cohorte.getFechaFin(),
                 cohorte.getNombreCohorte(),
                 cohorte.getActividad(),
-                cohorte.getSede()
+                cohorte.getSede(),
+                tieneSolicitudes
         );
     }
 }

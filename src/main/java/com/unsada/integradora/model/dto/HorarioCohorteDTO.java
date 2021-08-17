@@ -13,6 +13,15 @@ public class HorarioCohorteDTO {
     private String nombre;
     private Set nombreCohorte;
     private String nombreActividad;
+    private boolean tieneSolicitudes;
+
+    public boolean getTieneSolicitudes() {
+        return tieneSolicitudes;
+    }
+
+    public void setTieneSolicitudes(boolean tieneSolicitudes) {
+        this.tieneSolicitudes = tieneSolicitudes;
+    }
 
     public String getNombreActividad() {
         return nombreActividad;
@@ -22,7 +31,7 @@ public class HorarioCohorteDTO {
         this.nombreActividad = nombreActividad;
     }
 
-    public HorarioCohorteDTO(int idHorario, String dia, Time horaInicio, Time horaFin, String nombre, Set nombreCohorte, String nombreActividad) {
+    public HorarioCohorteDTO(int idHorario, String dia, Time horaInicio, Time horaFin, String nombre, Set nombreCohorte, String nombreActividad, boolean tieneSolicitudes) {
         this.idHorario = idHorario;
         this.dia = dia;
         this.horaInicio = horaInicio;
@@ -30,6 +39,7 @@ public class HorarioCohorteDTO {
         this.nombre = nombre;
         this.nombreCohorte = nombreCohorte;
         this.nombreActividad = nombreActividad;
+        this.tieneSolicitudes = tieneSolicitudes;
     }
 
     public HorarioCohorteDTO() {
