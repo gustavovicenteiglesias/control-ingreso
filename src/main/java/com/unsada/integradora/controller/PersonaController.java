@@ -1,5 +1,7 @@
 package com.unsada.integradora.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -8,25 +10,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Map.Entry;
 
+import com.unsada.integradora.core.reportes.impl.ReportePersonaImpl;
 import com.unsada.integradora.model.entity.Ddjj;
-import com.unsada.integradora.model.entity.Horario;
 import com.unsada.integradora.model.entity.Persona;
-import com.unsada.integradora.model.entity.Solicitud;
 import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
 import com.unsada.integradora.service.impl.PersonaServiceImpl;
-import com.unsada.integradora.service.interfaces.SolicitudesDTOServiceApi;
 import com.unsada.integradora.util.EvalTieneDDJJ;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.unsada.integradora.service.interfaces.PersonaServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
@@ -43,6 +41,8 @@ public class PersonaController {
 	SolicitudServiceApi solicitudServiceApi;
 	@Autowired
 	SolicitudActividadMapper solicitudActividadMapper;
+	@Autowired
+	ReportePersonaImpl reportePersona;
 	@Value("${vars.duracion-ddjj}")
 	private int duracion;
 	@Autowired
@@ -86,6 +86,49 @@ public class PersonaController {
 			return response;
 		}
 	}
+
+	@GetMapping(value = "/solicitudes-contacto-pdf/{fechainicio}/{fechafin}/{idPersona}")
+	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("fechainicio") Date fechainicio, @PathVariable("fechafin") Date fechafin, @PathVariable("idPersona") int idPersona) throws IllegalAccessException, IOException {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Optional<Persona> persona = personaServiceApi.findById(idPersona);
+
+		try{
+			String titulo = "Contactos_estrechos_" + persona.get().getNombre() + "_entre_" + fechainicio+ "_y_"+ fechafin + ".xlsx";
+			SXSSFWorkbook workbook = reportePersona.generarReportePersonasEnContacto(personaServiceApi.solicitudesContactos(fechainicio,fechafin,idPersona), "personas en contacto");
+			HttpHeaders header = new HttpHeaders();
+			header.setContentType(new MediaType("application", "force-download"));
+			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ titulo);
+			workbook.write(stream);
+			return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()),
+					header, HttpStatus.CREATED);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping(value = "/personas-con-solicitudes-por-cohorte-pdf/{idCohorte}")
+	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("idCohorte") int idCohorte) throws IllegalAccessException, IOException {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Optional<Persona> persona = personaServiceApi.findById(idCohorte);
+/*
+		try{
+			HttpHeaders header = new HttpHeaders();
+			header.setContentType(new MediaType("application", "force-download"));
+			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ titulo);
+			workbook.write(stream);
+			return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()),
+					header, HttpStatus.CREATED);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}*/
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+	}
+
+
+
+
 
 	public boolean compararFechas(Date index, Date fechainicio, Date fechafin){
 		if(index.compareTo(fechainicio) > 0 && index.compareTo(fechafin) <= 0){

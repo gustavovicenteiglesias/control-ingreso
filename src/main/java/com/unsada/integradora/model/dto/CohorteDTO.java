@@ -12,14 +12,24 @@ public class CohorteDTO {
     private String nombreCohorte;
     private Actividad actividad;
     private Sede sede;
+    private boolean tieneSolicitudes;
 
-    public CohorteDTO(int idCohorte, Date fechaInicio, Date fechaFin, String nombreCohorte, Actividad actividad, Sede sede) {
+    public boolean isTieneSolicitudes() {
+        return tieneSolicitudes;
+    }
+
+    public void setTieneSolicitudes(boolean tieneSolicitudes) {
+        this.tieneSolicitudes = tieneSolicitudes;
+    }
+
+    public CohorteDTO(int idCohorte, Date fechaInicio, Date fechaFin, String nombreCohorte, Actividad actividad, Sede sede, boolean tieneSolicitudes) {
         this.idCohorte = idCohorte;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.nombreCohorte = nombreCohorte;
         this.actividad = actividad;
         this.sede = sede;
+        this.tieneSolicitudes = tieneSolicitudes;
     }
 
     public CohorteDTO() {
