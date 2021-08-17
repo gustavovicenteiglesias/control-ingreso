@@ -85,8 +85,10 @@ public class HorarioController {
 			for(CohorteHorario cohorteHorario : cohorteHorarios){
 				horarios.add(cohorteHorario.getHorario());
 			}
+			List<HorarioCohorteDTO> horarioCohorteDTOS = horarios.stream().map(i -> horarioMapper.toDTO(i)).collect(Collectors.toList());
+
 			response.put("message", "Successful load");
-			response.put("data", horarios);
+			response.put("data", horarioCohorteDTOS);
 			response.put("success", true);
 			return response;
 		}catch(Exception e){
@@ -104,8 +106,10 @@ public class HorarioController {
 		try {
 			List<Horario> claseData;
 			claseData = (List<Horario>) horarioServiceApi.findBySedeActividad(idActividad, idSede);
+			List<HorarioCohorteDTO> horarioCohorteDTOS = claseData.stream().map(i -> horarioMapper.toDTO(i)).collect(Collectors.toList());
+
 			response.put("message", "Successful load");
-			response.put("data", claseData);
+			response.put("data", horarioCohorteDTOS);
 			response.put("success", true);
 			return response;
 
@@ -126,7 +130,7 @@ public class HorarioController {
 
 			if (clase.isPresent()) {
 				response.put("message", "Successful load");
-				response.put("data", clase);
+				response.put("data", horarioMapper.toDTO(clase.get()));
 				response.put("success", true);
 				return response;
 			} else {
@@ -149,7 +153,7 @@ public class HorarioController {
 		Optional<Cohorte> cohorte = cohorteServiceApi.findById(id);
 
 		try {
-			List<Horario> horarios = cohorte.get().getCohorteHorarios().stream().map(i -> i.getHorario()).collect(Collectors.toList());
+			List<HorarioCohorteDTO> horarios = cohorte.get().getCohorteHorarios().stream().map(i -> horarioMapper.toDTO(i.getHorario())).collect(Collectors.toList());
 			response.put("message", "Successful load");
 			response.put("data", horarios);
 			response.put("success", true);

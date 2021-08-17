@@ -90,11 +90,14 @@ public class PersonaController {
 	@GetMapping(value = "/solicitudes-contacto-pdf/{fechainicio}/{fechafin}/{idPersona}")
 	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("fechainicio") Date fechainicio, @PathVariable("fechafin") Date fechafin, @PathVariable("idPersona") int idPersona) throws IllegalAccessException, IOException {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Optional<Persona> persona = personaServiceApi.findById(idPersona);
+
 		try{
+			String titulo = "Contactos_estrechos_" + persona.get().getNombre() + "_entre_" + fechainicio+ "_y_"+ fechafin + ".xlsx";
 			SXSSFWorkbook workbook = reportePersona.generarReportePersonasEnContacto(personaServiceApi.solicitudesContactos(fechainicio,fechafin,idPersona), "personas en contacto");
 			HttpHeaders header = new HttpHeaders();
 			header.setContentType(new MediaType("application", "force-download"));
-			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+generarTitulo(idPersona, fechainicio, fechafin));
+			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ titulo);
 			workbook.write(stream);
 			return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()),
 					header, HttpStatus.CREATED);
@@ -104,15 +107,25 @@ public class PersonaController {
 
 	}
 
-	private String generarTitulo(int idPersona, Date inicio, Date fin){
-		Optional<Persona> persona = personaServiceApi.findById(idPersona);
+	@GetMapping(value = "/personas-con-solicitudes-por-cohorte-pdf/{idCohorte}")
+	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("idCohorte") int idCohorte) throws IllegalAccessException, IOException {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Optional<Persona> persona = personaServiceApi.findById(idCohorte);
+/*
 		try{
-			return "Contactos_estrechos_" + persona.get().getNombre() + "_entre_" + inicio+ "_y_"+ fin + ".xlsx";
+			HttpHeaders header = new HttpHeaders();
+			header.setContentType(new MediaType("application", "force-download"));
+			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ titulo);
+			workbook.write(stream);
+			return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()),
+					header, HttpStatus.CREATED);
 		}catch (Exception e){
-			e.printStackTrace();
-			return "";
-		}
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}*/
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
 	}
+
 
 
 
