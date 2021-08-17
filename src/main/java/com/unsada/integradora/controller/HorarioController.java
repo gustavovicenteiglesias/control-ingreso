@@ -143,6 +143,25 @@ public class HorarioController {
 		}
 	}
 
+	@GetMapping(value = "/por-cohorte/{id}")
+	public Map<String, Object> findByCohorte(@PathVariable("id") Integer id) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		Optional<Cohorte> cohorte = cohorteServiceApi.findById(id);
+
+		try {
+			List<Horario> horarios = cohorte.get().getCohorteHorarios().stream().map(i -> i.getHorario()).collect(Collectors.toList());
+			response.put("message", "Successful load");
+			response.put("data", horarios);
+			response.put("success", true);
+			return response;
+
+		} catch (Exception e) {
+			response.put("message", "" + e.getMessage());
+			response.put("success", false);
+			return response;
+		}
+	}
+
 	@PostMapping(value = "/create-sesiones-vacias/{idActividad}/{idCohorte}")
 	public ResponseEntity<String> createByCohorte( @PathVariable("idActividad") int idActividad, @PathVariable("idCohorte") int idCohorte, @RequestBody Horario data) {
 		Optional<Actividad> actividad = actividadServiceApi.findById(idActividad);

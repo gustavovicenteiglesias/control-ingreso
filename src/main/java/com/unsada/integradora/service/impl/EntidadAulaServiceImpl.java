@@ -23,7 +23,8 @@ import javax.swing.text.html.Option;
 
 @Service
 public class EntidadAulaServiceImpl implements EntidadAulaServiceApi {
-
+	@Autowired
+	EntidadAulaDao	entidadAulaDao;
 
 	@Autowired
 	ActividadServiceApi actividadService;
@@ -40,7 +41,7 @@ public class EntidadAulaServiceImpl implements EntidadAulaServiceApi {
 
 	@Override
 	public <S extends EntidadAula> S save(S entity) {
-		return null;
+		return entidadAulaDao.save(entity);
 	}
 
 	@Override

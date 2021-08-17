@@ -195,14 +195,24 @@ public class ActividadController {
 	public ResponseEntity<String> create(@RequestBody Actividad data, @PathVariable ("idPropuesta") int idPropuesta) {
 		Optional<Propuesta> propuesta = propuestaServiceApi.findById(idPropuesta);
 		System.out.println(propuesta.get().getIdPropuesta());
-		try {
 			data.setPropuesta(propuesta.get());
-			actividadServiceApi.save(data);
-			return new ResponseEntity<>("Save successful ", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			try{
+				Actividad actividad = this.crearActividad(data);
+				actividadServiceApi.save(actividad);
+				return new ResponseEntity<>("Save successful ", HttpStatus.OK);
 
+			}catch (Exception e) {
+				return new ResponseEntity<>("El nombre de la actividad ya existe ", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+
+	}
+	private Actividad crearActividad(Actividad actividad) throws Exception {
+		for (Actividad i : actividadServiceApi.findAll()) {
+			if (i.getNombre().equals(actividad.getNombre()))
+				throw new Exception("Nombre ya existe para esta actividad");
+		}
+		return actividad;
 	}
 	@GetMapping(value ="/cohortes/{idActividad}")
 	public Map<String, Object> listCohortes(@PathVariable("idActividad") int idActividad){

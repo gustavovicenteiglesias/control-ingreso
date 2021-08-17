@@ -22,7 +22,6 @@ public class EvalTieneDDJJ {
     private int duracionDdjj;
 
     public Ddjj getDdjj(Persona persona, Date fechaDeBusqueda){
-        date.minusDays(1);
         List<Ddjj> ddjj = ddjjService.findByPersona(persona);
 
         return compararFechas(ddjj);
@@ -48,7 +47,8 @@ public class EvalTieneDDJJ {
         try{
             long count = ddjj.getFecha().toLocalDate().datesUntil(date).count();
             if(count == duracionDdjj){
-                System.out.println("este es el mismo dia");
+                System.out.println("este es el mismo dia ");
+                System.out.println(ddjj.getFecha() + "==" + date);
                 return 1;
             }else{
                 return 0;

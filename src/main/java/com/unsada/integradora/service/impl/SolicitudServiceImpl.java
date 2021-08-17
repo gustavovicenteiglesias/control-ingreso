@@ -1,20 +1,27 @@
 package com.unsada.integradora.service.impl;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import com.unsada.integradora.model.entity.SesionPresencial;
+import com.unsada.integradora.model.entity.*;
+import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
+import com.unsada.integradora.util.QrCreatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unsada.integradora.dao.SolicitudDao;
-import com.unsada.integradora.model.entity.Solicitud;
+
 @Service
 public class SolicitudServiceImpl implements SolicitudServiceApi {
 	@Autowired
 	SolicitudDao solicitudDao;
+
 
 
 	@Override
@@ -87,8 +94,11 @@ public class SolicitudServiceImpl implements SolicitudServiceApi {
 
 	}
 
+
 	@Override
 	public void deleteAll() {
 
 	}
+
+
 }

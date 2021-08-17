@@ -6,12 +6,12 @@ import java.util.Optional;
 
 import com.unsada.integradora.dao.SolicitudDao;
 import com.unsada.integradora.model.dto.SolicitudActividadDTO;
+import com.unsada.integradora.model.entity.*;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import com.unsada.integradora.model.entity.SesionPresencial;
-import com.unsada.integradora.model.entity.Solicitud;
 
 public interface SolicitudServiceApi extends CrudRepository<Solicitud, Integer> {
 	static final String FIND_SOLICITUDES_IN_RANGE = "SELECT s.* FROM solicitud s INNER JOIN sesion_presencial sp ON sp.id_sesion_presencial=s.id_sesion_presencial";
@@ -28,4 +28,7 @@ public interface SolicitudServiceApi extends CrudRepository<Solicitud, Integer> 
 
 	@Query(value= FIND_SOLICITUDES_IN_RANGE, nativeQuery = true )
 	public List<Solicitud> findSolicitudesInRange(@Param("fechainicio") Date fechainicio, @Param("fechafin") Date fechafin);
+
+
+
 }

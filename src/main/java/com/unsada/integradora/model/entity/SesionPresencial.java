@@ -105,4 +105,12 @@ public class SesionPresencial implements Serializable {
 		return solicitud;
 	}
 
+	@Override
+	public String toString() {
+		return "SesionPresencial{" +
+				"idSesionPresencial=" + idSesionPresencial +
+				", fecha=" + fecha +
+				", solicituds=" + solicituds.size() +
+				'}';
+	}
 }

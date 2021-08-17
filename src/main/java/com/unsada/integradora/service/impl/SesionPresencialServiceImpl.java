@@ -1,7 +1,13 @@
 package com.unsada.integradora.service.impl;
 
+import java.sql.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.unsada.integradora.model.entity.CohorteHorario;
+import com.unsada.integradora.model.entity.EntidadAula;
+import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +17,8 @@ import com.unsada.integradora.model.entity.SesionPresencial;
 public class SesionPresencialServiceImpl implements SesionPresencialDao {
 	@Autowired
 	SesionPresencialDao	sesionPresencialDao;
+
+
 	@Override
 	public <S extends SesionPresencial> S save(S entity) {
 		// TODO Auto-generated method stub
@@ -88,5 +96,7 @@ public class SesionPresencialServiceImpl implements SesionPresencialDao {
 		// TODO Auto-generated method stub
 		return sesionPresencialDao.findSesionHoratio(id_Horario);
 	}
+
+
 
 }
