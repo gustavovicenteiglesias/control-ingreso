@@ -8,12 +8,12 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public abstract class ReporteGenerico<T extends ControlIngresoDTO> {
+public abstract class ReporteGenerico {
 
-    public SXSSFWorkbook workbook = new SXSSFWorkbook();
+    private SXSSFWorkbook workbook = new SXSSFWorkbook();
     private int rowCount;
 
-    public SXSSFWorkbook populateFromList(List<T> list, String sheetName) throws IllegalAccessException {
+    public SXSSFWorkbook populateFromList(List<?> list, String sheetName) throws IllegalAccessException {
         Sheet sheet = workbook.createSheet(sheetName);
         rowCount = 0;
         sheet = generateTitles(list.get(0), sheet);

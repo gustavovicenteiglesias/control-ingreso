@@ -1,11 +1,10 @@
-package com.unsada.integradora.util;
+package com.unsada.integradora.util.solicitudes;
 
 import com.unsada.integradora.model.entity.*;
 import com.unsada.integradora.service.interfaces.SesionPresencialServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;

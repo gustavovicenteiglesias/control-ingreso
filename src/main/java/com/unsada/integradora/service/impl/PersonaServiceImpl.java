@@ -14,6 +14,7 @@ import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
 import com.unsada.integradora.service.interfaces.PersonaServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudesDTOServiceApi;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,38 +35,23 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 	}
 
 	@Override
-	public <S extends Persona> Iterable<S> saveAll(Iterable<S> entities) {
-		return null;
+	public Optional<Persona> findByDni(String dni) {
+		return personaDao.findByDni(dni);
 	}
 
 	@Override
-	public Optional<Persona> findById(Integer integer) {
-		return personaDao.findById(integer);
+	public Optional<Persona> findById(Integer id) {
+		return personaDao.findById(id);
 	}
 
 	@Override
-	public boolean existsById(Integer integer) {
-		return personaDao.existsById(integer);
+	public List<Persona> findAll() {
+		return (List<Persona>) personaDao.findAll();
 	}
 
-	@Override
-	public Iterable<Persona> findAll() {
-		return null;
-	}
 
-	@Override
-	public Iterable<Persona> findAllById(Iterable<Integer> integers) {
-		return null;
-	}
-
-	@Override
-	public long count() {
-		return personaDao.count();
-	}
-
-	@Override
-	public void deleteById(Integer integer) {
-		personaDao.deleteById(integer);
+	public void deleteById(Integer id) {
+		personaDao.deleteById(id);
 	}
 
 	@Override
@@ -73,30 +59,30 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 		personaDao.delete(entity);
 	}
 
-	@Override
-	public void deleteAll(Iterable<? extends Persona> entities) {
-
-	}
-
-	@Override
-	public void deleteAll() {
-
-	}
-
-	@Override
-	public Optional<Persona> findByDni(String dni) {
-		return personaDao.findByDni(dni);
-	}
 
 	@Override
 	public Persona findPersonaPorSolicitud(Integer idsolicitud) {
-		return new Persona();
+		return personaDao.findPersonaPorSolicitud(idsolicitud);
 	}
-
 
 	@Override
 	public Iterable<Persona> PersonaSesion(String fechainicio, String fechafin) {
 		return null;
+	}
+
+	@Override
+	public List<Persona> findPersonasQueTienenSolicitudEnCohorte(Integer idCohorte) {
+		return personaDao.findPersonaConSolicitudesPorCohorte(idCohorte);
+	}
+
+	@Override
+	public List<Persona> findPersonasQueTienenSolicitudEnHorario(Integer idHorario) {
+		return personaDao.findPersonaConSolicitudesPorHorario(idHorario);
+	}
+
+	@Override
+	public List<Persona> findPersonasQueTienenSolicitudEnSesion(Integer idSesion) {
+		return personaDao.findPersonaConSolicitudesPorSesion(idSesion);
 	}
 
 
@@ -105,12 +91,12 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 		List<Persona> enContacto = new ArrayList<Persona>();
 		List<Solicitud> solicitudesContactos = new ArrayList<Solicitud>();
 		List<SolicitudActividadDTO> solicitudActividadDTOS = new ArrayList<>();
-
 		try {
 			List<Solicitud> solicitudes = new ArrayList<Solicitud>();
 			solicitudes = (List<Solicitud>) solicitudServiceApi.findSolicitudesInRange(fechaInicio, fechaFin);
 			List<Integer> sesionesEnSeguimiento = solicitudServiceApi.findSolicitudesPorPersona(idPersona);
 			solicitudes.removeIf(i -> !((i.getFechaCarga().compareTo(fechaInicio) > 0) && i.getFechaCarga().compareTo(fechaFin) <= 0));
+			solicitudes.removeIf(i -> i.getPresente() != 1);
 			for (Solicitud s : solicitudes) {
 				if (sesionesEnSeguimiento.contains(s.getSesionPresencial().getIdSesionPresencial())) {
 					Optional<Persona> p = Optional.ofNullable(s.getDdjj().getPersona());
