@@ -15,22 +15,17 @@ import java.util.List;
 
 @Component
 public class ReportePersonaImpl extends ReporteGenerico implements ReportesPersona {
+
+
     @Override
-    public SXSSFWorkbook solicitudesActivas(Persona persona) {
-        return null;
+    public SXSSFWorkbook generarReportePersonasConSolicitudesActivas(List<Persona> personas, String sheetname) throws IllegalAccessException {
+        return populateFromList(personas, sheetname);
+
     }
 
     @Override
-    public SXSSFWorkbook generarReportePersonasEnContacto( List<SolicitudActividadDTO> solicitudActividadDTOS, String sheetName) throws IllegalAccessException {
+    public SXSSFWorkbook generarReportePersonasEnContacto(List<SolicitudActividadDTO> solicitudActividadDTOS, String sheetName) throws IllegalAccessException {
         return populateFromList(solicitudActividadDTOS, sheetName);
     }
-
-
-
-
-
-
-
-
 
 }

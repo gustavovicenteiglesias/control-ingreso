@@ -22,7 +22,7 @@ public class ReportePersonaImplTest {
         personas.add(persona1);
         personas.add(persona1);
         personas.add(persona1);
-        FileOutputStream file = new FileOutputStream("test.xml");
+        FileOutputStream file = new FileOutputStream("testiii.xml");
         SXSSFWorkbook workbook = reportePersona.generarReportePersonasEnContacto(personas, "testGeneradoBien");
         workbook.write(file);
 

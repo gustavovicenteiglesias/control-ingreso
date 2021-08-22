@@ -16,6 +16,7 @@ import com.unsada.integradora.model.entity.Persona;
 import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
 import com.unsada.integradora.service.impl.PersonaServiceImpl;
 import com.unsada.integradora.util.EvalTieneDDJJ;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,8 +42,7 @@ public class PersonaController {
 	SolicitudServiceApi solicitudServiceApi;
 	@Autowired
 	SolicitudActividadMapper solicitudActividadMapper;
-	@Autowired
-	ReportePersonaImpl reportePersona;
+
 	@Value("${vars.duracion-ddjj}")
 	private int duracion;
 	@Autowired
@@ -91,41 +91,51 @@ public class PersonaController {
 	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("fechainicio") Date fechainicio, @PathVariable("fechafin") Date fechafin, @PathVariable("idPersona") int idPersona) throws IllegalAccessException, IOException {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Optional<Persona> persona = personaServiceApi.findById(idPersona);
+		ReportePersonaImpl reportePersona = new ReportePersonaImpl();
 
-		try{
+		if(persona.isPresent()){
 			String titulo = "Contactos_estrechos_" + persona.get().getNombre() + "_entre_" + fechainicio+ "_y_"+ fechafin + ".xlsx";
 			SXSSFWorkbook workbook = reportePersona.generarReportePersonasEnContacto(personaServiceApi.solicitudesContactos(fechainicio,fechafin,idPersona), "personas en contacto");
-			HttpHeaders header = new HttpHeaders();
-			header.setContentType(new MediaType("application", "force-download"));
-			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ titulo);
-			workbook.write(stream);
-			return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()),
-					header, HttpStatus.CREATED);
-		}catch (Exception e){
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return pdfResponse(workbook, titulo);
 		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 	}
 
 	@GetMapping(value = "/personas-con-solicitudes-por-cohorte-pdf/{idCohorte}")
 	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("idCohorte") int idCohorte) throws IllegalAccessException, IOException {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		Optional<Persona> persona = personaServiceApi.findById(idCohorte);
-/*
+		List<Persona> personas = personaServiceApi.findPersonasQueTienenSolicitudEnCohorte(idCohorte);
+		ReportePersonaImpl reportePersona = new ReportePersonaImpl();
+
+		if (!personas.isEmpty()) {
+			SXSSFWorkbook workbook = reportePersona.generarReportePersonasConSolicitudesActivas(personas, "solicitudesActivas");
+			return pdfResponse(workbook, "solicitudesActivas-");};
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+	}
+
+	private ResponseEntity<ByteArrayResource> pdfResponse(Workbook workbook, String fileName){
 		try{
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			HttpHeaders header = new HttpHeaders();
 			header.setContentType(new MediaType("application", "force-download"));
-			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ titulo);
+			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ fileName + ".xlm");
 			workbook.write(stream);
 			return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()),
 					header, HttpStatus.CREATED);
 		}catch (Exception e){
+			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}*/
-		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
+		}
 	}
 
+	@GetMapping(value = "/prueba/{idCohorte}")
+	public List<Persona> ss(@PathVariable("idCohorte") int idCohorte) throws IllegalAccessException, IOException {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		return personaServiceApi.findPersonasQueTienenSolicitudEnCohorte(idCohorte);
+
+
+	}
 
 
 
