@@ -22,5 +22,9 @@ public interface PersonaServiceApi{
 	Persona findPersonaPorSolicitud(@Param("idsolicitud") Integer idsolicitud);
 	Iterable<Persona> PersonaSesion(@Param("fechainicio") String fechainicio, @Param("fechafin") String fechafin);
 	List<Persona> findPersonasQueTienenSolicitudEnCohorte(@Param("idcohorte") Integer idCohorte);
+	List<Persona> findPersonasQueTienenSolicitudEnHorario(@Param("idHorario") Integer idHorario);
+	List<Persona> findPersonasQueTienenSolicitudEnSesion(@Param("idSesion") Integer idSesion);
+
+
 
 }

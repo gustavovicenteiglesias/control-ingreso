@@ -8,7 +8,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public abstract class ReporteGenerico<T> {
+public abstract class ReporteGenerico {
 
     private SXSSFWorkbook workbook = new SXSSFWorkbook();
     private int rowCount;

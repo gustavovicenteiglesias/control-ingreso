@@ -1,7 +1,6 @@
 package com.unsada.integradora.core.reportes.impl;
 
 import com.unsada.integradora.model.dto.SolicitudActividadDTO;
-import com.unsada.integradora.model.entity.Persona;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.testng.annotations.Test;
 import java.io.FileOutputStream;
@@ -23,7 +22,7 @@ public class ReportePersonaImplTest {
         personas.add(persona1);
         personas.add(persona1);
         FileOutputStream file = new FileOutputStream("testiii.xml");
-        SXSSFWorkbook workbook = reportePersona.generarReportePersonasEnContacto(personas, "testGeneradoBien");
+        SXSSFWorkbook workbook = reportePersona.generarReporteGenericoPersona(personas, "testGeneradoBien");
         workbook.write(file);
 
     }

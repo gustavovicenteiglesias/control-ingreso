@@ -8,29 +8,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import com.unsada.integradora.core.reportes.impl.ReportePersonaImpl;
+import com.unsada.integradora.model.dto.PersonaDTO;
+import com.unsada.integradora.model.dto.SolicitudReporteDTO;
+import com.unsada.integradora.model.entity.Cohorte;
 import com.unsada.integradora.model.entity.Ddjj;
+import com.unsada.integradora.model.entity.Horario;
 import com.unsada.integradora.model.entity.Persona;
+import com.unsada.integradora.model.mapper.impl.PersonaMapperImpl;
+import com.unsada.integradora.model.mapper.impl.SolicitudDependenciasMapperImpl;
+import com.unsada.integradora.model.mapper.interfaces.PersonaMapper;
 import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
 import com.unsada.integradora.service.impl.PersonaServiceImpl;
+import com.unsada.integradora.service.interfaces.CohorteServiceApi;
+import com.unsada.integradora.service.interfaces.HorarioServiceApi;
 import com.unsada.integradora.util.EvalTieneDDJJ;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.unsada.integradora.service.interfaces.PersonaServiceApi;
 import com.unsada.integradora.service.interfaces.SolicitudServiceApi;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
+
+import static com.unsada.integradora.controller.responses.PdfResponse.pdfResponse;
 
 @RestController
 @RequestMapping(value = "/api/persona")
@@ -41,7 +48,14 @@ public class PersonaController {
 	@Autowired
 	SolicitudServiceApi solicitudServiceApi;
 	@Autowired
-	SolicitudActividadMapper solicitudActividadMapper;
+	SolicitudDependenciasMapperImpl solicitudActividadMapper;
+	@Autowired
+	HorarioServiceApi horarioServiceApi;
+	@Autowired
+	CohorteServiceApi cohorteServiceApi;
+	@Autowired
+	PersonaMapper personaMapper;
+
 
 	@Value("${vars.duracion-ddjj}")
 	private int duracion;
@@ -89,55 +103,63 @@ public class PersonaController {
 
 	@GetMapping(value = "/solicitudes-contacto-pdf/{fechainicio}/{fechafin}/{idPersona}")
 	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("fechainicio") Date fechainicio, @PathVariable("fechafin") Date fechafin, @PathVariable("idPersona") int idPersona) throws IllegalAccessException, IOException {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Optional<Persona> persona = personaServiceApi.findById(idPersona);
 		ReportePersonaImpl reportePersona = new ReportePersonaImpl();
 
 		if(persona.isPresent()){
-			String titulo = "Contactos_estrechos_" + persona.get().getNombre() + "_entre_" + fechainicio+ "_y_"+ fechafin + ".xlsx";
-			SXSSFWorkbook workbook = reportePersona.generarReportePersonasEnContacto(personaServiceApi.solicitudesContactos(fechainicio,fechafin,idPersona), "personas en contacto");
-			return pdfResponse(workbook, titulo);
+			List<SolicitudReporteDTO> solicitudes = personaServiceApi.solicitudesContactos(fechainicio,fechafin,idPersona)
+					.stream()
+					.map(i -> solicitudActividadMapper.toReporteDto(i)).collect(Collectors.toList());
+			SXSSFWorkbook workbook = reportePersona.generarReporteGenericoPersona(solicitudes, "personas en contacto");
+			return pdfResponse(workbook,"contactos_estrechos_"+ "_entre_"+ fechainicio.toString() + "-" + fechafin + "_" + persona.get().getNombre()  );
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 	}
 
 	@GetMapping(value = "/personas-con-solicitudes-por-cohorte-pdf/{idCohorte}")
-	public ResponseEntity<ByteArrayResource> workbook(@PathVariable("idCohorte") int idCohorte) throws IllegalAccessException, IOException {
+	public ResponseEntity<ByteArrayResource> personasConSolicitudesPorCohorte(@PathVariable("idCohorte") int idCohorte) throws IllegalAccessException, IOException {
 		List<Persona> personas = personaServiceApi.findPersonasQueTienenSolicitudEnCohorte(idCohorte);
+		Optional<Cohorte> cohorte = cohorteServiceApi.findById(idCohorte);
 		ReportePersonaImpl reportePersona = new ReportePersonaImpl();
 
 		if (!personas.isEmpty()) {
-			SXSSFWorkbook workbook = reportePersona.generarReportePersonasConSolicitudesActivas(personas, "solicitudesActivas");
-			return pdfResponse(workbook, "solicitudesActivas-");};
+			SXSSFWorkbook workbook = reportePersona.generarReporteGenericoPersona(personas, "solicitudesActivas");
+			return pdfResponse(workbook, "solicitudes_por_cohorte_" + cohorte.get().getNombreCohorte());}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 	}
 
-	private ResponseEntity<ByteArrayResource> pdfResponse(Workbook workbook, String fileName){
-		try{
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			HttpHeaders header = new HttpHeaders();
-			header.setContentType(new MediaType("application", "force-download"));
-			header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ fileName + ".xlm");
-			workbook.write(stream);
-			return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()),
-					header, HttpStatus.CREATED);
-		}catch (Exception e){
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+	@GetMapping(value = "/personas-con-solicitudes-por-horario-pdf/{idHorario}")
+	public ResponseEntity<ByteArrayResource> personasConSolicitudesPorHorario(@PathVariable("idHorario") int idHorario) throws IllegalAccessException, IOException {
+		List<Persona> personas = personaServiceApi.findPersonasQueTienenSolicitudEnHorario(idHorario);
+		Optional<Horario> horario = horarioServiceApi.findById(idHorario);
+		ReportePersonaImpl reportePersona = new ReportePersonaImpl();
 
-	@GetMapping(value = "/prueba/{idCohorte}")
-	public List<Persona> ss(@PathVariable("idCohorte") int idCohorte) throws IllegalAccessException, IOException {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		return personaServiceApi.findPersonasQueTienenSolicitudEnCohorte(idCohorte);
-
+		if (!personas.isEmpty()) {
+			SXSSFWorkbook workbook = reportePersona.generarReporteGenericoPersona(personas, "solicitudesActivas");
+			return pdfResponse(workbook,
+					"solicitudes_activas_por_horario_"+ horario.get().getNombre()
+							 + horario.get().getCohorteHorarios().stream().map(i ->i.getCohorte().getNombreCohorte()).findFirst());
+			}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 	}
 
+	@GetMapping(value = "/personas-con-solicitudes-por-sesion-pdf/{idSesion}")
+	public ResponseEntity<ByteArrayResource> personasConSolicitudesPorSesion(@PathVariable("idSesion") int idSesion) throws IllegalAccessException, IOException {
+		List<PersonaDTO> personas = personaServiceApi.findPersonasQueTienenSolicitudEnSesion(idSesion)
+				.stream()
+				.map(i -> personaMapper.toDTO(i))
+				.collect(Collectors.toList());
+		ReportePersonaImpl reportePersona = new ReportePersonaImpl();
 
+		if (!personas.isEmpty()) {
+			SXSSFWorkbook workbook = reportePersona.generarReporteGenericoPersona(personas, "solicitudesActivas");
+			return pdfResponse(workbook, "solicitudes_activas_por_sesion");}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+	}
 
 
 	public boolean compararFechas(Date index, Date fechainicio, Date fechafin){

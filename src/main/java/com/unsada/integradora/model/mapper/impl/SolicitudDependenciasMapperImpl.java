@@ -1,6 +1,7 @@
 package com.unsada.integradora.model.mapper.impl;
 
 import com.unsada.integradora.model.dto.SolicitudActividadDTO;
+import com.unsada.integradora.model.dto.SolicitudReporteDTO;
 import com.unsada.integradora.model.entity.Solicitud;
 import com.unsada.integradora.model.mapper.interfaces.SolicitudActividadMapper;
 import org.springframework.stereotype.Component;
@@ -30,5 +31,19 @@ public class SolicitudDependenciasMapperImpl implements SolicitudActividadMapper
                 solicitud.getSesionPresencial().getEntidadAula().getEdificio().getSede().getNombre(),
                 nombreCompleto
                 );
+    }
+
+    public SolicitudReporteDTO toReporteDto(SolicitudActividadDTO dto){
+        String presente = "No";
+        if(dto.getPresente() == 1){ presente = "Si";}
+       return new SolicitudReporteDTO(
+               dto.getFechaCarga(),
+               presente,
+               dto.getNombre(),
+               dto.getTelefono(),
+               dto.getMail(),
+               dto.getNombreActividad(),
+               dto.getNombreEdificio(),
+               dto.getNombreSede());
     }
 }

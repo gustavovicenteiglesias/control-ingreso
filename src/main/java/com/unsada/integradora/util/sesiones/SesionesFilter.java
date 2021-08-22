@@ -1,4 +1,4 @@
-package com.unsada.integradora.util;
+package com.unsada.integradora.util.sesiones;
 
 import com.unsada.integradora.model.entity.SesionPresencial;
 import org.springframework.beans.factory.annotation.Autowired;

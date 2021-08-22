@@ -1,4 +1,4 @@
-package com.unsada.integradora.util;
+package com.unsada.integradora.util.solicitudes;
 import java.util.UUID;
 
 public interface QrCreatorService {

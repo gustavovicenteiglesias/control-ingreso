@@ -1,4 +1,4 @@
-package com.unsada.integradora.util;
+package com.unsada.integradora.util.solicitudes;
 
 import com.unsada.integradora.model.entity.*;
 import org.springframework.stereotype.Repository;

@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.unsada.integradora.model.mapper.impl.SolicitudDependenciasMapperImpl;
-import com.unsada.integradora.util.SesionCreator;
-import com.unsada.integradora.util.SolicitudCreator;
+import com.unsada.integradora.util.sesiones.SesionCreator;
+import com.unsada.integradora.util.solicitudes.SolicitudCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;

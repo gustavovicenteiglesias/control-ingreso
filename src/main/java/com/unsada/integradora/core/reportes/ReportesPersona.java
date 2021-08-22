@@ -7,6 +7,5 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.util.List;
 
 public interface ReportesPersona{
-        public SXSSFWorkbook generarReportePersonasConSolicitudesActivas(List<Persona> personas, String sheetname) throws IllegalAccessException;
-        public SXSSFWorkbook generarReportePersonasEnContacto(List<SolicitudActividadDTO> personasEnContacto, String sheetName) throws IllegalAccessException;
+        public SXSSFWorkbook generarReporteGenericoPersona(List<?> personas, String sheetname) throws IllegalAccessException;
 }

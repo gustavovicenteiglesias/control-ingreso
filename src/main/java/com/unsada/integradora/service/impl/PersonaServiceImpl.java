@@ -75,18 +75,28 @@ public class PersonaServiceImpl implements PersonaServiceApi, SolicitudesDTOServ
 		return personaDao.findPersonaConSolicitudesPorCohorte(idCohorte);
 	}
 
+	@Override
+	public List<Persona> findPersonasQueTienenSolicitudEnHorario(Integer idHorario) {
+		return personaDao.findPersonaConSolicitudesPorHorario(idHorario);
+	}
+
+	@Override
+	public List<Persona> findPersonasQueTienenSolicitudEnSesion(Integer idSesion) {
+		return personaDao.findPersonaConSolicitudesPorSesion(idSesion);
+	}
+
 
 	@Override
 	public List<SolicitudActividadDTO> solicitudesContactos(Date fechaInicio, Date fechaFin, int idPersona) {
 		List<Persona> enContacto = new ArrayList<Persona>();
 		List<Solicitud> solicitudesContactos = new ArrayList<Solicitud>();
 		List<SolicitudActividadDTO> solicitudActividadDTOS = new ArrayList<>();
-		System.out.println("reached service");
 		try {
 			List<Solicitud> solicitudes = new ArrayList<Solicitud>();
 			solicitudes = (List<Solicitud>) solicitudServiceApi.findSolicitudesInRange(fechaInicio, fechaFin);
 			List<Integer> sesionesEnSeguimiento = solicitudServiceApi.findSolicitudesPorPersona(idPersona);
 			solicitudes.removeIf(i -> !((i.getFechaCarga().compareTo(fechaInicio) > 0) && i.getFechaCarga().compareTo(fechaFin) <= 0));
+			solicitudes.removeIf(i -> i.getPresente() != 1);
 			for (Solicitud s : solicitudes) {
 				if (sesionesEnSeguimiento.contains(s.getSesionPresencial().getIdSesionPresencial())) {
 					Optional<Persona> p = Optional.ofNullable(s.getDdjj().getPersona());
